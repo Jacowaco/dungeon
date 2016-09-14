@@ -1,0 +1,46 @@
+{
+    "defaultValue": {
+        "soundsEnable": false
+    },
+    "gui": {
+        "title": "GUARIDA CAMUGATA",
+        "details": "JUEGA Y SUMA PUNTOS PARA TU EQUIPO",
+        "score": "METROS",
+        "time": "TIEMPO",
+        "instructions": {
+            "details": [
+                "HAZ CLIC EN LAS FLECHAS.",
+                "GANATE UNO...",
+                "COMPLETA LA COLECCION..."
+            ],
+            "nextBtn": ">",
+            "prevBtn": "<",
+            "playGame": "OK"
+        },
+        "confirmation": {
+            "noBtn": "NO",
+            "yesBtn": "SI",
+            "dialog": "¿QUIERES SALIR?",
+            "ok": "OK",
+            "play": "JUGAR",
+            "again": "JUGAR OTRA",
+            "help": "AYUDA",
+            "exit": "SALIR",
+            "back": "VOLVER",
+            "cancel": "VOLVER",
+            "next": "SIGUIENTE",
+            "retry": "OTRA VEZ",
+            "instructions": "INSTRUCCIONES"
+        },
+        "win": {
+            "title": "¡LO LOGRASTE!",
+            "score": "PUNTOS:",
+            "bonus": "BONUS:",
+            "again": "JUGAR",
+            "exit": "SALIR",
+            "loose": "NO PASA NADA, ¡INTÉNTALO DE NUEVO!",
+            "win": "¡MUY BIEN! GANASTE PARA TU EQUIPO",
+            "total": "TOTAL:"
+        }
+    }
+}
