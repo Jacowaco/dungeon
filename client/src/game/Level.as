@@ -17,7 +17,7 @@ package game
 		{
 			super();
 			
-			levelDefinition = new TileMap(Game.path("./tiles/"), "levels.tmx");
+			levelDefinition = new TileMap(Game.path("./tiles/"), "levels.json");
 			levelDefinition.addEventListener(TileMap.MAP_READY, onMapReady);
 			
 			
@@ -29,6 +29,7 @@ package game
 			trace("map ready: ");
 			
 			screen = new Screen(levelDefinition.getLayer("level_1"));
+			addChild(screen);
 //			trace(screen);
 		}
 	}

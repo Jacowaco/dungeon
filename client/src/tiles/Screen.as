@@ -25,22 +25,20 @@ package tiles
 			// lo que no se ve lo pongo invisible
 			for(var x:int = 0; x < tl.getColsCount(); x++)
 			{
-				// para cada columna
 				for(var y:int = 0 ; y < tl.getRowsCount(); y++)
-				{	// para cada fila
+				{					
+					var currentTile:Tile = tl.getTile(x,y);		
 					
-					var currentTile:Tile = tl.getTile(x,y);					
-					if(currentTile.gid == 0) continue; // si es un tile vacio
-					
-					var asset:MovieClip = AssetCreator.createAsset(currentTile.name);
-					// los tiles se muestran centrados
-					asset.x = x * currentTile.dimension.x + ( currentTile.dimension.x ) / 2;//* scale 
-					asset.y = y * currentTile.dimension.y  + ( currentTile.dimension.x) / 2;//* scale
-					asset.name = currentTile.name || "no name";
+					if(currentTile.gid == 0) continue; // si es un tile vacio					
+					var asset:MovieClip = AssetCreator.createAsset(currentTile.name);					
+					asset.x = x * currentTile.dimension.x;//* scale 
+					asset.y = y * currentTile.dimension.y;//* scale
+					asset.name = currentTile.name;
+					trace(asset.x, asset.y);
 					addChild(asset);
 				}
 				
-				elements[tl.name].push(asset);
+				elements.push(asset);
 			}
 		}
 	}

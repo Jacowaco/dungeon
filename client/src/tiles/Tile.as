@@ -20,38 +20,19 @@ package tiles
 				
 		private function create():void
 		{
-			this.nameDef = tileSet.tileName(gid); 	
+			this.nameDef = tileSet.tileName(gid);
+			this.dim = tileSet.dimension;
+
 		}
 		
 		public function toString():String
 		{
 			return ("gid: " + id + " type: " + nameDef + " location: " + loc);
 		}
-		
-		public function setLocation(x:int, y:int):void		
-		{
-			// los tiles son origin en top/left
-			this.loc = new Point(x, y);
-		}
-		
-		public function obstacle():Boolean
-		{
-			return (nameDef == "OBSTACLE");
-		}
-		
+			
 		public function get dimension():Point
 		{
 			return dim ? dim : new Point();
-		}
-		
-		public function set dimension(dim:Point):void
-		{
-			this.dim = dim;
-		}
-		
-		public function set gid(id:uint):void
-		{
-			this.id = id;	
 		}
 		
 		public function get gid():uint
@@ -64,9 +45,5 @@ package tiles
 			return this.nameDef;
 		}
 		
-		public function set name(name:String):void 
-		{
-			this.nameDef = name;	
-		}
 	}
 }

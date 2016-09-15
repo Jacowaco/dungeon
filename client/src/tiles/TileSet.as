@@ -8,32 +8,62 @@ package tiles
 
 	public class TileSet 
 	{
-		private var firstgid:uint;				
-		private var tilesetName:String;
-		private var tileDim:Point;
+
 		
-		private var source:String;
-		private var sourceDim:Point;
+		/*
+		{
+		"firstgid":1,
+		"image":"tileset.png",
+		"imageheight":400,
+		"imagewidth":400,
+		"margin":0,
+		"name":"tileset",
+		"properties":
+		{
 		
-		private var tilesList:XMLList;
-		private var definition:XML;
-		
-		public function TileSet(xml:XML){
-			this.definition = xml;
-			parse();
+		},
+		"spacing":0,
+		"tileheight":40,
+		"tilewidth":40,
+		"tileproperties":
+		{
+		"0":
+		{
+		"name":"floor"
+		},
+		"1":
+		{
+		"name":"obstacle"
+		}
 		}
 		
+		}
+		*/
 		
-		private function parse():void
-		{
-			firstgid = definition.attribute("firstgid");
-			tilesetName = definition.attribute("name");
-			tileDim = new Point(definition.attribute("tilewidth"),definition.attribute("tileheight")) ;
+		private var firstgid:uint;				
+		private var tilesetName:String;
+		private var tileDimension:Point;
+		
+		private var image:String;
+		private var imageDimension:Point;
+
+		private var tileProperties:Object;
+
+		
+		
+		public function TileSet(ts:Object){
+		
 			
-			source = definition.child("image").attribute("source");
-			sourceDim = new Point(definition.child("image").attribute("width"),definition.child("image").attribute("height")); 
+			firstgid = ts.firstgid;
+			tilesetName = ts.name;
 			
-			tilesList = definition.child("tile");
+			tileDimension = new Point(ts.tilewidth,ts.tileheight) ;
+			
+			image = ts.image;
+			imageDimension = new Point(ts.imagewidth,ts.imageheight); 
+			
+			tileProperties = ts.tileproperties;
+			
 
 			// posioblemente no quiera cargar imagenes
 //			var loader:TileCodeEventLoader = new TileCodeEventLoader();
@@ -43,17 +73,9 @@ package tiles
 //			loader.load(new URLRequest(path + tileSets[i].source));
 			
 			logger.info("new Tileset: ");
-			logger.info(firstgid, tilesetName, tileDim, source, sourceDim);
+			logger.info(firstgid, tilesetName, tileDimension, image, imageDimension);
 			
 		}
-
-		
-//		public function getType(gid:int):String
-//		{
-//			return tilesData[gid];
-//		}
-		
-		
 
 		public function getTileBitmap(gid:int):Bitmap{
 			
@@ -74,7 +96,7 @@ package tiles
 		
 		public function get dimension():Point
 		{
-			return new Point(definition.tilewidth, definition.tileheight);
+			return tileDimension;
 		}
 		
 		public function get name():String
@@ -86,15 +108,9 @@ package tiles
 		
 		public function tileName(gid:uint):String
 		{
-			var id:int = gid + firstgid;
-
-			for each(var tile:XML in tilesList.children()){
-				if(tile.attribute(id) == id){
-					trace(tile);
-				}
-			}
-
-			return tilesList.child(id).attribute("name");
+			var id:int = gid - firstgid;
+			return gid == 0 ? "empty" : tileProperties[id].name;
+				
 		}
 		
 	}
