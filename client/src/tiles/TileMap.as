@@ -15,6 +15,8 @@ package tiles
 	
 	import org.as3commons.zip.Zip;
 	import org.as3commons.zip.ZipFile;
+	
+	import utils.Utils;
 
 	/*
 	el TileMap tiene un objecto completo con capas	
@@ -42,23 +44,22 @@ package tiles
 		// un array de objetos Tilesets
 		// cada tileset es una imagen con tiles usadas en el mapa
 		// con la info de propiedades de cada tile
-		private var tileSets:Array = new Array();
+		private var tileSets:Array = [];
 		private var totalTileSets:uint = 0;
-		private var tileSetsLoaded:uint = 0;				
+		private var tileSetsLoaded:uint = 0;
+		private var currentTileset:uint = 0;
 		
 		// un objeto que guarda un TileMap para cada capa
 		// cada tileMap guarda el tileset que usa y un array[][] con sus tiles
-		private var layers:Object = new Object(); 
+		private var layers:Object = {}; 
 		
-		private var eventLoaders:Array= new Array();	// carga los tiles (pngs)
+		
 		
 		public function TileMap(path:String, mapfile:String):void 
 		{
 			this.path = path;
-			this.mapfile = mapfile;
-			
-			isZip = mapfile.split('.')[mapfile.split('.').length - 1] == "zip" ? true : false;
-			
+			this.mapfile = mapfile;			
+			isZip = mapfile.split('.')[mapfile.split('.').length - 1] == "zip" ? true : false;			
 			init(isZip);
 		}
 		
@@ -74,6 +75,16 @@ package tiles
 		private function xmlLoadComplete(e:Event):void {
 			
 			if(debug) logger.info("TilemapLoader xml load complete: ");		
+		
+			parseFile(e);
+			loadTilesets();
+			loadLayers();
+			// cuando cargue todo salgo...
+			dispatchEvent(new Event(MAP_READY));
+		}
+		
+		private function parseFile(e:Event):void
+		{
 			if(isZip){
 				var ba:ByteArray = ByteArray(e.target.data);
 				var zip:Zip = new Zip();
@@ -92,9 +103,8 @@ package tiles
 			mapHeight = xml.attribute("height");
 			tileWidth = xml.attribute("tilewidth");
 			tileHeight = xml.attribute("tileheight");	
-			loadTilesets();			
+			
 		}
-		
 		
 		private function progressHandler(event:ProgressEvent):void {
 			if(debug) logger.info("progressHandler: bytesLoaded=" + event.bytesLoaded + " bytesTotal=" + event.bytesTotal);
@@ -104,99 +114,38 @@ package tiles
 		private function loadTilesets():void
 		{
 			logger.info("loading Tilesets");
-			var xmlCounter:uint = 0;
+			var tsCount:uint = 0;
 			
 			for each (var tileset:XML in xml.tileset) {
-				
-//				var imageWidth:uint = xml.tileset.image.attribute("width")[xmlCounter];
-//				var imageHeight:uint = xml.tileset.image.attribute("height")[xmlCounter];
-//				var firstGid:uint = xml.tileset.attribute("firstgid")[xmlCounter];
-//				var tilesetName:String = xml.tileset.attribute("name")[xmlCounter];
-//				var tilesetTileWidth:uint = xml.tileset.attribute("tilewidth")[xmlCounter];
-//				var tilesetTileHeight:uint = xml.tileset.attribute("tileheight")[xmlCounter];
-//				var tilesetImagePath:String = xml.tileset.image.attribute("source")[xmlCounter];
-//				
-//				var ts:TileSet = new TileSet(firstGid, tilesetName, tilesetTileWidth, tilesetTileHeight, tilesetImagePath, imageWidth, imageHeight);
-				
+								
 				var ts:TileSet = new TileSet(tileset);
-//				for each (var tile:XML in tileset.tile)
-//				{
-//					var id:String = (int(tile.attribute("id")) + 1).toString();
-//					var props:XMLList = tile.child("properties");
-//					ts.tilesData[id] = props.property.attribute("value").toString();
-//					if(debug) logger.info("tileset data");
-//					if(debug) logger.info(props.property.attribute("name"));
-//					if(debug) logger.info(props.property.attribute("value"));						
-//				}				
-//				
-				tileSets.push(ts);
-				xmlCounter++;
+				tileSets[tsCount] = ts;
+				tsCount++;
 			}
 			
-			totalTileSets = xmlCounter;
+			totalTileSets = tsCount;
 			
-			// load images for tileset
-//			for (var i:int = 0; i < totalTileSets; i++) {
-//				if(debug) logger.info("load tilset at " + tileSets[i].source);
-//				var loader:TileCodeEventLoader = new TileCodeEventLoader();
-//				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, tilesLoadComplete);
-//				loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, progressHandler);
-//				loader.tileSet = tileSets[i];
-//				loader.load(new URLRequest(path + tileSets[i].source));
-//				eventLoaders.push(loader);
-//			}			
 		}
-		
-		
-		
-		
-		private function tilesLoadComplete (e:Event):void {
-//			var ts:TileSet = e.target.loader.tileSet;
-//			ts.bitmapData = Bitmap(e.target.content).bitmapData;
-//			tileSetsLoaded++;
-//			
-//			if (tileSetsLoaded == totalTileSets)
-//			{
-//			
-//			}
-//			createMapLayers();
-		}
-		
-		
-		/*
-		private function createMapLayers():void {	
-			trace("tileset");
-			trace(xml.tileset);
-			
-			
-			
-			
+
+		private function loadLayers():void {	
+			logger.info("loading layers: ");
 			// load each layer
 			for each (var layer:XML in xml.layer) {				
+				var name:String = layer.attribute("name");
+				var w:int = layer.attribute("width");
+				var h:int = layer.attribute("height");
 				
-				var tileSet:TileSet = new TileSet(xml.tileset);	
-					
 				var map:Array = new Array(); 			// el mapa de una capa (bidimensional)				
 				var tilesList:Array = new Array();		// los tiles para esa capa (unidimensional)
 				var currentTile:uint = 0;
-				var w:int = layer.attribute("width")[0];
-				var h:int = layer.attribute("height")[0];
-				
-				
-				
-				
 				// assign the gid to each location in the layer
 				for each (var tile:XML in layer.data.tile) {
-					// el gid es un numero asociado con un tile especifico entre todos los tilesets
-					// ver "understanding gid"  en http://gamedevelopment.tutsplus.com/tutorials/parsing-and-rendering-tiled-tmx-format-maps-in-your-own-game-engine--gamedev-3104 
-					var gid:Number = tile.attribute("gid");
-					
-//					
-					
-					var t:Tile = new Tile(tileSet.getType(gid), gid);
-					t.dimension = new Point(tileSet.tileWidth, tileSet.tileHeight);
-					
-					tilesList[currentTile] =t; 
+//					// el gid es un numero asociado con un tile especifico entre todos los tilesets
+//					// ver "understanding gid"  en http://gamedevelopment.tutsplus.com/tutorials/parsing-and-rendering-tiled-tmx-format-maps-in-your-own-game-engine--gamedev-3104 
+					var gid:Number = tile.attribute("gid");					
+//					// lo que quiero es que en la unidad Tile tener toda la data disponible. el asset, la posicion y el tipo
+					var t:Tile = new Tile(tileSets[currentTileset], gid);   // uno solo tileset por ahora... le paso el tileset y el id para que lo cree
+					tilesList[currentTile] = t; 
 					currentTile++;
 				}		
 				// store the gid into a 2d array (para esa capa)
@@ -208,30 +157,32 @@ package tiles
 						map[tileX][tileY] = t;
 					}
 				}
-				var layerName:String = layer.attribute("name")[0];
-				if(debug) logger.info("saving layer :" + layerName); 
-				// me guardo una propiedad con ese mapa
+				
+				if(debug) logger.info("saving layer: " + name); 
+				
+				// me guardo ese mapa
 				var tl:TileLayer = new TileLayer();
-				tl.setName(layerName);
+				tl.setName(name);
 				tl.setMap(map);
-				tl.setTileSet(tileSet);
 				tl.setDimensions(w, h);
-				layers[layerName] = tl;
-			}
-			// cuando cargue todo salgo...
-			dispatchEvent(new Event(MAP_READY));
-		}
-		
-		*/
-		
-		// ---------------------------------
-		public function getTileLayer(layer:String):TileLayer
-		{
-			if(layers.hasOwnProperty(layer)) {				
-				return layers[layer];
+				layers[name] = tl;
+			
+				layersCount++;
 			}
 			
-			return null;
+			Utils.getProperties(layers);
+		}
+		
+		public function getLayers():Object
+		{
+			return layers;
+		}
+
+		
+		// ---------------------------------
+		public function getLayer(layer:String):TileLayer
+		{
+			return this.layers[layer] as TileLayer; 
 		}
 		
 //		private function getTilesetForGID(tileGid:uint):TileSet
@@ -263,6 +214,11 @@ package tiles
 		{
 			return layersCount;
 		}
+		
+//		override public function toString():String
+//		{
+//			return Utils.getProperties(layers).toString();
+//		}
 	}
 	
 }

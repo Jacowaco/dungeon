@@ -38,7 +38,8 @@ package ui
 		{
 			super();
 			this.asset = asset;
-			createConfirmationPopup();						
+			createConfirmationPopup();
+			createIngameGui();
 			addChild(asset);  // asset tiene el marco amarillo			
 		}
 		
@@ -99,6 +100,10 @@ package ui
 			meters.visible = show;
 			power.visible = show;
 			exitBtn.visible = show;
+		}
+		public function off():void
+		{
+			
 		}
 		
 		

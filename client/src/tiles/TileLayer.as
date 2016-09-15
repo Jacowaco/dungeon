@@ -14,7 +14,8 @@ package tiles
 		public var name:String;
 		private var map:Array;
 		
-		private var tileset:TileSet;		
+		// los tiles en map ya tienen la data del tileset
+			
 		
 		public function TileLayer()
 		{
@@ -29,19 +30,19 @@ package tiles
 			this.rows = mapHeight ;
 		}
 		
-		public function getTileDimension():Point
-		{
-			return tileset.dimension;	
-		}
+//		public function getTileDimension():Point
+//		{
+//			return tileset.dimension;	
+//		}
 		
 		public function getTile(x:int, y:int):Tile
 		{
 			return map[x][y] as Tile;
 		}
-		public function setTileset(tileset:TileSet):void
-		{
-			this.tileset = tileset;
-		}
+//		public function setTileset(tileset:TileSet):void
+//		{
+//			this.tileset = tileset;
+//		}
 		
 		public function getRowsCount():int
 		{
@@ -53,20 +54,20 @@ package tiles
 			return cols;
 		}
 		
-		public function setTileSet(ts:TileSet):void
-		{
-			this.tileset = ts;
-		}
+//		public function setTileSet(ts:TileSet):void
+//		{
+//			this.tileset = ts;
+//		}
 		
 		public function setMap(map:Array):void
 		{
 			this.map = map;
 		}
-		public function getBitmapForTile(tile:Tile):Bitmap
-		{
-			return tileset.getTileBitmap(tile.gid);
-		}		
-		
+//		public function getBitmapForTile(tile:Tile):Bitmap
+//		{
+//			return tileset.getTileBitmap(tile.gid);
+//		}		
+//		
 		public function getTilesCount(type:String):int
 		{
 			var qty:int = 0;

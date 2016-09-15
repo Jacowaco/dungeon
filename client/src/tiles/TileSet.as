@@ -9,7 +9,7 @@ package tiles
 	public class TileSet 
 	{
 		private var firstgid:uint;				
-		private var name:String;
+		private var tilesetName:String;
 		private var tileDim:Point;
 		
 		private var source:String;
@@ -27,16 +27,23 @@ package tiles
 		private function parse():void
 		{
 			firstgid = definition.attribute("firstgid");
-			name = definition.attribute("name");
+			tilesetName = definition.attribute("name");
 			tileDim = new Point(definition.attribute("tilewidth"),definition.attribute("tileheight")) ;
 			
 			source = definition.child("image").attribute("source");
 			sourceDim = new Point(definition.child("image").attribute("width"),definition.child("image").attribute("height")); 
 			
 			tilesList = definition.child("tile");
+
+			// posioblemente no quiera cargar imagenes
+//			var loader:TileCodeEventLoader = new TileCodeEventLoader();
+//			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, tilesLoadComplete);
+//			loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, progressHandler);
+//			loader.tileSet = tileSets[i];
+//			loader.load(new URLRequest(path + tileSets[i].source));
 			
 			logger.info("new Tileset: ");
-			logger.info(firstgid, name, tileDim, source, sourceDim);
+			logger.info(firstgid, tilesetName, tileDim, source, sourceDim);
 			
 		}
 
@@ -70,10 +77,24 @@ package tiles
 			return new Point(definition.tilewidth, definition.tileheight);
 		}
 		
+		public function get name():String
+		{
+			return tilesetName;
+		}
+		
+		
+		
 		public function tileName(gid:uint):String
 		{
-			trace(tilesList.toString());
-			return "";	
+			var id:int = gid + firstgid;
+
+			for each(var tile:XML in tilesList.children()){
+				if(tile.attribute(id) == id){
+					trace(tile);
+				}
+			}
+
+			return tilesList.child(id).attribute("name");
 		}
 		
 	}

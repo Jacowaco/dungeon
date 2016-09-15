@@ -6,20 +6,20 @@ package tiles
 	public class Screen extends Sprite
 	{
 		
-		private var layers:Array;
+		private var elements:Array;
 		
 		public function Screen(screenDefinition:TileLayer)
 		{
 			super();
-			layers = new Array();
-			addLayer(screenDefinition);
+			elements = new Array();
+			create(screenDefinition);
 		}
 		
-		private function addLayer(tl:TileLayer):void
+		private function create(tl:TileLayer):void
 		{			
 			// creo una nueva capa y la llamo como se llama en el tiled
 			// hay guardo todos los sprites que forman esa capa
-			layers[tl.name] = new Array();	
+//			elements[tl.name] = new Array();	
 			
 			// creo y atacheo todo a la capa.
 			// lo que no se ve lo pongo invisible
@@ -40,7 +40,7 @@ package tiles
 					addChild(asset);
 				}
 				
-				layers[tl.name].push(asset);
+				elements[tl.name].push(asset);
 			}
 		}
 	}

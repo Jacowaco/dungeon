@@ -15,6 +15,7 @@ package tiles
 		
 		public static function createAsset(name:String):MovieClip
 		{
+			trace("tiles."+name);
 			var myClass:Class = getDefinitionByName("tiles."+name) as Class;			
 			return new myClass() as MovieClip;
 		}

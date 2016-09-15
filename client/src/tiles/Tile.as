@@ -4,22 +4,28 @@ package tiles
 
 	public class Tile
 	{
-		private var type:String;
+		private var nameDef:String;
 		private var id:uint;
 		private var loc:Point;
 		private var dim:Point;		
+		private var tileSet:TileSet;   // me guardo la refe al tileset que pertenezco
 		
-		public function Tile(type:String, gid:uint)
+		public function Tile(ts:TileSet, gid:uint)
 		{
-			this.type = type;
+			this.tileSet = ts;
 			this.id = gid;
+			
+			create();
 		}
-		
-
+				
+		private function create():void
+		{
+			this.nameDef = tileSet.tileName(gid); 	
+		}
 		
 		public function toString():String
 		{
-			return ("gid: " + id + " type: " + type + " location: " + loc);
+			return ("gid: " + id + " type: " + nameDef + " location: " + loc);
 		}
 		
 		public function setLocation(x:int, y:int):void		
@@ -30,7 +36,7 @@ package tiles
 		
 		public function obstacle():Boolean
 		{
-			return (type == "OBSTACLE");
+			return (nameDef == "OBSTACLE");
 		}
 		
 		public function get dimension():Point
@@ -55,12 +61,12 @@ package tiles
 		
 		public function get name():String
 		{
-			return this.type;
+			return this.nameDef;
 		}
 		
 		public function set name(name:String):void 
 		{
-			this.type = name;	
+			this.nameDef = name;	
 		}
 	}
 }
