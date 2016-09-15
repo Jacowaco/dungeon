@@ -113,6 +113,7 @@ package
 			playAudioScheme("menu");
 			stage.addEventListener(Event.ENTER_FRAME, update);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 			// ready() le avisa al mmo que ya estoy para jugar (ie. dispatchEvent(MinigameEvent.READY));
 			ready();
 			
@@ -242,9 +243,13 @@ package
 		
 		private function onKeyDown(key:KeyboardEvent):void
 		{
-		
+			level.keyDown(key);
 		}
 
+		private function onKeyUp(key:KeyboardEvent):void
+		{
+			level.keyUp(key);
+		}
 		
 		private function onExitGame(e:Event=null):void
 		{
