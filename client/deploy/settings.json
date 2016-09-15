@@ -2,6 +2,10 @@
     "defaultValue": {
         "soundsEnable": false
     },
+    "avatar":{
+        "speed": 50,
+        "jump": 15
+    },
     "gui": {
         "title": "GUARIDA CAMUGATA",
         "details": "JUEGA Y SUMA PUNTOS PARA TU EQUIPO",

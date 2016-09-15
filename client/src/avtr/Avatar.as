@@ -25,9 +25,9 @@ package avtr
 		private var space:Boolean;
 		private var jumping:Boolean = false;
 		
-		private var walkSpeed:Number;
-		public var jumpForce:Number;
-		public var sideForce:Number;
+		private var speed:Number;		
+		private var jump:Number;		
+		private var weight:Number;
 		
 		private var initialPosition:Vector2D;
 		private var asset:MovieClip;
@@ -38,6 +38,8 @@ package avtr
 			this.asset = new assets.GaturroMC;
 			addChild(asset);
 			body = new Body();			
+			speed = settings.avatar.speed;
+			jump = settings.avatar.jump;
 		}
 		
 		public function update():void
@@ -56,12 +58,12 @@ package avtr
 		
 		private function move():void
 		{			
-			var xs = (left ? -1 : 0 + right ? + 1 : 0) * 4;
+			var xs = (left ? -1 : 0 + right ? + 1 : 0) * speed / 10;
 			body.velocity = new Vector2D(xs, body.velocity.y);
 			
 			if(up && !jumping){
 				jumping = true;
-				body.velocity = body.velocity.add(new Vector2D(0, -10));
+				body.velocity = body.velocity.add(new Vector2D(0, -jump));
 			}
 			
 			
@@ -152,9 +154,9 @@ package avtr
 		}
 		
 		
-		public function get speed():Number{
-			return walkSpeed;
-		}
+//		public function get speed():Number{
+//			return walkSpeed;
+//		}
 		
 		
 		public function getTarget():Rectangle
