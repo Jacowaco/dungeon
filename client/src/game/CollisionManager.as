@@ -13,11 +13,6 @@ package game
 
 	public class CollisionManager
 	{
-		public static const TOP:int = 1;
-		public static const BOTTOM:int = 2;
-		public static const LEFT:int = 3;
-		public static const RIGHT:int = 4;
-		
 		
 		private var floor:Array = [];
 		private var obstacle:Array = [];
@@ -56,20 +51,22 @@ package game
 		{
 			// ENGANA PICHANGA
 			for each(var obj:DisplayObject in obstacle){
-				if(checkTopCollition(obj, avatar)) return true;				
+				if(checkTopCollition(obj, avatar)) return true;		
+				if(checkLeftCollition(obj, avatar)) return true;
+				if(checkRightCollition(obj, avatar)) return true;
 			}
 			return false;
 		}
 		
 		private function checkTopCollition(obj:DisplayObject, avatar:Avatar):Boolean
 		{
-			if(obj.hitTestObject(avatar.bottomTarget())){		
+			if(obj.hitTestPoint((avatar.getTarget(Avatar.BOTTOM)).x,(avatar.getTarget(Avatar.BOTTOM)).y ), true){		
 				// si lo toque, me tengo que asegurar de que me deje bien parado
 				// la colisión se puede registrar recien mucho despues de que el pie atraveso el bounding
 				// del obstaculo
-				var y:Number = getObjectBoundingSide(obj, TOP);
-				avatar.isOverFloor();
-				avatar.setPosition(avatar.x, y);				
+				var y:Number = getObjectBoundingSide(obj, Avatar.TOP);
+//				avatar.isOverFloor();
+				avatar.setPosition(avatar.x, y-1);				
 				(obj as MovieClip).gotoAndPlay(2);
 				return true;
 			} 
@@ -77,28 +74,60 @@ package game
 			return false;
 		}
 		
+		private function checkLeftCollition(obj:DisplayObject, avatar:Avatar)
+		{
+			
+			if(obj.hitTestPoint( (avatar.getTarget(Avatar.LEFT)).x, (avatar.getTarget(Avatar.LEFT)).y )){		
+				// si lo toque, me tengo que asegurar de que me deje bien parado
+				// la colisión se puede registrar recien mucho despues de que el pie atraveso el bounding
+				// del obstaculo
+				var x:Number = getObjectBoundingSide(obj, Avatar.RIGHT);
+				avatar.isFacingWall();
+				avatar.setPosition(x, avatar.y);				
+				(obj as MovieClip).gotoAndPlay(2);
+				return true;
+			} 
+			
+			return false;
+				
+		}
+		
+		private function checkRightCollition(obj:DisplayObject, avatar:Avatar)
+		{
+			
+			if(obj.hitTestObject(avatar.getTarget(Avatar.RIGHT))){		
+				var x:Number = getObjectBoundingSide(obj, Avatar.LEFT);
+				avatar.isFacingWall();
+				avatar.setPosition(x , avatar.y);				
+				(obj as MovieClip).gotoAndPlay(2);
+				return true;
+			} 
+			
+			return false;
+			
+		}
 		
 		private function getObjectBoundingSide(obj:DisplayObject, side:int):Number
 		{
 			var rect:Rectangle = obj.getBounds(obj.stage);
 			switch(side)
 			{
-				case TOP:
+				case Avatar.TOP:
 				{
 					return rect.top;
 					break;
 				}
-				case BOTTOM:
+				case Avatar.BOTTOM:
 				{
 					return rect.bottom;
 					break;
 				}
-				case LEFT:
+				case Avatar.LEFT:
 				{
 					return rect.left;
 					break;
 				}
-				case RIGHT:
+				case Avatar.RIGHT:
 				{
 					return rect.right;
 					break;

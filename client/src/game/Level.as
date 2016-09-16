@@ -31,9 +31,6 @@ package game
 			
 			addChild(avatar);
 			
-			
-			
-			
 		}
 		
 		private function onMapReady(e:Event):void
@@ -51,9 +48,10 @@ package game
 		private function onEnterFrame(e:Event):void
 		{
 			
-		
-			collisions.obstacleCollision(avatar);
-			collisions.floorCollision(avatar);
+			avatar.actions();
+			
+//			collisions.obstacleCollision(avatar);
+//			collisions.floorCollision(avatar);
 			avatar.update();
 			
 			

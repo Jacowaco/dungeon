@@ -16,67 +16,84 @@ package avtr
 	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
 	
+	/*
+	alta data gato !
+	http://higherorderfun.com/blog/2012/05/20/the-guide-to-implementing-2d-platformers/
+	http://devmag.org.za/2011/07/04/how-to-design-levels-for-a-platformer/
+	http://devmag.org.za/2012/07/19/13-more-tips-for-making-a-fun-platformer/
+	http://devmag.org.za/2011/01/18/11-tips-for-making-a-fun-platformer/
+	*/
 	
 	
 	public class Avatar extends Sprite
 	{		
 		
+		public static const TOP:int = 1;
+		public static const BOTTOM:int = 2;
+		public static const LEFT:int = 3;
+		public static const RIGHT:int = 4;
+		
 		private var left:Boolean;
 		private var up:Boolean;
 		private var right:Boolean;
 		private var space:Boolean;
+		
 		private var jumping:Boolean = false;
+		private var overFloor:Boolean = false; 
+		private var facingWall:Boolean = false; 
+		
 		
 		private var speed:Number;		
+		private var maxSpeed:Number;
 		private var jump:Number;		
 		private var weight:Number;
 		
+		
+		private var translation:Number;
 		private var initialPosition:Vector2D;
 		private var asset:MovieClip;
 		private var body:Body;
-		public var defaultBound:Rectangle;
+//		public var defaultBound:Rectangle;
 		
 		public function Avatar()
 		{
 			this.asset = new assets.GaturroMC;
 			addChild(asset);
 			
-			var circle:Shape = new Shape(); // The instance name circle is created
-			circle.graphics.beginFill(0x990000, 1); // Fill the circle with the color 990000
-			circle.graphics.lineStyle(2, 0x000000); // Give the ellipse a black, 2 pixels thick line
-			circle.graphics.drawCircle(0, 0, 10); // Draw the circle, assigning it a x position, y position, raidius.
-			circle.graphics.endFill(); // End the filling of the circle
-//			addChild(circle); // Add a child
 			// me guardo el bouncing para poder calcular bien
 			// la posicion donde apoyarlo cuando salta			
-			defaultBound = asset.getBounds(this); 
+//			defaultBound = asset.getBounds(this); 
 			body = new Body();			
 			speed = settings.avatar.speed;
+			maxSpeed = settings.avatar.maxSpeed;
 			jump = settings.avatar.jump;
 		}
 		
 		public function update():void
 		{
-			actions();
-			body.update();
 			
+			body.update();			
 			x = body.x;
 			y = body.y;		
 			
 			
 		}
+		public function addForce(x:Number, y:Number):void
+		{
+			body.velocity = body.velocity.add(new Vector2D(x,y));
+		}
 		
-		private function actions():void
+		
+		public function actions():void
 		{			
-			var xs = (left ? -1 : 0 + right ? + 1 : 0) * speed / 10;
-			body.velocity = new Vector2D(xs, body.velocity.y);
-			trace("UP: ", up, " JUMPING: ", jumping);
-		
+			translation = (left ? -1 : 0 + right ? + 1 : 0) * speed / 10;
+			addForce(translation,0);
+			
 			if(up && !jumping){
 				trace("jump....");
 				jumping = true;
 				asset.gotoAndPlay("jump");
-				body.velocity = body.velocity.add(new Vector2D(0, -jump));
+				addForce(0, -jump);
 			}
 			
 		}
@@ -99,41 +116,37 @@ package avtr
 		
 		
 		
-		public function bottomTarget():DisplayObject
+		public function getTarget(side:int):DisplayObject
 		{
-			return asset.foot1;
+			switch(side)
+			{
+				case TOP:
+				{
+					return asset.top_tg;
+					break;
+				}
+				case BOTTOM:
+				{
+					return asset.bottom_tg;
+					break;
+				}
+				case LEFT:
+				{
+					return asset.left_tg;
+					break;
+				}
+				case RIGHT:
+				{
+					return asset.right_tg;
+					break;
+				}
+					
+			}
+			return null;
+			
 		}
-		
-		
-		//		public function onKeyUp(ke:KeyboardEvent):void{	
-		//			delete keys[ke.keyCode];
-		//			currentState.onKeyUp(ke);
-		//		}
-		//		
-		public function key_down(event:KeyboardEvent){
-			if(event.keyCode == 37){
-				left = true;
-			}
-			if(event.keyCode == Keyboard.SPACE){
-				up = true;
-			}
-			if(event.keyCode == 39){
-				right = true;
-			}
-		}
-		
-		public function key_up(event:KeyboardEvent){
-			if(event.keyCode == 37){
-				left = false;
-			}
-			if(event.keyCode == Keyboard.SPACE){
-				up = false;
-			}
-			if(event.keyCode == 39){
-				right = false;
-			}
-		}
-		
+
+
 		//		protected function changeState(state:AvatarState):void
 		//		{
 		//			if(currentState) currentState.exit();
@@ -166,23 +179,17 @@ package avtr
 			asset.gotoAndPlay("falling");
 		}
 		
-		
-//		public function get speed():Number{
-//			return walkSpeed;
+//		public function isOverFloor():void
+//		{
+//			overFloor = true;
+////			body.collide(Body.VERTICAL);
+//			
 //		}
 		
-		
-		public function getTarget():Rectangle
+		public function isFacingWall():void
 		{
-			var target:MovieClip = asset["target"];			
-			return  target.getBounds(target.stage);
-		}
-		
-		public function isOverFloor():void
-		{
-			jumping = false;
-			body.collide(Body.DOWN);
-			
+			facingWall = true;
+//			body.collide(Body.HORIZONTAL);
 		}
 		
 		public function isJumping():Boolean
@@ -190,7 +197,11 @@ package avtr
 			return jumping;
 		}
 		
-		
+		public function setPosition(x:Number, y:Number):void
+		{
+			body.x = x;
+			body.y = y;
+		}
 		
 		public function pause():void
 		{
@@ -202,13 +213,28 @@ package avtr
 			asset.play();
 		}
 		
-		public function setPosition(x:Number, y:Number):void
-		{
-			body.x = x;
-			body.y = y;
-//			this.x = x;
-//			this.y = y;
-//			move();
+		public function key_down(event:KeyboardEvent):void{
+			if(event.keyCode == 37){
+				left = true;
+			}
+			if(event.keyCode == Keyboard.SPACE){
+				up = true;
+			}
+			if(event.keyCode == 39){
+				right = true;
+			}
+		}
+		
+		public function key_up(event:KeyboardEvent):void{
+			if(event.keyCode == 37){
+				left = false;
+			}
+			if(event.keyCode == Keyboard.SPACE){
+				up = false;
+			}
+			if(event.keyCode == 39){
+				right = false;
+			}
 		}
 		
 	}

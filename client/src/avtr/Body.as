@@ -4,51 +4,47 @@ package avtr
 
 	public class Body
 	{
-		public static var DOWN:int = -1;
+		public static var VERTICAL:int = 1;
+		public static var HORIZONTAL:int = 2;
 		
-		protected var gravity:Vector2D;
-		protected var speed:Vector2D;
+		protected var pos:Vector2D;		
+		protected var grav:Vector2D;
 		protected var vel:Vector2D;
-		protected var position:Vector2D;
-		protected var mass:Number;
+//		protected var mass:Number;
 		
 		private var addGravity:Boolean = true;
 		
 		public function Body()
 		{
-			gravity = new Vector2D(0, 1);
-			velocity = new Vector2D(0,0);
-			position = new Vector2D(15,15);
-			speed = new Vector2D();
+			grav = new Vector2D(0, 1);
+			vel = new Vector2D(0,0);
+			pos = new Vector2D(15,15);
 		}
 		
 		public function update():void
 		{
-			this.velocity = this.vel.add(this.speed);
-			if(addGravity) this.vel = this.vel.add(this.gravity);
-			this.position = this.position.add(this.velocity);
-			
-			addGravity = true;
+			this.vel = this.vel.add(this.grav); 
+			this.pos = this.pos.add(this.velocity);
 		}
 		
 		public function get x():Number 
 		{
-			return position.x;
+			return pos.x;
 		}
 		
 		public function get y():Number 
 		{
-			return position.y;
+			return pos.y;
 		}
 		
 		public function set x(x:Number):void 
 		{
-			position = new Vector2D(x, position.y);
+			pos = new Vector2D(x, pos.y);
 		}
 		
 		public function set y(y:Number):void 
 		{
-			position = new Vector2D(position.x, y);
+			pos = new Vector2D(pos.x, y);
 		}
 
 		public function get velocity():Vector2D
@@ -60,13 +56,17 @@ package avtr
 		{
 			vel = value;
 		}
-		
-		public function collide(direction:int):void{
-			if(direction == DOWN) {				
-				vel = new Vector2D(vel.x, 0);
-			}
+
+		public function get gravity():Vector2D
+		{
+			return grav;
 		}
-		
+
+		public function set gravity(value:Vector2D):void
+		{
+			grav = value;
+		}
+
 		
 	}
 }
