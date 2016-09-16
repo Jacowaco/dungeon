@@ -3,6 +3,7 @@ package game
 	import avtr.Avatar;
 	
 	import flash.display.DisplayObject;
+	import flash.display.MovieClip;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
@@ -45,32 +46,37 @@ package game
 		public function floorCollision(avatar:Avatar):Boolean
 		{
 			for each(var obj:DisplayObject in floor){
-				if(obj.hitTestObject(avatar.bottomTarget())){		
-					// si lo toque, me tengo que asegurar de que me deje bien parado
-					// la colisión se puede registrar recien mucho despues de que el pie atraveso el bounding
-					// del obstaculo
-					var y:Number = getObjectBoundingSide(obj, TOP);
-					avatar.setPosition(avatar.x, y);
-					return true;
-				}				
+				if(checkTopCollition(obj, avatar)) return true;
 			}
-			
+
+			return false;
+		}
+		
+		public function obstacleCollision(avatar:Avatar):Boolean
+		{
 			// ENGANA PICHANGA
 			for each(var obj:DisplayObject in obstacle){
-				if(obj.hitTestObject(avatar.bottomTarget())){		
-					// si lo toque, me tengo que asegurar de que me deje bien parado
-					// la colisión se puede registrar recien mucho despues de que el pie atraveso el bounding
-					// del obstaculo
-					var y:Number = getObjectBoundingSide(obj, TOP);
-					avatar.setPosition(avatar.x, y);
-					return true;
-				}				
+				if(checkTopCollition(obj, avatar)) return true;				
 			}
-			
-			
+			return false;
+		}
+		
+		private function checkTopCollition(obj:DisplayObject, avatar:Avatar):Boolean
+		{
+			if(obj.hitTestObject(avatar.bottomTarget())){		
+				// si lo toque, me tengo que asegurar de que me deje bien parado
+				// la colisión se puede registrar recien mucho despues de que el pie atraveso el bounding
+				// del obstaculo
+				var y:Number = getObjectBoundingSide(obj, TOP);
+				avatar.isOverFloor();
+				avatar.setPosition(avatar.x, y);				
+				(obj as MovieClip).gotoAndPlay(2);
+				return true;
+			} 
 			
 			return false;
 		}
+		
 		
 		private function getObjectBoundingSide(obj:DisplayObject, side:int):Number
 		{

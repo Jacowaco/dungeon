@@ -62,10 +62,8 @@ package avtr
 		}
 		
 		public function collide(direction:int):void{
-			if(direction == DOWN) {
-				addGravity = false;
+			if(direction == DOWN) {				
 				vel = new Vector2D(vel.x, 0);
-//				trace(addGravity);
 			}
 		}
 		

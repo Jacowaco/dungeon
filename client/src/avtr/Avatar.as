@@ -7,6 +7,7 @@ package avtr
 	
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
+	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
@@ -33,11 +34,22 @@ package avtr
 		private var initialPosition:Vector2D;
 		private var asset:MovieClip;
 		private var body:Body;
+		public var defaultBound:Rectangle;
 		
 		public function Avatar()
 		{
 			this.asset = new assets.GaturroMC;
 			addChild(asset);
+			
+			var circle:Shape = new Shape(); // The instance name circle is created
+			circle.graphics.beginFill(0x990000, 1); // Fill the circle with the color 990000
+			circle.graphics.lineStyle(2, 0x000000); // Give the ellipse a black, 2 pixels thick line
+			circle.graphics.drawCircle(0, 0, 10); // Draw the circle, assigning it a x position, y position, raidius.
+			circle.graphics.endFill(); // End the filling of the circle
+//			addChild(circle); // Add a child
+			// me guardo el bouncing para poder calcular bien
+			// la posicion donde apoyarlo cuando salta			
+			defaultBound = asset.getBounds(this); 
 			body = new Body();			
 			speed = settings.avatar.speed;
 			jump = settings.avatar.jump;
@@ -45,21 +57,23 @@ package avtr
 		
 		public function update():void
 		{
-			move();
-			
+			actions();
 			body.update();
 			
 			x = body.x;
-			y = body.y;
+			y = body.y;		
+			
 			
 		}
 		
-		private function move():void
+		private function actions():void
 		{			
 			var xs = (left ? -1 : 0 + right ? + 1 : 0) * speed / 10;
 			body.velocity = new Vector2D(xs, body.velocity.y);
-			
+			trace("UP: ", up, " JUMPING: ", jumping);
+		
 			if(up && !jumping){
+				trace("jump....");
 				jumping = true;
 				asset.gotoAndPlay("jump");
 				body.velocity = body.velocity.add(new Vector2D(0, -jump));
@@ -166,8 +180,14 @@ package avtr
 		
 		public function isOverFloor():void
 		{
-			body.collide(Body.DOWN);
 			jumping = false;
+			body.collide(Body.DOWN);
+			
+		}
+		
+		public function isJumping():Boolean
+		{
+			return jumping;
 		}
 		
 		
@@ -186,6 +206,9 @@ package avtr
 		{
 			body.x = x;
 			body.y = y;
+//			this.x = x;
+//			this.y = y;
+//			move();
 		}
 		
 	}

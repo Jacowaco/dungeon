@@ -50,10 +50,12 @@ package game
 		
 		private function onEnterFrame(e:Event):void
 		{
+			
+		
+			collisions.obstacleCollision(avatar);
+			collisions.floorCollision(avatar);
 			avatar.update();
-			if(collisions.floorCollision(avatar)){
-				avatar.isOverFloor();
-			}
+			
 			
 	
 			
