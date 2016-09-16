@@ -5,6 +5,7 @@ package avtr
 	import com.qb9.flashlib.geom.Vector2D;
 	import com.qb9.flashlib.prototyping.shapes.Rect;
 	
+	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -45,15 +46,12 @@ package avtr
 		public function update():void
 		{
 			move();
-			trace(body.velocity);
+			
 			body.update();
 			
 			x = body.x;
 			y = body.y;
-			//			checkCollisions(platforms);
-			//			checkGameStatus(platforms);
-			//			currentState.update(keys);							
-			//			super.run(); // para que actualice la posicion del asset
+			
 		}
 		
 		private function move():void
@@ -63,11 +61,9 @@ package avtr
 			
 			if(up && !jumping){
 				jumping = true;
+				asset.gotoAndPlay("jump");
 				body.velocity = body.velocity.add(new Vector2D(0, -jump));
 			}
-			
-			
-			trace(xs);
 			
 		}
 		
@@ -89,7 +85,10 @@ package avtr
 		
 		
 		
-		
+		public function bottomTarget():DisplayObject
+		{
+			return asset.foot1;
+		}
 		
 		
 		//		public function onKeyUp(ke:KeyboardEvent):void{	
@@ -101,7 +100,7 @@ package avtr
 			if(event.keyCode == 37){
 				left = true;
 			}
-			if(event.keyCode == 38){
+			if(event.keyCode == Keyboard.SPACE){
 				up = true;
 			}
 			if(event.keyCode == 39){
@@ -113,7 +112,7 @@ package avtr
 			if(event.keyCode == 37){
 				left = false;
 			}
-			if(event.keyCode == 38){
+			if(event.keyCode == Keyboard.SPACE){
 				up = false;
 			}
 			if(event.keyCode == 39){
@@ -183,6 +182,11 @@ package avtr
 			asset.play();
 		}
 		
+		public function setPosition(x:Number, y:Number):void
+		{
+			body.x = x;
+			body.y = y;
+		}
 		
 	}
 }

@@ -40,6 +40,16 @@ package avtr
 		{
 			return position.y;
 		}
+		
+		public function set x(x:Number):void 
+		{
+			position = new Vector2D(x, position.y);
+		}
+		
+		public function set y(y:Number):void 
+		{
+			position = new Vector2D(position.x, y);
+		}
 
 		public function get velocity():Vector2D
 		{

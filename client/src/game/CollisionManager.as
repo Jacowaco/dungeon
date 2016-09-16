@@ -4,6 +4,7 @@ package game
 	
 	import flash.display.DisplayObject;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	
 	import tiles.Screen;
 	import tiles.TileLayer;
@@ -11,6 +12,12 @@ package game
 
 	public class CollisionManager
 	{
+		public static const TOP:int = 1;
+		public static const BOTTOM:int = 2;
+		public static const LEFT:int = 3;
+		public static const RIGHT:int = 4;
+		
+		
 		private var floor:Array = [];
 		private var obstacle:Array = [];
 		
@@ -31,19 +38,57 @@ package game
 				break;
 			}
 		 }
+		 
 		}
+		
 		
 		public function floorCollision(avatar:Avatar):Boolean
 		{
 			for each(var obj:DisplayObject in floor){
-//				return obj.hitTestPoint(avatar.localToGlobal(new Point()).x, avatar.localToGlobal(new Point()).y, true);
-				if(obj.hitTestObject(avatar)){
-					trace (obj.toString());
+				if(obj.hitTestObject(avatar.bottomTarget())){		
+					// si lo toque, me tengo que asegurar de que me deje bien parado
+					// la colisión se puede registrar recien mucho despues de que el pie atraveso el bounding
+					// del obstaculo
+					var y:Number = getObjectBoundingSide(obj, TOP);
+					avatar.setPosition(avatar.x, y);
 					return true;
-				}
-				
+				}				
 			}
 			return false;
+		}
+		
+		private function getObjectBoundingSide(obj:DisplayObject, side:int):Number
+		{
+			var rect:Rectangle = obj.getBounds(obj.stage);
+			switch(side)
+			{
+				case TOP:
+				{
+					return rect.top;
+					break;
+				}
+				case BOTTOM:
+				{
+					return rect.bottom;
+					break;
+				}
+				case LEFT:
+				{
+					return rect.left;
+					break;
+				}
+				case RIGHT:
+				{
+					return rect.right;
+					break;
+				}
+					
+				default:
+				{
+					break;
+				}
+			}
+			return 0;
 		}
 	}
 }
