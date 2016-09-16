@@ -54,6 +54,21 @@ package game
 					return true;
 				}				
 			}
+			
+			// ENGANA PICHANGA
+			for each(var obj:DisplayObject in obstacle){
+				if(obj.hitTestObject(avatar.bottomTarget())){		
+					// si lo toque, me tengo que asegurar de que me deje bien parado
+					// la colisión se puede registrar recien mucho despues de que el pie atraveso el bounding
+					// del obstaculo
+					var y:Number = getObjectBoundingSide(obj, TOP);
+					avatar.setPosition(avatar.x, y);
+					return true;
+				}				
+			}
+			
+			
+			
 			return false;
 		}
 		
