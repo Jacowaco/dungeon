@@ -60,13 +60,14 @@ package game
 		
 		private function checkTopCollition(obj:DisplayObject, avatar:Avatar):Boolean
 		{
-			if(obj.hitTestPoint((avatar.getTarget(Avatar.BOTTOM)).x,(avatar.getTarget(Avatar.BOTTOM)).y ), true){		
-				// si lo toque, me tengo que asegurar de que me deje bien parado
-				// la colisión se puede registrar recien mucho despues de que el pie atraveso el bounding
-				// del obstaculo
+//			trace((avatar.getTarget(Avatar.BOTTOM)).x,(avatar.getTarget(Avatar.BOTTOM)).y );
+			if(avatar.isJumping()) return false;
+			
+			var point:Point = avatar.localToGlobal(new Point());
+			if(obj.hitTestPoint( point.x, point.y, true)){
+//				trace("true");
 				var y:Number = getObjectBoundingSide(obj, Avatar.TOP);
-//				avatar.isOverFloor();
-				avatar.setPosition(avatar.x, y-1);				
+				avatar.setPosition(avatar.getPosition().x, y);				
 				(obj as MovieClip).gotoAndPlay(2);
 				return true;
 			} 

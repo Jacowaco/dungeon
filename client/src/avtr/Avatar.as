@@ -32,6 +32,12 @@ package avtr
 		public static const BOTTOM:int = 2;
 		public static const LEFT:int = 3;
 		public static const RIGHT:int = 4;
+		public static var VERTICAL:int = 1;
+		public static var HORIZONTAL:int = 2;
+		
+		protected var pos:Vector2D;		
+		protected var grav:Vector2D;
+		protected var vel:Vector2D;
 		
 		private var left:Boolean;
 		private var up:Boolean;
@@ -52,18 +58,17 @@ package avtr
 		private var translation:Number;
 		private var initialPosition:Vector2D;
 		private var asset:MovieClip;
-		private var body:Body;
-//		public var defaultBound:Rectangle;
+
 		
 		public function Avatar()
 		{
 			this.asset = new assets.GaturroMC;
 			addChild(asset);
-			
-			// me guardo el bouncing para poder calcular bien
-			// la posicion donde apoyarlo cuando salta			
-//			defaultBound = asset.getBounds(this); 
-			body = new Body();			
+
+			grav = new Vector2D(0, 1);
+			vel = new Vector2D(0,0);
+			pos = new Vector2D(15,15);
+					
 			speed = settings.avatar.speed;
 			maxSpeed = settings.avatar.maxSpeed;
 			jump = settings.avatar.jump;
@@ -71,37 +76,47 @@ package avtr
 		
 		public function update():void
 		{
-			
-			body.update();			
-			x = body.x;
-			y = body.y;		
+			this.vel = this.vel.add(this.grav); 
+			this.pos = this.pos.add(this.vel);
 			
 			
+		}
+		
+		public function render():void
+		{			
+			x = pos.x;
+			y = pos.y;		
+
 		}
 		public function addForce(x:Number, y:Number):void
 		{
-			body.velocity = body.velocity.add(new Vector2D(x,y));
+			vel = vel.add(new Vector2D(x,y));
 		}
 		
+		public function setForce(x:Number, y:Number):void
+		{
+			vel = new Vector2D(x,y);
+		}
 		
 		public function actions():void
 		{			
 			translation = (left ? -1 : 0 + right ? + 1 : 0) * speed / 10;
-			addForce(translation,0);
-			
+			setForce(translation,vel.y);
+	
 			if(up && !jumping){
 				trace("jump....");
 				jumping = true;
 				asset.gotoAndPlay("jump");
 				addForce(0, -jump);
+				trace(vel);
 			}
 			
 		}
 		
-		public function setInitialPosition(loc:Vector2D):void
-		{
-			initialPosition = loc;				
-		}
+//		public function setInitialPosition(loc:Vector2D):void
+//		{
+//			initialPosition = loc;				
+//		}
 		
 		public function direction(direction:int):void
 		{
@@ -147,18 +162,11 @@ package avtr
 		}
 
 
-		//		protected function changeState(state:AvatarState):void
-		//		{
-		//			if(currentState) currentState.exit();
-		//			currentState = state;
-		//			currentState.enter();
-		//		}
-		//		
-		//		public function jump():void{
-		//			changeState(jumpingState);		
-		//			
-		//		}
-		//		
+		public function isJumping():Boolean
+		{
+			return jumping;
+		}
+		
 		public function triggerJumpAnimation():void
 		{
 			asset.gotoAndPlay("jump");
@@ -191,16 +199,17 @@ package avtr
 			facingWall = true;
 //			body.collide(Body.HORIZONTAL);
 		}
-		
-		public function isJumping():Boolean
-		{
-			return jumping;
-		}
+
 		
 		public function setPosition(x:Number, y:Number):void
 		{
-			body.x = x;
-			body.y = y;
+			pos = new Vector2D(x,y); 
+			
+		}
+		
+		public function getPosition():Vector2D
+		{
+			return pos;
 		}
 		
 		public function pause():void
