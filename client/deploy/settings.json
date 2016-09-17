@@ -5,6 +5,7 @@
     "avatar":{
         "speed": 50,
         "maxSpeed": 500,
+        "gravity": [0,1],
         "jump": 20
     },
     "gui": {

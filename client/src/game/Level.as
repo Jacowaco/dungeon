@@ -27,9 +27,6 @@ package game
 			levels = new TileMap(Game.path("./tiles/"), "levels.json");
 			levels.addEventListener(TileMap.MAP_READY, onMapReady);
 			
-			avatar = new Avatar();
-			
-			addChild(avatar);
 			
 		}
 		
@@ -37,21 +34,25 @@ package game
 		{
 			trace("map ready: ");			
 			screens.push(new Screen(levels.getLayer("level_1")));
-//			screens.push(new Screen(levelDefinition.getLayer("level_2")));
 			addChild(screens[0]);
-//			addChild(screens[1]);
-			//setInterval(switchScreen, 2000);
 			collisions = new CollisionManager(screens[0] as Screen);
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			
+			avatar = new Avatar();			
+			avatar.position = (screens[0] as Screen).startPos;
+			addChild(avatar);
+			
+			
+
 		}
 		
 		private function onEnterFrame(e:Event):void
 		{
 			
-			avatar.actions();
+//			avatar.actions();
 			avatar.update();
 			collisions.floorCollision(avatar);
-			avatar.render();
+//			avatar.render();
 			
 			
 //			collisions.obstacleCollision(avatar);
@@ -79,12 +80,13 @@ package game
 		
 		public function keyDown(key:KeyboardEvent):void
 		{
-			avatar.key_down(key);
+			avatar.onKeyDown(key);
+
 		}
 		
 		public function keyUp(key:KeyboardEvent):void
 		{
-			avatar.key_up(key);	
+			avatar.onKeyUp(key);	
 		}
 	}
 }

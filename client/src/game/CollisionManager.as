@@ -61,16 +61,16 @@ package game
 		private function checkTopCollition(obj:DisplayObject, avatar:Avatar):Boolean
 		{
 //			trace((avatar.getTarget(Avatar.BOTTOM)).x,(avatar.getTarget(Avatar.BOTTOM)).y );
-			if(avatar.isJumping()) return false;
+//			if(avatar.isJumping()) return false;
 			
-			var point:Point = avatar.localToGlobal(new Point());
-			if(obj.hitTestPoint( point.x, point.y, true)){
-//				trace("true");
-				var y:Number = getObjectBoundingSide(obj, Avatar.TOP);
-				avatar.setPosition(avatar.getPosition().x, y);				
-				(obj as MovieClip).gotoAndPlay(2);
-				return true;
-			} 
+//			var point:Point = avatar.localToGlobal(new Point());
+//			if(obj.hitTestPoint( point.x, point.y, true)){
+////				trace("true");
+//				var y:Number = getObjectBoundingSide(obj, Avatar.TOP);
+//				avatar.setPosition(avatar.getPosition().x, y);				
+//				(obj as MovieClip).gotoAndPlay(2);
+//				return true;
+//			} 
 			
 			return false;
 		}
@@ -78,17 +78,17 @@ package game
 		private function checkLeftCollition(obj:DisplayObject, avatar:Avatar)
 		{
 			
-			if(obj.hitTestPoint( (avatar.getTarget(Avatar.LEFT)).x, (avatar.getTarget(Avatar.LEFT)).y )){		
-				// si lo toque, me tengo que asegurar de que me deje bien parado
-				// la colisión se puede registrar recien mucho despues de que el pie atraveso el bounding
-				// del obstaculo
-				var x:Number = getObjectBoundingSide(obj, Avatar.RIGHT);
-				avatar.isFacingWall();
-				avatar.setPosition(x, avatar.y);				
-				(obj as MovieClip).gotoAndPlay(2);
-				return true;
-			} 
-			
+//			if(obj.hitTestPoint( (avatar.getTarget(Avatar.LEFT)).x, (avatar.getTarget(Avatar.LEFT)).y )){		
+//				// si lo toque, me tengo que asegurar de que me deje bien parado
+//				// la colisión se puede registrar recien mucho despues de que el pie atraveso el bounding
+//				// del obstaculo
+//				var x:Number = getObjectBoundingSide(obj, Avatar.RIGHT);
+//				avatar.isFacingWall();
+//				avatar.setPosition(x, avatar.y);				
+//				(obj as MovieClip).gotoAndPlay(2);
+//				return true;
+//			} 
+//			
 			return false;
 				
 		}
@@ -96,14 +96,14 @@ package game
 		private function checkRightCollition(obj:DisplayObject, avatar:Avatar)
 		{
 			
-			if(obj.hitTestObject(avatar.getTarget(Avatar.RIGHT))){		
-				var x:Number = getObjectBoundingSide(obj, Avatar.LEFT);
-				avatar.isFacingWall();
-				avatar.setPosition(x , avatar.y);				
-				(obj as MovieClip).gotoAndPlay(2);
-				return true;
-			} 
-			
+//			if(obj.hitTestObject(avatar.getTarget(Avatar.RIGHT))){		
+//				var x:Number = getObjectBoundingSide(obj, Avatar.LEFT);
+//				avatar.isFacingWall();
+//				avatar.setPosition(x , avatar.y);				
+//				(obj as MovieClip).gotoAndPlay(2);
+//				return true;
+//			} 
+//			
 			return false;
 			
 		}
@@ -113,26 +113,26 @@ package game
 			var rect:Rectangle = obj.getBounds(obj.stage);
 			switch(side)
 			{
-				case Avatar.TOP:
-				{
-					return rect.top;
-					break;
-				}
-				case Avatar.BOTTOM:
-				{
-					return rect.bottom;
-					break;
-				}
-				case Avatar.LEFT:
-				{
-					return rect.left;
-					break;
-				}
-				case Avatar.RIGHT:
-				{
-					return rect.right;
-					break;
-				}
+//				case Avatar.TOP:
+//				{
+//					return rect.top;
+//					break;
+//				}
+//				case Avatar.BOTTOM:
+//				{
+//					return rect.bottom;
+//					break;
+//				}
+//				case Avatar.LEFT:
+//				{
+//					return rect.left;
+//					break;
+//				}
+//				case Avatar.RIGHT:
+//				{
+//					return rect.right;
+//					break;
+//				}
 					
 				default:
 				{

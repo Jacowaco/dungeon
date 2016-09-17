@@ -1,13 +1,11 @@
 package avtr
 {
-	import assets.*;
+	import assets.GaturroMC;
 	
 	import com.qb9.flashlib.geom.Vector2D;
 	import com.qb9.flashlib.prototyping.shapes.Rect;
 	
-	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
-	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
@@ -16,107 +14,99 @@ package avtr
 	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
 	
-	/*
-	alta data gato !
-	http://higherorderfun.com/blog/2012/05/20/the-guide-to-implementing-2d-platformers/
-	http://devmag.org.za/2011/07/04/how-to-design-levels-for-a-platformer/
-	http://devmag.org.za/2012/07/19/13-more-tips-for-making-a-fun-platformer/
-	http://devmag.org.za/2011/01/18/11-tips-for-making-a-fun-platformer/
-	*/
+	import game.Thing;
 	
+
 	
 	public class Avatar extends Sprite
 	{		
+		private static var LEFT:int = -1;
+		private static var RIGHT:int = 1;
 		
-		public static const TOP:int = 1;
-		public static const BOTTOM:int = 2;
-		public static const LEFT:int = 3;
-		public static const RIGHT:int = 4;
-		public static var VERTICAL:int = 1;
-		public static var HORIZONTAL:int = 2;
+		protected var currentState:AvatarState;
 		
-		protected var pos:Vector2D;		
-		protected var grav:Vector2D;
-		protected var vel:Vector2D;
+		private var idleState:IdleState;
+		private var walkingState:WalkState;
+		private var jumpingState:JumpState;
+		private var fallingState:FallState;
 		
-		private var left:Boolean;
-		private var up:Boolean;
-		private var right:Boolean;
-		private var space:Boolean;
+		private var keys:Object = {};  // guardo el estado de las keys para saber que hacer en el update
 		
-		private var jumping:Boolean = false;
-		private var overFloor:Boolean = false; 
-		private var facingWall:Boolean = false; 
+		private var walkSpeed:Number;
+		public var jumpForce:Number;
+		public var sideForce:Number;
 		
-		
-		private var speed:Number;		
-		private var maxSpeed:Number;
-		private var jump:Number;		
-		private var weight:Number;
-		
-		
-		private var translation:Number;
 		private var initialPosition:Vector2D;
-		private var asset:MovieClip;
-
+		public var contact:Thing; // la cosa contra la que estoy topado ahora.
 		
+		private var pos:Vector2D;
+		public var vel:Vector2D;
+		public var g:Vector2D;
+		public var f:Vector2D;
+		private var asset:MovieClip;
 		public function Avatar()
 		{
-			this.asset = new assets.GaturroMC;
+			
+			asset = new GaturroMC;
 			addChild(asset);
-
-			grav = new Vector2D(0, 1);
-			vel = new Vector2D(0,0);
-			pos = new Vector2D(15,15);
-					
-			speed = settings.avatar.speed;
-			maxSpeed = settings.avatar.maxSpeed;
-			jump = settings.avatar.jump;
+			
+			pos = new Vector2D(15,15); // TODO
+			vel = new Vector2D();						
+			g = new Vector2D(settings.avatar.gravity[0], settings.avatar.gravity[1]);
+			f = new Vector2D();
+			
+			jumpForce = settings.avatar.jump;
+			walkSpeed = settings.avatar.speed;
+			
+			idleState = new IdleState(this);			
+			walkingState = new WalkState(this);
+			jumpingState = new JumpState(this);
+			fallingState = new FallState(this);
+			changeState(fallingState); 			
 		}
 		
 		public function update():void
 		{
-			this.vel = this.vel.add(this.grav); 
-			this.pos = this.pos.add(this.vel);
 			
-			
-		}
-		
-		public function render():void
-		{			
+//			checkCollisions(platforms);
+//			checkGameStatus(platforms);
+			currentState.update(keys);
 			x = pos.x;
-			y = pos.y;		
-
+			y = pos.y;
+//			super.run(); // para que actualice la posicion del asset
 		}
-		public function addForce(x:Number, y:Number):void
-		{
-			vel = vel.add(new Vector2D(x,y));
-		}
-		
-		public function setForce(x:Number, y:Number):void
-		{
-			vel = new Vector2D(x,y);
+				
+		private function checkCollisions(platforms:Array):void{
+			currentState.checkCollisions(platforms);
 		}
 		
-		public function actions():void
-		{			
-			translation = (left ? -1 : 0 + right ? + 1 : 0) * speed / 10;
-			setForce(translation,vel.y);
-	
-			if(up && !jumping){
-				trace("jump....");
-				jumping = true;
-				asset.gotoAndPlay("jump");
-				addForce(0, -jump);
-				trace(vel);
+		private function checkGameStatus(platforms:Array):void
+		{
+			for each(var p:Thing in platforms){
+//				trace("p.isGoal(): ", p.isGoal());
+//				if(p.isGoal() && asset.hitTestObject(p.asset)) {					
+//					dispatchEvent(new Event(LevelEvents.LEVEL_WIN));
+//					return;
+//				}
+//				
+//				if(asset.localToGlobal(new Point(0, 0)).y > Game.SCREEN_HEIGHT) {
+//					dispatchEvent(new Event(LevelEvents.LEVEL_LOST));
+//					return;
+//				}
 			}
-			
 		}
 		
-//		public function setInitialPosition(loc:Vector2D):void
-//		{
-//			initialPosition = loc;				
-//		}
+		public function isFalling():Boolean
+		{
+			return currentState == fallingState;
+		}
+		
+		
+		
+		public function setInitialPosition(loc:Vector2D):void
+		{
+			initialPosition = loc;				
+		}
 		
 		public function direction(direction:int):void
 		{
@@ -125,46 +115,46 @@ package avtr
 		
 		public function reset():void
 		{
-			//			this.loc = initialPosition;
-			//			changeState(fallingState);
+			this.pos = initialPosition;
+			changeState(fallingState);
 		}
 		
 		
 		
-		public function getTarget(side:int):DisplayObject
+		
+		
+		
+		public function onKeyUp(ke:KeyboardEvent):void{	
+			delete keys[ke.keyCode];
+			currentState.onKeyUp(ke);
+		}
+		
+		public function onKeyDown(ke:KeyboardEvent):void
 		{
-			switch(side)
-			{
-				case TOP:
-				{
-					return asset.top_tg;
-					break;
-				}
-				case BOTTOM:
-				{
-					return asset.bottom_tg;
-					break;
-				}
-				case LEFT:
-				{
-					return asset.left_tg;
-					break;
-				}
-				case RIGHT:
-				{
-					return asset.right_tg;
-					break;
-				}
-					
-			}
-			return null;
 			
+			switch (ke.keyCode ) {
+				case Keyboard.LEFT:
+					direction(LEFT);
+					break;
+				case Keyboard.RIGHT:
+					direction(RIGHT);
+					break;
+			}
+			
+			keys[ke.keyCode] = 1;	
+			currentState.onKeyDown(ke);
 		}
-
-
-		public function isJumping():Boolean
+		
+		protected function changeState(state:AvatarState):void
 		{
-			return jumping;
+			if(currentState) currentState.exit();
+			currentState = state;
+			currentState.enter();
+		}
+		
+		public function jump():void{
+			changeState(jumpingState);		
+			
 		}
 		
 		public function triggerJumpAnimation():void
@@ -173,44 +163,42 @@ package avtr
 		}
 		
 		public function walk():void{
-			//			changeState(walkingState);
+			changeState(walkingState);
 			asset.gotoAndPlay("walk");
 		}
 		
 		public function idle():void{
-			//			changeState(idleState);
+			changeState(idleState);
 			asset.gotoAndStop("standBy");
 		}
 		
 		public function fall():void{
-			//			changeState(fallingState);
+			changeState(fallingState);
 			asset.gotoAndPlay("falling");
 		}
 		
-//		public function isOverFloor():void
-//		{
-//			overFloor = true;
-////			body.collide(Body.VERTICAL);
-//			
-//		}
 		
-		public function isFacingWall():void
-		{
-			facingWall = true;
-//			body.collide(Body.HORIZONTAL);
-		}
-
-		
-		public function setPosition(x:Number, y:Number):void
-		{
-			pos = new Vector2D(x,y); 
-			
+		public function get speed():Number{
+			return walkSpeed;
 		}
 		
-		public function getPosition():Vector2D
+		
+		public function getTarget():Rectangle
 		{
-			return pos;
+			var target:MovieClip = asset["target"];			
+			return  target.getBounds(target.stage);
 		}
+		
+		
+		public function moveBy(dx:Number, dy:Number):void
+		{
+			pos = pos.add( new Vector2D(dx, dy));
+		}		
+		
+		public function moveTo(x:Number, y:Number):void
+		{
+			pos = new Vector2D(x, y);
+		}		
 		
 		public function pause():void
 		{
@@ -221,30 +209,16 @@ package avtr
 		{
 			asset.play();
 		}
-		
-		public function key_down(event:KeyboardEvent):void{
-			if(event.keyCode == 37){
-				left = true;
-			}
-			if(event.keyCode == Keyboard.SPACE){
-				up = true;
-			}
-			if(event.keyCode == 39){
-				right = true;
-			}
+
+		public function get position():Vector2D
+		{
+			return pos;
 		}
-		
-		public function key_up(event:KeyboardEvent):void{
-			if(event.keyCode == 37){
-				left = false;
-			}
-			if(event.keyCode == Keyboard.SPACE){
-				up = false;
-			}
-			if(event.keyCode == 39){
-				right = false;
-			}
+
+		public function set position(value:Vector2D):void
+		{
+			pos = value;
 		}
-		
+
 	}
 }
