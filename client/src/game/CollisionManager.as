@@ -62,14 +62,17 @@ package game
 		
 		private function checkTopCollition(obj:Thing, avatar:Avatar):Boolean
 		{
-//			if(avatar.isJumping()) return false;
-			if(avatar.contact == obj) return true;
-			
 			var point:Point = avatar.target(Avatar.BOTTOM).localToGlobal(new Point());
 
 			if(obj.hitTestPoint( point.x, point.y, true)){
-				avatar.contact = obj;
-				avatar.setIdleState();				
+				if(avatar.contact == obj) return true;				
+				avatar.contact = obj;						
+				avatar.moveBy(0, obj.getBounds(obj.stage).top - avatar.target(Avatar.BOTTOM).localToGlobal(new Point).y);  // fuerzo a que el gato se pare en la plataforma
+//				trace(obj.getBounds(obj.stage).top, avatar.target(Avatar.BOTTOM).localToGlobal(new Point) );
+			
+				
+				if(avatar.isFalling()) avatar.setIdleState();
+				avatar.move();
 				obj.debug();
 				return true;
 			} 

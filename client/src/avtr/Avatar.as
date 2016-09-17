@@ -100,6 +100,8 @@ package avtr
 			var xdir:Number = left ? -1 : 0 + rigth ? 1 : 0;	
 			vel = new Vector2D(xdir * speed, vel.y);
 			if(xdir != 0) faceTo(xdir);
+			
+			if(jump) setJumpState();
 		}
 		
 		public function isFalling():Boolean
@@ -163,18 +165,12 @@ package avtr
 			currentState = state;
 			currentState.enter();
 		}
-		
 
-//		public function jump():void{
-//			changeState(jumpingState);		
-//			
-//		}
-		
-		public function triggerJumpAnimation():void
-		{
-			asset.gotoAndPlay("jump");
+		public function setJumpState():void{
+			changeState(jumpingState);		
+			asset.gotoAndPlay("jump");			
 		}
-
+		
 		public function setWalkState():void{
 			changeState(walkingState);
 			asset.gotoAndPlay("walk");

@@ -54,15 +54,7 @@ package game
 			asset.gotoAndPlay(2);
 		}
 		
-		
-//		override public function run():void
-//		{			
-//			switch (kind){
-//				case MOBILE: moveTo(offset.x, loc.y); break;
-//			}
-//			
-//			super.run();
-//		}
+	
 		
 		public function triggerAction():void
 		{
@@ -147,11 +139,11 @@ package game
 			return isActive;
 		}
 		
-		public function getTarget():Rectangle
-		{
-			var target:MovieClip = asset["ison"];			
-			return  target.getBounds(target.stage);
-		}	
+//		public function getBounds():Rectangle
+//		{
+////			var target:MovieClip = asset["ison"];			
+//			return  getBounds(stage);
+//		}	
 		
 		public function isGoal():Boolean
 		{

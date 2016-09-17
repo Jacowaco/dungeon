@@ -32,6 +32,7 @@ package avtr
 		override public function update():void
 		{	
 //			var direction:Vector2D;// = resolveDirection(keys);
+			
 			context.addController();
 			context.move();
 			if(!(context.left || context.rigth)) context.setIdleState();

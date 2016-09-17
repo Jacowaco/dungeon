@@ -49,8 +49,7 @@ package game
 		private function onEnterFrame(e:Event):void
 		{
 			
-
-			collisions.floorCollision(avatar);
+			if( ! collisions.floorCollision(avatar)) avatar.setFallState();
 			avatar.update();
 			
 		}

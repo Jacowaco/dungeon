@@ -24,7 +24,7 @@ package avtr
 //			logger.info("platform: ", platform);
 //			offset = context.contact.pos.x - context.position.x;	
 			context.vel = new Vector2D();
-			trace(offset);
+//			trace(offset);
 		}
 		
 		override public function exit():void{

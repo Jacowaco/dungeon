@@ -20,8 +20,9 @@ package avtr
 		}
 		
 		override public function enter():void{
-//			logger.info("enter jump state");			
-			jump(1.0);
+			logger.info("enter jump state");			
+			jump();
+			context.contact = null;
 			canJumpAgain = false;
 			secondJumpCompleted = false;
 		}
@@ -54,12 +55,10 @@ package avtr
 //		}
 		
 		
-		private function jump(val:Number):void
+		private function jump():void
 		{
-			var jump:Vector2D = new Vector2D(0, -context.jumpForce * val);		
+			var jump:Vector2D = new Vector2D(context.vel.x, -context.jumpForce);		
 			context.vel = context.vel.add(jump);		
-			context.triggerJumpAnimation();
-			audio.fx.play("jump");
 		}
 		
 //		override public function onKeyDown(ke:KeyboardEvent):void{
