@@ -49,17 +49,9 @@ package game
 		private function onEnterFrame(e:Event):void
 		{
 			
-//			avatar.actions();
-			avatar.update();
-			collisions.floorCollision(avatar);
-//			avatar.render();
-			
-			
-//			collisions.obstacleCollision(avatar);
 
-			
-			
-	
+			collisions.floorCollision(avatar);
+			avatar.update();
 			
 		}
 		

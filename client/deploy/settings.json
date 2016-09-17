@@ -3,8 +3,7 @@
         "soundsEnable": false
     },
     "avatar":{
-        "speed": 50,
-        "maxSpeed": 500,
+        "speed": 5,
         "gravity": [0,1],
         "jump": 20
     },

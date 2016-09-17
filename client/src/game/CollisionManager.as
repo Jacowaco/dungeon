@@ -25,7 +25,7 @@ package game
 		private function addColliders(screen:Screen):void
 		{
 		 for(var i:int = 0; i < screen.numChildren; i++){
-			switch (screen.getChildAt(i).name){
+			switch ((screen.getChildAt(i) as Thing).name){
 				case "floor":
 					floor.push(screen.getChildAt(i));
 				break;
@@ -35,12 +35,14 @@ package game
 			}
 		 }
 		 
+		 trace(floor.length);
+		 trace(obstacle.length);
 		}
 		
 		
 		public function floorCollision(avatar:Avatar):Boolean
 		{
-			for each(var obj:DisplayObject in floor){
+			for each(var obj:Thing in floor){
 				if(checkTopCollition(obj, avatar)) return true;
 			}
 
@@ -50,7 +52,7 @@ package game
 		public function obstacleCollision(avatar:Avatar):Boolean
 		{
 			// ENGANA PICHANGA
-			for each(var obj:DisplayObject in obstacle){
+			for each(var obj:Thing in obstacle){
 				if(checkTopCollition(obj, avatar)) return true;		
 				if(checkLeftCollition(obj, avatar)) return true;
 				if(checkRightCollition(obj, avatar)) return true;
@@ -58,19 +60,19 @@ package game
 			return false;
 		}
 		
-		private function checkTopCollition(obj:DisplayObject, avatar:Avatar):Boolean
+		private function checkTopCollition(obj:Thing, avatar:Avatar):Boolean
 		{
-//			trace((avatar.getTarget(Avatar.BOTTOM)).x,(avatar.getTarget(Avatar.BOTTOM)).y );
 //			if(avatar.isJumping()) return false;
+			if(avatar.contact == obj) return true;
 			
-//			var point:Point = avatar.localToGlobal(new Point());
-//			if(obj.hitTestPoint( point.x, point.y, true)){
-////				trace("true");
-//				var y:Number = getObjectBoundingSide(obj, Avatar.TOP);
-//				avatar.setPosition(avatar.getPosition().x, y);				
-//				(obj as MovieClip).gotoAndPlay(2);
-//				return true;
-//			} 
+			var point:Point = avatar.target(Avatar.BOTTOM).localToGlobal(new Point());
+
+			if(obj.hitTestPoint( point.x, point.y, true)){
+				avatar.contact = obj;
+				avatar.setIdleState();				
+				obj.debug();
+				return true;
+			} 
 			
 			return false;
 		}

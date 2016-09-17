@@ -5,6 +5,7 @@ package avtr
 	import com.qb9.flashlib.geom.Vector2D;
 	import com.qb9.flashlib.prototyping.shapes.Rect;
 	
+	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -14,14 +15,26 @@ package avtr
 	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
 	
+	import game.CollisionManager;
 	import game.Thing;
 	
-
+	import org.as3commons.zip.utils.ChecksumUtil;
+	
+	
 	
 	public class Avatar extends Sprite
 	{		
-		private static var LEFT:int = -1;
-		private static var RIGHT:int = 1;
+		public static var LEFT:int 			= 1;
+		public static var RIGHT:int 		= 2;
+		public static var BOTTOM:int 		= 3;
+		public static var TOP:int 			= 4;
+		
+		public var left:Boolean = false;
+		public var rigth:Boolean = false;
+		public var jump:Boolean = false;
+		public var duck:Boolean = false;
+		public var shoot:Boolean = false;
+		
 		
 		protected var currentState:AvatarState;
 		
@@ -66,34 +79,26 @@ package avtr
 		}
 		
 		public function update():void
-		{
-			
-//			checkCollisions(platforms);
-//			checkGameStatus(platforms);
-			currentState.update(keys);
-			x = pos.x;
-			y = pos.y;
-//			super.run(); // para que actualice la posicion del asset
-		}
-				
-		private function checkCollisions(platforms:Array):void{
-			currentState.checkCollisions(platforms);
+		{						
+			currentState.update();			
 		}
 		
-		private function checkGameStatus(platforms:Array):void
+		public function move():void
 		{
-			for each(var p:Thing in platforms){
-//				trace("p.isGoal(): ", p.isGoal());
-//				if(p.isGoal() && asset.hitTestObject(p.asset)) {					
-//					dispatchEvent(new Event(LevelEvents.LEVEL_WIN));
-//					return;
-//				}
-//				
-//				if(asset.localToGlobal(new Point(0, 0)).y > Game.SCREEN_HEIGHT) {
-//					dispatchEvent(new Event(LevelEvents.LEVEL_LOST));
-//					return;
-//				}
-			}
+			position = position.add(vel);
+			x = pos.x;
+			y = pos.y;
+		}
+		
+		public function addGravity():void
+		{ 
+			vel = vel.add(g);
+		}
+		
+		public function addController():void
+		{
+			var xdir:Number = left ? -1 : 0 + rigth ? 1 : 0;	
+			vel = new Vector2D(xdir * speed, vel.y);
 		}
 		
 		public function isFalling():Boolean
@@ -102,47 +107,53 @@ package avtr
 		}
 		
 		
-		
-		public function setInitialPosition(loc:Vector2D):void
-		{
-			initialPosition = loc;				
-		}
-		
 		public function direction(direction:int):void
 		{
 			asset.scaleX = Math.abs(asset.scaleX) * direction;	
 		}
 		
-		public function reset():void
-		{
-			this.pos = initialPosition;
-			changeState(fallingState);
-		}
-		
-		
-		
-		
 		
 		
 		public function onKeyUp(ke:KeyboardEvent):void{	
-			delete keys[ke.keyCode];
-			currentState.onKeyUp(ke);
+			switch (ke.keyCode ) {
+				case Keyboard.LEFT:
+					left = false;
+					break;
+				case Keyboard.RIGHT:
+					rigth = false;
+					break;
+				case Keyboard.UP:
+					
+					break;				
+				case Keyboard.DOWN:
+					
+					break;
+				case Keyboard.SPACE:
+					jump = false;
+					break;
+			}
 		}
 		
 		public function onKeyDown(ke:KeyboardEvent):void
 		{
-			
 			switch (ke.keyCode ) {
 				case Keyboard.LEFT:
-					direction(LEFT);
+					left = true;
 					break;
 				case Keyboard.RIGHT:
-					direction(RIGHT);
+					rigth = true;
+					break;
+				case Keyboard.UP:
+					
+					break;				
+				case Keyboard.DOWN:
+					
+					break;
+				case Keyboard.SPACE:
+					jump = true;
 					break;
 			}
 			
-			keys[ke.keyCode] = 1;	
-			currentState.onKeyDown(ke);
 		}
 		
 		protected function changeState(state:AvatarState):void
@@ -152,42 +163,45 @@ package avtr
 			currentState.enter();
 		}
 		
-		public function jump():void{
-			changeState(jumpingState);		
-			
-		}
+
+//		public function jump():void{
+//			changeState(jumpingState);		
+//			
+//		}
 		
 		public function triggerJumpAnimation():void
 		{
 			asset.gotoAndPlay("jump");
 		}
-		
-		public function walk():void{
+
+		public function setWalkState():void{
 			changeState(walkingState);
 			asset.gotoAndPlay("walk");
 		}
-		
-		public function idle():void{
+
+		public function setIdleState():void
+		{
 			changeState(idleState);
 			asset.gotoAndStop("standBy");
 		}
+
 		
-		public function fall():void{
+		public function setFallState():void{
 			changeState(fallingState);
 			asset.gotoAndPlay("falling");
 		}
 		
-		
+
 		public function get speed():Number{
 			return walkSpeed;
 		}
 		
-		
-		public function getTarget():Rectangle
-		{
-			var target:MovieClip = asset["target"];			
-			return  target.getBounds(target.stage);
-		}
+//		
+//		public function getTarget():Rectangle
+//		{
+//			var target:MovieClip = asset["target"];			
+//			return  target.getBounds(target.stage);
+//		}
 		
 		
 		public function moveBy(dx:Number, dy:Number):void
@@ -209,16 +223,47 @@ package avtr
 		{
 			asset.play();
 		}
-
+		
 		public function get position():Vector2D
 		{
 			return pos;
 		}
-
+		
 		public function set position(value:Vector2D):void
 		{
 			pos = value;
 		}
-
+		
+		public function target(target:int):DisplayObject
+		{
+			switch(target)
+			{
+				case BOTTOM:
+				{
+					return asset.bottom_tg;
+					break;
+				}
+				case TOP:
+				{
+					return asset.top_tg;
+					break;
+				}
+				case LEFT:
+				{
+					return asset.left_tg;
+					break;
+				}
+				case RIGHT:
+				{
+					return asset.right_tg;
+					break;
+				}
+				default:
+				{
+					break;
+				}
+			}
+			return null;
+		}
 	}
 }

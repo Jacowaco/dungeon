@@ -40,6 +40,7 @@ package game
 		public function Thing(mc:MovieClip)
 		{			
 			asset = mc;
+			this.name = asset.name;
 			this.addChild(mc);
 		}
 		
@@ -48,6 +49,10 @@ package game
 			return asset.name;
 		}
 		
+		public function debug():void
+		{
+			asset.gotoAndPlay(2);
+		}
 		
 		
 //		override public function run():void
