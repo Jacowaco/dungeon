@@ -99,6 +99,7 @@ package avtr
 		{
 			var xdir:Number = left ? -1 : 0 + rigth ? 1 : 0;	
 			vel = new Vector2D(xdir * speed, vel.y);
+			if(xdir != 0) faceTo(xdir);
 		}
 		
 		public function isFalling():Boolean
@@ -107,7 +108,7 @@ package avtr
 		}
 		
 		
-		public function direction(direction:int):void
+		public function faceTo(direction:int):void
 		{
 			asset.scaleX = Math.abs(asset.scaleX) * direction;	
 		}

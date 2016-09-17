@@ -35,11 +35,6 @@ package avtr
 			context.addController();
 			context.move();
 			if(!(context.left || context.rigth)) context.setIdleState();
-				
-//			if(context.contact) {				
-//				offset -= direction.x * context.speed;
-//			}			
-//			context.moveTo(context.contact.pos.x - offset, context.position.y);
 		}
 		
 //		override public function onKeyDown(ke:KeyboardEvent):void
