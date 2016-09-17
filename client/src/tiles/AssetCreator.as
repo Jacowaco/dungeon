@@ -11,11 +11,12 @@ package tiles
 		{
 			tiles.obstacle;
 			tiles.floor;
+			tiles.goal;
 		}
 		
 		public static function createAsset(name:String):MovieClip
 		{
-			trace("tiles."+name);
+//			trace("tiles."+name);
 			var myClass:Class = getDefinitionByName("tiles."+name) as Class;			
 			return new myClass() as MovieClip;
 		}

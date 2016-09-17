@@ -17,11 +17,11 @@ package avtr
 		}
 		
 		override public function enter():void{
-			logger.info("enter fall state");			
+//			logger.info("enter fall state");			
 		}
 		
 		override public function exit():void{
-			logger.info("exit fall state");
+//			logger.info("exit fall state");
 		}
 		
 		// fall state solo lo hace caer

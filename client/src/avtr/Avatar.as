@@ -82,7 +82,7 @@ package avtr
 		
 		public function update():void
 		{						
-			trace("update state: ", currentState);
+//			trace("update state: ", currentState);
 			currentState.update();			
 		}
 		

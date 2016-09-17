@@ -32,20 +32,22 @@ package tiles
 					if(currentTile.gid == 0) continue; // si es un tile vacio
 					
 					if(currentTile.name == "start") {
-						startPos = new Vector2D(x * currentTile.dimension.x, x * currentTile.dimension.y); // si es un tile vacio
+						startPos = new Vector2D(x * currentTile.dimension.x, y * currentTile.dimension.y + currentTile.dimension.y); // si es un tile vacio
 						continue;
 					}
-					
-					if(currentTile.name == "goal") {
-						startPos = new Vector2D(x * currentTile.dimension.x, x * currentTile.dimension.y); // si es un tile vacio
-						continue;
-					}
+//					
+//					if(currentTile.name == "goal") {
+//						startPos = new Vector2D(x * currentTile.dimension.x, x * currentTile.dimension.y); // si es un tile vacio
+//						continue;
+//					}
 					
 					var asset:MovieClip = AssetCreator.createAsset(currentTile.name);					
 					asset.x = x * currentTile.dimension.x;//* scale 
 					asset.y = y * currentTile.dimension.y;//* scale
 					asset.name = currentTile.name;
+//					if(asset.name == "goal") asset 
 					addChild(new Thing(asset));
+					
 				}
 			}
 		}

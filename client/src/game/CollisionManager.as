@@ -16,6 +16,9 @@ package game
 		
 		private var floor:Array = [];
 		private var obstacle:Array = [];
+		private var goal:Object;
+		//http://higherorderfun.com/blog/2012/05/20/the-guide-to-implementing-2d-platformers/
+		
 		
 		public function CollisionManager(screen:Screen)
 		{
@@ -31,12 +34,15 @@ package game
 				break;
 				case "obstacle":
 					obstacle.push(screen.getChildAt(i));
-				break;
+				break;				
+				
+				case "goal":
+					goal = screen.getChildAt(i);
+					break;				
+						
 			}
 		 }
 		 
-		 trace(floor.length);
-		 trace(obstacle.length);
 		}
 		
 		
@@ -85,6 +91,15 @@ package game
 			}
 			return false;
 				
+		}
+		
+		public function checkGoal(avatar:Avatar){
+			var target:Point = avatar.target(Avatar.BOTTOM).localToGlobal(new Point);// avatar.target(dir ? Avatar.RIGHT : Avatar.LEFT).localToGlobal(new Point);  siempre es right			
+			if(goal.hitTestPoint(target.x, target.y)){	
+				trace("goal");
+				return true;
+			}
+			return false;
 		}
 		
 	}

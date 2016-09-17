@@ -8,6 +8,7 @@ package game
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.utils.setInterval;
+	import flash.utils.setTimeout;
 	
 	import tiles.Screen;
 	import tiles.TileMap;
@@ -30,24 +31,41 @@ package game
 			
 		}
 		
+		private var screenNumber:int = 0;
+		
 		private function onMapReady(e:Event):void
 		{
 			trace("map ready: ");			
-			screens.push(new Screen(levels.getLayer("level_1")));
-			addChild(screens[0]);
-			collisions = new CollisionManager(screens[0] as Screen);
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);
-			
 			avatar = new Avatar();			
-			avatar.position = (screens[0] as Screen).startPos;
+			
+			createScreen(screenNumber);
 			addChild(avatar);
 			
+		}
+		
+		var s:Screen ;
+		private function createScreen(number:int):void
+		{
+			if(s){ 
+				removeChild(s);
+				s = null;
+			}
 			
-
+			s = new Screen(levels.getLayer("level_" + (number + 1).toString()));
+			addChild(s);			
+			collisions = new CollisionManager(s as Screen);
+			
+			trace((s as Screen).startPos);
+			avatar.position = (s as Screen).startPos;
+			avatar.setIdleState();
+					
+			addEventListener(Event.ENTER_FRAME, onEnterFrame);			
 		}
 		
 		private function onEnterFrame(e:Event):void
 		{
+
+
 			if(collisions.checkFloor(avatar)) {  // true si estoy parado sobre algo...
 				avatar.setIdleState();
 			}
@@ -59,6 +77,13 @@ package game
 			
 			if(!avatar.isJumping()) avatar.setFallState();
 			avatar.update();
+			
+			if(collisions.checkGoal(avatar)) {  // true si estoy parado sobre algo...
+				removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+				screenNumber = (screenNumber + 1) % 2;
+				setTimeout(createScreen, 100, screenNumber);
+				
+			}
 			
 		}
 		
