@@ -37,6 +37,7 @@ package avtr
 		{
 //			context.moveTo(context.contact.pos.x - offset, context.position.y);		
 			if(context.left || context.rigth) context.setWalkState();
+			if(context.jump) context.setJumpState();
 		}
 		
 //		override public function onKeyDown(ke:KeyboardEvent):void

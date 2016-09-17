@@ -35,7 +35,9 @@ package avtr
 			
 			context.addController();
 			context.move();
-			if(!(context.left || context.rigth)) context.setIdleState();
+			if(!(context.left || context.rigth)) {				
+				context.setIdleState();
+			}
 		}
 		
 //		override public function onKeyDown(ke:KeyboardEvent):void

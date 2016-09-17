@@ -49,6 +49,22 @@ package game
 			return false;
 		}
 		
+
+		private function checkTopCollition(obj:Thing, avatar:Avatar):Boolean
+		{
+			var point:Point = avatar.target(Avatar.BOTTOM).localToGlobal(new Point());
+			
+			if(obj.hitTestPoint( point.x, point.y, true)){
+//				avatar.contact = obj;						
+				avatar.moveBy(0, obj.getBounds(obj.stage).top - avatar.target(Avatar.BOTTOM).localToGlobal(new Point).y);  // fuerzo a que el gato se pare en la plataforma
+				avatar.move();
+				obj.debug();
+				return true;
+			} 
+			
+			return false;
+		}
+		
 		public function obstacleCollision(avatar:Avatar):Boolean
 		{
 			// ENGANA PICHANGA
@@ -57,26 +73,6 @@ package game
 				if(checkLeftCollition(obj, avatar)) return true;
 				if(checkRightCollition(obj, avatar)) return true;
 			}
-			return false;
-		}
-		
-		private function checkTopCollition(obj:Thing, avatar:Avatar):Boolean
-		{
-			var point:Point = avatar.target(Avatar.BOTTOM).localToGlobal(new Point());
-
-			if(obj.hitTestPoint( point.x, point.y, true)){
-				if(avatar.contact == obj) return true;				
-				avatar.contact = obj;						
-				avatar.moveBy(0, obj.getBounds(obj.stage).top - avatar.target(Avatar.BOTTOM).localToGlobal(new Point).y);  // fuerzo a que el gato se pare en la plataforma
-//				trace(obj.getBounds(obj.stage).top, avatar.target(Avatar.BOTTOM).localToGlobal(new Point) );
-			
-				
-				if(avatar.isFalling()) avatar.setIdleState();
-				avatar.move();
-				obj.debug();
-				return true;
-			} 
-			
 			return false;
 		}
 		

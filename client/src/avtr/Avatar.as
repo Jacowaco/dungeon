@@ -80,6 +80,7 @@ package avtr
 		
 		public function update():void
 		{						
+			trace("update state: ", currentState);
 			currentState.update();			
 		}
 		
@@ -109,97 +110,49 @@ package avtr
 			return currentState == fallingState;
 		}
 		
+		public function isJumping():Boolean
+		{
+			return currentState == jumpingState;
+		}
 		
 		public function faceTo(direction:int):void
 		{
 			asset.scaleX = Math.abs(asset.scaleX) * direction;	
 		}
-		
-		
-		
-		public function onKeyUp(ke:KeyboardEvent):void{	
-			switch (ke.keyCode ) {
-				case Keyboard.LEFT:
-					left = false;
-					break;
-				case Keyboard.RIGHT:
-					rigth = false;
-					break;
-				case Keyboard.UP:
-					
-					break;				
-				case Keyboard.DOWN:
-					
-					break;
-				case Keyboard.SPACE:
-					jump = false;
-					break;
-			}
-		}
-		
-		public function onKeyDown(ke:KeyboardEvent):void
-		{
-			switch (ke.keyCode ) {
-				case Keyboard.LEFT:
-					left = true;
-					break;
-				case Keyboard.RIGHT:
-					rigth = true;
-					break;
-				case Keyboard.UP:
-					
-					break;				
-				case Keyboard.DOWN:
-					
-					break;
-				case Keyboard.SPACE:
-					jump = true;
-					break;
-			}
 			
-		}
-		
 		protected function changeState(state:AvatarState):void
 		{
 			if(currentState) currentState.exit();
 			currentState = state;
 			currentState.enter();
 		}
-
+		
 		public function setJumpState():void{
-			changeState(jumpingState);		
-			asset.gotoAndPlay("jump");			
+			if(!isJumping()) changeState(jumpingState);		
+			asset.gotoAndPlay("jump");		
 		}
+		
 		
 		public function setWalkState():void{
 			changeState(walkingState);
 			asset.gotoAndPlay("walk");
 		}
-
+		
 		public function setIdleState():void
 		{
 			changeState(idleState);
 			asset.gotoAndStop("standBy");
 		}
-
 		
 		public function setFallState():void{
-			changeState(fallingState);
+			if(! isFalling()) changeState(fallingState);
 			asset.gotoAndPlay("falling");
 		}
 		
-
+		
 		public function get speed():Number{
 			return walkSpeed;
 		}
-		
-//		
-//		public function getTarget():Rectangle
-//		{
-//			var target:MovieClip = asset["target"];			
-//			return  target.getBounds(target.stage);
-//		}
-		
 		
 		public function moveBy(dx:Number, dy:Number):void
 		{
@@ -261,6 +214,47 @@ package avtr
 				}
 			}
 			return null;
+		}
+		
+		public function onKeyUp(ke:KeyboardEvent):void{	
+			switch (ke.keyCode ) {
+				case Keyboard.LEFT:
+					left = false;
+					break;
+				case Keyboard.RIGHT:
+					rigth = false;
+					break;
+				case Keyboard.UP:
+					
+					break;				
+				case Keyboard.DOWN:
+					
+					break;
+				case Keyboard.SPACE:
+					jump = false;
+					break;
+			}
+		}
+		
+		public function onKeyDown(ke:KeyboardEvent):void
+		{
+			switch (ke.keyCode ) {
+				case Keyboard.LEFT:
+					left = true;
+					break;
+				case Keyboard.RIGHT:
+					rigth = true;
+					break;
+				case Keyboard.UP:
+					
+					break;				
+				case Keyboard.DOWN:
+					
+					break;
+				case Keyboard.SPACE:
+					jump = true;
+					break;
+			}			
 		}
 	}
 }
