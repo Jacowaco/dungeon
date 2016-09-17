@@ -57,6 +57,8 @@ package avtr
 		public var g:Vector2D;
 		public var f:Vector2D;
 		private var asset:MovieClip;
+		private var faceRight:Boolean = true;
+		
 		public function Avatar()
 		{
 			
@@ -116,10 +118,16 @@ package avtr
 		}
 		
 		public function faceTo(direction:int):void
-		{
+		{			
+			faceRight = direction == 1 ? true : false; 
 			asset.scaleX = Math.abs(asset.scaleX) * direction;	
 		}
-			
+		
+		public function facingRight():Boolean
+		{
+			return faceRight;
+		}
+		
 		protected function changeState(state:AvatarState):void
 		{
 			if(currentState) currentState.exit();

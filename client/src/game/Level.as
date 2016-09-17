@@ -48,9 +48,14 @@ package game
 		
 		private function onEnterFrame(e:Event):void
 		{
-			if(collisions.floorCollision(avatar)) {  // true si estoy parado sobre algo...
+			if(collisions.checkFloor(avatar)) {  // true si estoy parado sobre algo...
 				avatar.setIdleState();
 			}
+			
+			if(collisions.checkObstacles(avatar)) {  // true si estoy parado sobre algo...
+				avatar.setIdleState();
+			}
+			
 			
 			if(!avatar.isJumping()) avatar.setFallState();
 			avatar.update();
