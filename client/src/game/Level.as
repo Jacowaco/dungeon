@@ -8,6 +8,7 @@ package game
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import flash.utils.setInterval;
 	import flash.utils.setTimeout;
 	
@@ -32,11 +33,12 @@ package game
 			screens = new Screens(levelDef);	
 			camera.addChild(screens);
 			
-			avatar = new Avatar();
-			collisions = new CollisionManager(screens);
+			avatar = new Avatar();			
 			camera.addChild(avatar);
 			
 			addChild(camera);
+			
+			collisions = new CollisionManager(screens);
 			
 			rlim = settings.camera.rightLimit;
 			init();
@@ -50,9 +52,13 @@ package game
 
 		
 		public function onEnterFrame(e:Event):void
-		{
+		{			
+			collisions.resolve(screens, avatar);
 			
-			collisions.resolve(screens.currentScreen(), avatar);
+			
+//			var bounds:Rectangle = new Rectangle(camera.x,-100,900,580);
+//			screens.currentObstacles(bounds);
+//			collisions.resolve(screens.currentObstacles(), avatar);
 			
 			if(!avatar.isJumping()) avatar.setFallState();			
 			avatar.update();			

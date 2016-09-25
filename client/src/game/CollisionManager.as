@@ -17,19 +17,24 @@ package game
 		private var obstacle:Array = [];
 		private var goal:Object;
 		//http://higherorderfun.com/blog/2012/05/20/the-guide-to-implementing-2d-platformers/
-		private var currentScreen:Screen;
+		private var currentScreen:Screens;
 		
-		public function CollisionManager(screen:Screens)
+		public function CollisionManager(screens:Screens)
 		{
-			
+//			cacheScreen(screens);
+			trace("CollisionManager: ", screens);
+			for each(var s:Screen in screens.getScreens()){
+				trace("adding ", s);
+				addColliders(s);
+			}	
 		}
 		
-		public function resolve(screen:Screen, avatar:Avatar):Boolean
+		public function resolve(screens:Screens, avatar:Avatar):Boolean
 		{
-			if (currentScreen != screen){
-				cacheScreen(screen);
-				currentScreen = screen;
-			}
+//			if (currentScreen != screens){
+//				cacheScreen(screens);
+//				currentScreen = screens;
+//			}
 			
 			if(checkFloor(avatar)) {  // true si estoy parado sobre algo...
 				avatar.setIdleState();
@@ -41,9 +46,9 @@ package game
 			return false;
 		}
 		
-		private function cacheScreen(screen:Screen):void
+		private function cacheScreen(screens:Screens):void
 		{
-			addColliders(screen);
+					
 		}
 		
 		private function addColliders(screen:Screen):void
