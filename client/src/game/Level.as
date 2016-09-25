@@ -67,13 +67,13 @@ package game
 		
 		
 		
-		public function keyDown(key:KeyboardEvent):void
+		public function onKeyDown(key:KeyboardEvent):void
 		{
 			avatar.onKeyDown(key);
 
 		}
 		
-		public function keyUp(key:KeyboardEvent):void
+		public function onKeyUp(key:KeyboardEvent):void
 		{
 			avatar.onKeyUp(key);	
 		}

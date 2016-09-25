@@ -33,24 +33,29 @@ package game
 		private function createNewLevel():void{
 			logger.info("createNewLevel: ");
 			level = new Level(levelCreator.getLevelDefinition(LevelCreator.EASY));
-			level.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			addChild(level);
 		}
 		
-		private function onEnterFrame(e:Event):void
+		public function onEnterFrame(e:Event):void
 		{
-			level.onEnterFrame(e);
+			if(level){
+				level.onEnterFrame(e);
+			}
 		}
 		
-		public function keyDown(key:KeyboardEvent):void
+		public function onKeyDown(key:KeyboardEvent):void
 		{
-			level.keyDown(key);
+			if(level){
+				level.onKeyDown(key);
+			}
 			
 		}
 		
-		public function keyUp(key:KeyboardEvent):void
+		public function onKeyUp(key:KeyboardEvent):void
 		{
-			level.keyUp(key);	
+			if(level){
+				level.onKeyUp(key);	
+			}
 		}
 		
 	}

@@ -111,7 +111,7 @@ package
 			loadAudio();
 			createGui();
 			playAudioScheme("menu");
-			stage.addEventListener(Event.ENTER_FRAME, update);
+			stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 			// ready() le avisa al mmo que ya estoy para jugar (ie. dispatchEvent(MinigameEvent.READY));
@@ -127,8 +127,6 @@ package
 			gui.addEventListener(GuiEvents.EXIT, onExitGame);
 			gui.addEventListener(GuiEvents.PAUSE, onPause);			
 			gui.addEventListener(GuiEvents.RESUME, onResume);
-			gui.addEventListener(GuiEvents.NEW_MATCH, onNewMatch);
-			gui.addEventListener(GuiEvents.COUNTDOWN_END, onCountDownEnded);
 			gui.addEventListener(GuiEvents.SHOW_MENU, onChangeGui);
 			
 			addChild(gui);						
@@ -200,10 +198,7 @@ package
 			}
 		}		
 		
-		private function update(e:Event):void
-		{
 
-		}
 		
 		private function onPause(e:Event):void
 		{
@@ -214,40 +209,21 @@ package
 		{
 			trace("resume game: ");
 		}
-		
-		private function onCompetitionEnd(e:Event):void
-		{			
-			playAudioScheme("end");
-			
-		}
-		
-		private function onCountDownEnded(e:Event):void
-		{
-			audio.fx.play("tiempo_fuera");
-		}
-		
-		private function showCountDown(e:Event):void
-		{			
-			gui.showCountDown();
-			e.currentTarget.removeEventListener(GuiEvents.COUNTDOWN, showCountDown);
-		}
-		
-		private function onNewMatch(e:Event):void
-		{
-			playAudioScheme("ingame");
-			
-			
-		}
-		
-		
+
+				
 		private function onKeyDown(key:KeyboardEvent):void
 		{
-			gameController.keyDown(key);
+			gameController.onKeyDown(key);
 		}
 
 		private function onKeyUp(key:KeyboardEvent):void
 		{
-			gameController.keyUp(key);
+			gameController.onKeyUp(key);
+		}
+		
+		private function onEnterFrame(e:Event):void
+		{
+			gameController.onEnterFrame(e);
 		}
 		
 		private function onExitGame(e:Event=null):void
@@ -264,7 +240,7 @@ package
 		{
 			audio.music.stop();
 			audio.fx.stop();
-			stage.removeEventListener(Event.ENTER_FRAME, update);
+			stage.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 			removeChild(gui); gui = null;			
 		}
 		
