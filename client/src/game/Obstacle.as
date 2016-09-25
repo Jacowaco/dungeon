@@ -16,7 +16,7 @@ package game
 	import flash.utils.getQualifiedClassName;
 	import flash.utils.setTimeout;
 	
-	public class Thing extends Sprite
+	public class Obstacle extends Sprite
 	{
 		private var isOver:Boolean = false;
 		private var isActive:Boolean = true;
@@ -37,7 +37,7 @@ package game
 		public var pos:Vector2D;
 		var offset:Point = new Point();
 		
-		public function Thing(mc:MovieClip)
+		public function Obstacle(mc:MovieClip)
 		{			
 			asset = mc;
 			this.name = asset.name;
@@ -139,11 +139,6 @@ package game
 			return isActive;
 		}
 		
-//		public function getBounds():Rectangle
-//		{
-////			var target:MovieClip = asset["ison"];			
-//			return  getBounds(stage);
-//		}	
 		
 		public function isGoal():Boolean
 		{

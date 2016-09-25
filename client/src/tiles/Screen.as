@@ -5,7 +5,7 @@ package tiles
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	
-	import game.Thing;
+	import game.Obstacle;
 	
 	public class Screen extends Sprite
 	{
@@ -46,7 +46,7 @@ package tiles
 					asset.y = y * currentTile.dimension.y;//* scale
 					asset.name = currentTile.name;
 //					if(asset.name == "goal") asset 
-					addChild(new Thing(asset));
+					addChild(new Obstacle(asset));
 					
 				}
 			}

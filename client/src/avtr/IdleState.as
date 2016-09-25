@@ -6,7 +6,7 @@ package avtr
 	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
 	
-	import game.Thing;
+	import game.Obstacle;
 	
 	
 	public class IdleState extends AvatarState
@@ -38,7 +38,7 @@ package avtr
 		}
 		
 		
-		override public function handleCollition(p:Thing):void
+		override public function handleCollition(p:Obstacle):void
 		{
 
 			if(p == context.contact && !p.isOn()){				

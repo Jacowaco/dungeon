@@ -5,7 +5,7 @@ package avtr
 	import flash.events.KeyboardEvent;
 	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
-	import game.Thing;
+	import game.Obstacle;
 	
 
 	public class AvatarState
@@ -36,7 +36,7 @@ package avtr
 //		}
 		
 		
-		public function handleCollition(p:Thing):void
+		public function handleCollition(p:Obstacle):void
 		{
 			throw new Error("unninplemented");
 		}

@@ -6,7 +6,7 @@ package avtr
 	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
 	
-	import game.Thing;
+	import game.Obstacle;
 	
 	
 	

@@ -28,7 +28,7 @@ package game
 		private function addColliders(screen:Screen):void
 		{
 		 for(var i:int = 0; i < screen.numChildren; i++){
-			switch ((screen.getChildAt(i) as Thing).name){
+			switch ((screen.getChildAt(i) as Obstacle).name){
 				case "floor":
 					floor.push(screen.getChildAt(i));
 				break;
@@ -48,7 +48,7 @@ package game
 		
 		public function checkFloor(avatar:Avatar):Boolean
 		{
-			for each(var obj:Thing in floor){
+			for each(var obj:Obstacle in floor){
 				if(checkTopCollition(obj, avatar)) return true;
 			}
 
@@ -56,7 +56,7 @@ package game
 		}
 		
 
-		private function checkTopCollition(obj:Thing, avatar:Avatar):Boolean
+		private function checkTopCollition(obj:Obstacle, avatar:Avatar):Boolean
 		{
 			var point:Point = avatar.target(Avatar.BOTTOM).localToGlobal(new Point());
 			
@@ -72,14 +72,14 @@ package game
 		
 		public function checkObstacles(avatar:Avatar):Boolean
 		{
-			for each(var obj:Thing in obstacle){
+			for each(var obj:Obstacle in obstacle){
 				if(checkSideCollition(obj, avatar)) return true;
 				if(checkTopCollition(obj, avatar)) return true;
 			}
 			return false;
 		}
 		
-		private function checkSideCollition(obj:Thing, avatar:Avatar):Boolean
+		private function checkSideCollition(obj:Obstacle, avatar:Avatar):Boolean
 		{
 			var dir:int = avatar.facingRight() ? 1 : -1  ;			
 			var target:Point = avatar.target(Avatar.RIGHT).localToGlobal(new Point);// avatar.target(dir ? Avatar.RIGHT : Avatar.LEFT).localToGlobal(new Point);  siempre es right			

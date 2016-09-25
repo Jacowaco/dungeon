@@ -16,7 +16,7 @@ package avtr
 	import flash.ui.Keyboard;
 	
 	import game.CollisionManager;
-	import game.Thing;
+	import game.Obstacle;
 	
 	import org.as3commons.zip.utils.ChecksumUtil;
 	
@@ -50,7 +50,7 @@ package avtr
 		public var sideForce:Number;
 		
 		private var initialPosition:Vector2D;
-		public var contact:Thing; // la cosa contra la que estoy topado ahora.
+		public var contact:Obstacle; // la cosa contra la que estoy topado ahora.
 		
 		private var pos:Vector2D;
 		public var vel:Vector2D;
