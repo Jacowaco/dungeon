@@ -192,6 +192,11 @@ package avtr
 			pos = value;
 		}
 		
+		public function stagePos():Point
+		{
+			return localToGlobal(new Point);
+		}
+		
 		public function target(target:int):DisplayObject
 		{
 			switch(target)

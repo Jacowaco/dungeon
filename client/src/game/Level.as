@@ -7,6 +7,7 @@ package game
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
+	import flash.geom.Point;
 	import flash.utils.setInterval;
 	import flash.utils.setTimeout;
 	
@@ -21,27 +22,23 @@ package game
 		private var screens:Screens;
 		private var avatar:Avatar;
 		private var camera:Sprite;
+		private var rlim:int;
 
 		// el level es una suceción de screens
 		public function Level(levelDef:Array)
 		{
 			
-			camera = new Sprite();
-			
+			camera = new Sprite();			
 			screens = new Screens(levelDef);	
 			camera.addChild(screens);
 			
-			
-			
-			
-			
 			avatar = new Avatar();
 			collisions = new CollisionManager(screens);
-			
-			
 			camera.addChild(avatar);
-
-			addChild(camera);			
+			
+			addChild(camera);
+			
+			rlim = settings.camera.rightLimit;
 			init();
 		}
 		
@@ -59,8 +56,11 @@ package game
 			if(!avatar.isJumping()) avatar.setFallState();
 			avatar.update();
 				
-			screens.x --;
-			
+			var currentPos:Point = avatar.stagePos();
+			trace(currentPos.x);
+			if(currentPos.x > settings.camera.rightLimit){
+				camera.x += rlim - currentPos.x;
+			}
 			
 		}
 		

@@ -8,6 +8,9 @@
         "jump": 20,
         "defaultPosition": [1,8]
     },
+    "camera":{
+        "rightLimit": 200
+    },
     "gui": {
         "title": "GUARIDA CAMUGATA",
         "details": "JUEGA Y SUMA PUNTOS PARA TU EQUIPO",
