@@ -17,57 +17,55 @@ package game
 	public class Level extends Sprite
 	{
 		private var collisions:CollisionManager;
+		
 		private var screens:Screens;
 		private var avatar:Avatar;
+		private var camera:Sprite;
 
 		// el level es una suceción de screens
 		public function Level(levelDef:Array)
 		{
-			screens = new Screens(levelDef);
-			addChild(screens);
+			
+			camera = new Sprite();
+			
+			screens = new Screens(levelDef);	
+			camera.addChild(screens);
+			
+			
+			
+			
+			
+			avatar = new Avatar();
+			collisions = new CollisionManager(screens);
+			
+			
+			camera.addChild(avatar);
+
+			addChild(camera);			
+			init();
+		}
+		
+		private function init():void
+		{
+			
 		}
 		
 
 		
-		private function onEnterFrame(e:Event):void
+		public function onEnterFrame(e:Event):void
 		{
 
-
-			if(collisions.checkFloor(avatar)) {  // true si estoy parado sobre algo...
-				avatar.setIdleState();
-			}
-			
-			if(collisions.checkObstacles(avatar)) {  // true si estoy parado sobre algo...
-				avatar.setIdleState();
-			}
-			
-			
+			collisions.resolve(screens.currentScreen(), avatar);
 			if(!avatar.isJumping()) avatar.setFallState();
 			avatar.update();
-			
-			if(collisions.checkGoal(avatar)) {  // true si estoy parado sobre algo...
-				removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-//				screenNumber = (screenNumber + 1) % 2;
-//				setTimeout(createScreen, 100, screenNumber);
-//				
-			}
-			
-		}
-		
-		
-		// engania piuchanga para prbar
-		private var flag:Boolean = false;		
-		private function switchScreen():void
-		{
-			flag = !flag;
-			if(flag){
-				removeChild(screens[0]); addChild(screens[1]);				
 				
-			}else
-			{
-				removeChild(screens[1]); addChild(screens[0]);
-			}
+			screens.x --;
+			
+			
 		}
+		
+		
+		
 		
 		public function keyDown(key:KeyboardEvent):void
 		{

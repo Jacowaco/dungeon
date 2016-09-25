@@ -135,8 +135,7 @@ package
 		}
 		
 		// sound schemes: invento para poder tener estados de musica...
-		private var currentScheme:String;		
-		
+		private var currentScheme:String;				
 		private var soundScheme:Object = {
 			"menu": ["music_rio"],
 			"ingame": ["estadio"],

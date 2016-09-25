@@ -17,15 +17,53 @@ package game
 		private var obstacle:Array = [];
 		private var goal:Object;
 		//http://higherorderfun.com/blog/2012/05/20/the-guide-to-implementing-2d-platformers/
+		private var currentScreen:Screen;
 		
+		public function CollisionManager(screen:Screens)
+		{
+			
+		}
 		
-		public function CollisionManager(screen:Screen)
+		public function resolve(screen:Screen, avatar:Avatar):Boolean
+		{
+			if (currentScreen != screen){
+				cacheScreen(screen);
+				currentScreen = screen;
+			}
+			if(checkFloor(avatar)) {  // true si estoy parado sobre algo...
+				avatar.setIdleState();
+			}
+			
+			if(checkObstacles(avatar)) {  // true si estoy parado sobre algo...
+				avatar.setIdleState();
+			}
+			
+			
+	
+			if(checkGoal(avatar)) {  // true si estoy parado sobre algo...
+//				removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+			}
+			return false;
+		}
+		
+		private function cacheScreen(screen:Screen):void
 		{
 			addColliders(screen);
 		}
 		
+		private function checkObstacles(avatar:Avatar):Boolean
+		{
+			for each(var obj:Obstacle in obstacle){
+				if(checkSideCollition(obj, avatar)) return true;
+				if(checkTopCollition(obj, avatar)) return true;
+			}
+			return false;
+		}
+		
+		
 		private function addColliders(screen:Screen):void
 		{
+			logger.info("caching screen: ", screen);
 		 for(var i:int = 0; i < screen.numChildren; i++){
 			switch ((screen.getChildAt(i) as Obstacle).name){
 				case "floor":
@@ -37,15 +75,13 @@ package game
 				
 				case "goal":
 					goal = screen.getChildAt(i);
-					break;				
-						
+					break;										
 			}
-		 }
-		 
+		 }		 
 		}
 		
 		
-		public function checkFloor(avatar:Avatar):Boolean
+		private function checkFloor(avatar:Avatar):Boolean
 		{
 			for each(var obj:Obstacle in floor){
 				if(checkTopCollition(obj, avatar)) return true;
@@ -69,14 +105,7 @@ package game
 			return false;
 		}
 		
-		public function checkObstacles(avatar:Avatar):Boolean
-		{
-			for each(var obj:Obstacle in obstacle){
-				if(checkSideCollition(obj, avatar)) return true;
-				if(checkTopCollition(obj, avatar)) return true;
-			}
-			return false;
-		}
+
 		
 		private function checkSideCollition(obj:Obstacle, avatar:Avatar):Boolean
 		{
@@ -92,7 +121,7 @@ package game
 				
 		}
 		
-		public function checkGoal(avatar:Avatar){
+		private function checkGoal(avatar:Avatar){
 			var target:Point = avatar.target(Avatar.BOTTOM).localToGlobal(new Point);// avatar.target(dir ? Avatar.RIGHT : Avatar.LEFT).localToGlobal(new Point);  siempre es right			
 			if(goal.hitTestPoint(target.x, target.y)){	
 				trace("goal");
