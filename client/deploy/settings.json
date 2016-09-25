@@ -5,7 +5,8 @@
     "avatar":{
         "speed": 5,
         "gravity": [0,1],
-        "jump": 20
+        "jump": 20,
+        "defaultPosition": [1,8]
     },
     "gui": {
         "title": "GUARIDA CAMUGATA",

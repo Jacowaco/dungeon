@@ -7,7 +7,6 @@ package game
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
-	import tiles.Screen;
 	import tiles.TileLayer;
 	import tiles.TileMap;
 

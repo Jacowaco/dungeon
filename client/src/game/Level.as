@@ -10,57 +10,24 @@ package game
 	import flash.utils.setInterval;
 	import flash.utils.setTimeout;
 	
-	import tiles.Screen;
 	import tiles.TileMap;
 	
 	import utils.Utils;
 	
 	public class Level extends Sprite
 	{
-		private var levels:TileMap;
-		private var screens:Array = [];
-		private var avatar:Avatar;
 		private var collisions:CollisionManager;
-		
-		public function Level()
+		private var screens:Screens;
+		private var avatar:Avatar;
+
+		// el level es una suceción de screens
+		public function Level(levelDef:Array)
 		{
-			super();			
-			levels = new TileMap(Game.path("./tiles/"), "levels.json");
-			levels.addEventListener(TileMap.MAP_READY, onMapReady);
-			
-			
+			screens = new Screens(levelDef);
+			addChild(screens);
 		}
 		
-		private var screenNumber:int = 0;
-		
-		private function onMapReady(e:Event):void
-		{
-			trace("map ready: ");			
-			avatar = new Avatar();			
-			
-			createScreen(screenNumber);
-			addChild(avatar);
-			
-		}
-		
-		var s:Screen ;
-		private function createScreen(number:int):void
-		{
-			if(s){ 
-				removeChild(s);
-				s = null;
-			}
-			
-			s = new Screen(levels.getLayer("level_" + (number + 1).toString()));
-			addChild(s);			
-			collisions = new CollisionManager(s as Screen);
-			
-			trace((s as Screen).startPos);
-			avatar.position = (s as Screen).startPos;
-			avatar.setIdleState();
-					
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);			
-		}
+
 		
 		private function onEnterFrame(e:Event):void
 		{
@@ -80,9 +47,9 @@ package game
 			
 			if(collisions.checkGoal(avatar)) {  // true si estoy parado sobre algo...
 				removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-				screenNumber = (screenNumber + 1) % 2;
-				setTimeout(createScreen, 100, screenNumber);
-				
+//				screenNumber = (screenNumber + 1) % 2;
+//				setTimeout(createScreen, 100, screenNumber);
+//				
 			}
 			
 		}

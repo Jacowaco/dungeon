@@ -37,7 +37,7 @@ package
 	import flash.utils.getQualifiedClassName;
 	import flash.utils.setTimeout;
 	
-	import game.Level;
+	import game.GameController;
 	
 	import ui.Gui;
 	import ui.GuiEvents;
@@ -69,7 +69,7 @@ package
 		// con path puedo levantar la ruta desde cualquier lado en el codigo.
 		public static var path:Function;
 		
-		public var level:Level;
+		private var gameController:GameController;
 		
 		public function Game()
 		{
@@ -117,8 +117,8 @@ package
 			// ready() le avisa al mmo que ya estoy para jugar (ie. dispatchEvent(MinigameEvent.READY));
 			ready();
 			
-			level = new Level();
-			addChild(level);
+			gameController = new GameController();
+			addChild(gameController)
 		}		
 		
 		private function createGui():void
@@ -243,12 +243,12 @@ package
 		
 		private function onKeyDown(key:KeyboardEvent):void
 		{
-			level.keyDown(key);
+			gameController.keyDown(key);
 		}
 
 		private function onKeyUp(key:KeyboardEvent):void
 		{
-			level.keyUp(key);
+			gameController.keyUp(key);
 		}
 		
 		private function onExitGame(e:Event=null):void
