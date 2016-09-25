@@ -51,19 +51,22 @@ package game
 		
 		public function onEnterFrame(e:Event):void
 		{
-
+			
 			collisions.resolve(screens.currentScreen(), avatar);
-			if(!avatar.isJumping()) avatar.setFallState();
-			avatar.update();
-				
+			
+			if(!avatar.isJumping()) avatar.setFallState();			
+			avatar.update();			
+			
+			cameraUpdate();
+		}
+		
+		private function cameraUpdate():void
+		{
 			var currentPos:Point = avatar.stagePos();
-			trace(currentPos.x);
 			if(currentPos.x > settings.camera.rightLimit){
 				camera.x += rlim - currentPos.x;
 			}
-			
 		}
-		
 		
 		
 		

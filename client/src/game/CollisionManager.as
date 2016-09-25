@@ -38,8 +38,6 @@ package game
 			if(checkObstacles(avatar)) {  // true si estoy parado sobre algo...
 				avatar.setIdleState();
 			}
-//			
-			
 			return false;
 		}
 		
@@ -67,6 +65,14 @@ package game
 			}		 
 		}
 		
+		private function checkFloor(avatar:Avatar):Boolean
+		{
+			for each(var obj:Obstacle in floor){
+				if(checkTopCollition(obj, avatar)) return true;
+			}			
+			return false;
+		}
+		
 		private function checkObstacles(avatar:Avatar):Boolean
 		{
 			for each(var obj:Obstacle in obstacle){
@@ -76,20 +82,12 @@ package game
 			return false;
 		}
 		
-		
-
-		
-		
-		private function checkFloor(avatar:Avatar):Boolean
-		{
-			for each(var obj:Obstacle in floor){
-				if(checkTopCollition(obj, avatar)) return true;
-			}
-			
-			return false;
-		}
+				
 		
 		
+		// COLISIONES POR LADO
+		// hitTestPoint solo funciona en coordenadas globales.
+		// http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/display/DisplayObject.html#hitTestPoint()
 		private function checkTopCollition(obj:Obstacle, avatar:Avatar):Boolean
 		{
 			var point:Point = avatar.target(Avatar.BOTTOM).localToGlobal(new Point());
@@ -98,19 +96,15 @@ package game
 				avatar.move();
 				obj.debug();
 				return true;
-			} 
-			
+			} 			
 			return false;
 		}
-		
-		
 		
 		private function checkSideCollition(obj:Obstacle, avatar:Avatar):Boolean
 		{
 			var dir:int = avatar.facingRight() ? 1 : -1  ;			
-			var target:Point = avatar.target(Avatar.RIGHT).localToGlobal(new Point);// avatar.target(dir ? Avatar.RIGHT : Avatar.LEFT).localToGlobal(new Point);  siempre es right
-//			var target:Point = new Point(avatar.target(Avatar.RIGHT).x,avatar.target(Avatar.RIGHT).y); // localToGlobal(new Point);
-			if(obj.hitTestPoint(target.x, target.y)){		
+			var target:Point = avatar.target(Avatar.RIGHT).localToGlobal(new Point);
+			if(obj.hitTestPoint(target.x, target.y)){								
 				var boundarie:Number = dir == 1 ? obj.getBounds(obj).left : obj.getBounds(obj).right;
 				var global:Point = obj.localToGlobal(new Point(boundarie,0));
 				avatar.moveBy(global.x - target.x, 0);  
@@ -120,15 +114,5 @@ package game
 			return false;
 			
 		}
-		
-		private function checkGoal(avatar:Avatar){
-			var target:Point = avatar.target(Avatar.BOTTOM).localToGlobal(new Point);// avatar.target(dir ? Avatar.RIGHT : Avatar.LEFT).localToGlobal(new Point);  siempre es right			
-			if(goal.hitTestPoint(target.x, target.y)){	
-				trace("goal");
-				return true;
-			}
-			return false;
-		}
-		
 	}
 }
