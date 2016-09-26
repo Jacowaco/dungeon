@@ -30,12 +30,15 @@ package game
 			levels.addEventListener(TileMap.MAP_READY, onMapReady);				
 		}
 		
+		
 		public function getLevelDefinition(difficulty:String):Array
 		{
 			var layers:Array = [];
-			layers.push(levels.getLayer(difficulty+":1")); //levels.getLayer("level_" + (number + 1).toString())
-			layers.push(levels.getLayer(difficulty+":2")); //levels.getLayer("level_" + (number + 1).toString())
-			layers.push(levels.getLayer(difficulty+":3")); //levels.getLayer("level_" + (number + 1).toString())
+			var list:Array =  settings.level;
+			
+			for each(var name:String in list){
+				layers.push(levels.getLayer(name));
+			}
 			return layers;
 		}
 		

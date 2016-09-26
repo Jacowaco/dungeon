@@ -13,7 +13,10 @@ package tiles
 			tiles.floor;
 			tiles.goal;
 			tiles.thorn;
-			
+			tiles.crack;
+			tiles.zombie;
+			tiles.hang;
+			tiles.bat;
 		}
 		
 		public static function createAsset(name:String):MovieClip

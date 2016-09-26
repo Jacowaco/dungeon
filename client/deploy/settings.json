@@ -2,6 +2,8 @@
     "defaultValue": {
         "soundsEnable": false
     },
+    "level": ["easy:1", "easy:1", "easy:2", "easy:3"]
+    ,
     "avatar":{
         "speed": 5,
         "gravity": [0,2],
