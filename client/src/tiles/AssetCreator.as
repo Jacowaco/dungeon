@@ -12,6 +12,8 @@ package tiles
 			tiles.obstacle;
 			tiles.floor;
 			tiles.goal;
+			tiles.thorn;
+			
 		}
 		
 		public static function createAsset(name:String):MovieClip

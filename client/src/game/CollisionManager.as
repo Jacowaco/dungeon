@@ -4,17 +4,19 @@ package game
 	
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
+	import flash.events.EventDispatcher;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
 	import tiles.TileLayer;
 	import tiles.TileMap;
 	
-	public class CollisionManager
+	public class CollisionManager extends EventDispatcher
 	{
 		
 		private var floor:Array = [];
 		private var obstacle:Array = [];
+		private var killers:Array = [];
 		private var goal:Object;
 		//http://higherorderfun.com/blog/2012/05/20/the-guide-to-implementing-2d-platformers/
 		private var currentScreen:Screens;
@@ -31,18 +33,20 @@ package game
 		
 		public function resolve(screens:Screens, avatar:Avatar):Boolean
 		{
-//			if (currentScreen != screens){
-//				cacheScreen(screens);
-//				currentScreen = screens;
-//			}
 			
 			if(checkFloor(avatar)) {  // true si estoy parado sobre algo...
 				avatar.setIdleState();
 			}
 			
+			if(checkKillers(avatar)) {  // true si estoy parado sobre algo...
+				avatar.setIdleState();
+				avatar.getKilled();
+			}
+			
 			if(checkObstacles(avatar)) {  // true si estoy parado sobre algo...
 				avatar.setIdleState();
 			}
+
 			return false;
 		}
 		
@@ -65,7 +69,10 @@ package game
 					
 					case "goal":
 						goal = screen.getChildAt(i);
-						break;										
+						break;		
+					case "thorn":
+						killers.push( screen.getChildAt(i));
+						break;
 				}
 			}		 
 		}
@@ -78,6 +85,14 @@ package game
 			return false;
 		}
 		
+		private function checkKillers(avatar:Avatar):Boolean
+		{
+			for each(var obj:Obstacle in killers){
+				if(checkSideCollition(obj, avatar)) return true;
+				if(checkTopCollition(obj, avatar)) return true;
+			}			
+			return false;
+		}
 		private function checkObstacles(avatar:Avatar):Boolean
 		{
 			for each(var obj:Obstacle in obstacle){
@@ -86,9 +101,6 @@ package game
 			}
 			return false;
 		}
-		
-				
-		
 		
 		// COLISIONES POR LADO
 		// hitTestPoint solo funciona en coordenadas globales.
@@ -112,12 +124,13 @@ package game
 			if(obj.hitTestPoint(target.x, target.y)){								
 				var boundarie:Number = dir == 1 ? obj.getBounds(obj).left : obj.getBounds(obj).right;
 				var global:Point = obj.localToGlobal(new Point(boundarie,0));
-				avatar.moveBy(global.x - target.x, 0);  
+				avatar.moveBy(global.x - target.x - 2, 0);  
 				obj.debug();
 				return true;
 			}
-			return false;
-			
+			return false;			
 		}
+		
+		
 	}
 }

@@ -41,7 +41,14 @@ package game
 		{			
 			asset = mc;
 			this.name = asset.name;
+			if(name == "thorn") randomize();
+			
 			this.addChild(mc);
+		}
+		
+		private function randomize():void
+		{
+			asset.gotoAndPlay(Math.floor(Math.random() * 3));
 		}
 		
 		public function type():String

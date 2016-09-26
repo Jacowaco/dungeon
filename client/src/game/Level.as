@@ -18,6 +18,8 @@ package game
 	
 	public class Level extends Sprite
 	{
+		public static const END:String = "LevelEnd";
+		
 		private var collisions:CollisionManager;
 		
 		private var screens:Screens;
@@ -39,6 +41,7 @@ package game
 			addChild(camera);
 			
 			collisions = new CollisionManager(screens);
+			collisions.addEventListener(Level.END, onEnd);
 			
 			rlim = settings.camera.rightLimit;
 			init();
@@ -85,6 +88,11 @@ package game
 		public function onKeyUp(key:KeyboardEvent):void
 		{
 			avatar.onKeyUp(key);	
+		}
+		
+		private function onEnd(e:Event)
+		{
+			
 		}
 	}
 }

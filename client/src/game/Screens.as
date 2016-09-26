@@ -42,34 +42,5 @@ package game
 			return screens;
 		}
 
-//		private function switchScreen():void
-//		{
-//
-//		}
-		
-//		public function currentScreens(camerax:Number):Array
-//		{ 
-//		}
-//		
-//		public function currentObstacles(bounds:Rectangle):Array
-//		{
-//			
-//			var result:Array = [];
-//			
-//			for each(var s:Screen in screens){				
-//				for(var i:int = 0; i < s.numChildren; i++){
-//					var dsp:DisplayObject = s.getChildAt(i);
-//					var target:Point = dsp.localToGlobal(new Point);
-//					bounds.contains(target.x, target.y);
-//					result.push(dsp);
-//				}
-//			}
-//			
-//			
-//			
-//			trace(result.length);
-//			return null;
-//		}		
-
 	}
 }

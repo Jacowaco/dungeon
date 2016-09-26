@@ -16,6 +16,7 @@ package avtr
 	import flash.ui.Keyboard;
 	
 	import game.CollisionManager;
+	import game.Level;
 	import game.Obstacle;
 	
 	import org.as3commons.zip.utils.ChecksumUtil;
@@ -195,6 +196,13 @@ package avtr
 		public function stagePos():Point
 		{
 			return localToGlobal(new Point);
+		}
+		
+		public function getKilled():void
+		{
+			trace("get Killed");
+			dispatchEvent(new Event(Level.END));
+			asset.gotoAndPlay("celebrate");
 		}
 		
 		public function target(target:int):DisplayObject
