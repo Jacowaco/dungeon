@@ -20,7 +20,7 @@ package game
 		public function Screens(levelDef:Array)
 		{
 			logger.info("Screens");			
-			
+			trace(levelDef);
 			screens = [];
 			for each(var layer:TileLayer in levelDef){
 				logger.info("creating screen:" + layer);

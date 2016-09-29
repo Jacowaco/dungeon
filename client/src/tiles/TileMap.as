@@ -19,7 +19,7 @@ package tiles
 	import org.as3commons.zip.ZipFile;
 	
 	import utils.Utils;
-
+	
 	/*
 	el TileMap tiene un objecto completo con capas	
 	cada capa es un TileLayer (una pantalla) 
@@ -32,7 +32,6 @@ package tiles
 		public static var MAP_READY:String = "mapReady";
 		
 		private var jsonfile:URLLoader; 	// for reading the tmx file
-//		private var xml:XML; 			 	// for storing the tmx data as xml		
 		private var data:Object;
 		private var isZip:Boolean;			// por si quiero cargar el mapa comprimido
 		private var mapfile:String;			// el xml sacado del tiled
@@ -42,13 +41,12 @@ package tiles
 		private var mapHeight:uint;
 		private var tileWidth:uint;
 		private var tileHeight:uint;
-		private var layersCount:uint;
 		
 		private var tileSets:Array = [];
 		private var totalTileSets:uint = 0;
 		private var tileSetsLoaded:uint = 0;
 		private var currentTileset:uint = 0;
-
+		
 		private var layers:Object = {}; 
 		
 		public function TileMap(path:String, mapfile:String):void 
@@ -61,17 +59,17 @@ package tiles
 		
 		private function init(isZip:Boolean):void 
 		{
-				if(debug) logger.info("TilemapLoader init: ");
-				jsonfile = new URLLoader();
-				if(isZip) jsonfile.dataFormat = URLLoaderDataFormat.BINARY;
-				jsonfile.addEventListener(Event.COMPLETE, loadComplete);
-				jsonfile.load(new URLRequest(path+mapfile));		
+			if(debug) logger.info("TilemapLoader init: ");
+			jsonfile = new URLLoader();
+			if(isZip) jsonfile.dataFormat = URLLoaderDataFormat.BINARY;
+			jsonfile.addEventListener(Event.COMPLETE, loadComplete);
+			jsonfile.load(new URLRequest(path+mapfile));		
 		}
 		
 		private function loadComplete(e:Event):void {
 			
 			if(debug) logger.info("TilemapLoader json load complete: ");		
-		
+			
 			parseFile(e);
 			loadTilesets();
 			loadLayers();
@@ -111,7 +109,7 @@ package tiles
 				tileSets.push(new TileSet(ts));
 			}			
 		}
-
+		
 		/*
 		{
 		"data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -137,11 +135,11 @@ package tiles
 				var tilesList:Array = new Array();		// los tiles para esa capa (unidimensional)
 				var currentTile:uint = 0;
 				// assign the gid to each location in the layer
-//				for each (var tileid:int in layer.data) {					
-//					var t:Tile = new Tile(tileSets[currentTileset], tileid);   // uno solo tileset por ahora... le paso el tileset y el id para que lo cree
-//					tilesList[currentTile] = t; 
-//					currentTile++;
-//				}		
+				//				for each (var tileid:int in layer.data) {					
+				//					var t:Tile = new Tile(tileSets[currentTileset], tileid);   // uno solo tileset por ahora... le paso el tileset y el id para que lo cree
+				//					tilesList[currentTile] = t; 
+				//					currentTile++;
+				//				}		
 				
 				// store the gid into a 2d array (para esa capa)
 				for (var tileX:int = 0; tileX < w; tileX++) {
@@ -161,51 +159,47 @@ package tiles
 				tl.setMap(map);
 				tl.setDimensions(w, h);
 				layers[name] = tl;
+				trace(layers[name]);
 				
-			}
-			
- 
-				
-				
-			
-	
-			
-			
-			Utils.getProperties(layers);
+			}		
+			trace(Utils.getProperties(layers));
 		}
 		
 		public function getLayers():Object
 		{
 			return layers;
 		}
-
+		
 		
 		// ---------------------------------
-		public function getLayer(layer:String):TileLayer
-		{
-			return this.layers[layer] as TileLayer; 
-		}
+//		public function getLayer(name:String):TileLayer{
+//			trace("getLayer():", name);
+//			trace(Utils.getProperties(layers));
+//			trace(layers.hasOwnProperty(name));
+//			return layers[name] as TileLayer; 
+//		}
 		
-	
-
-
+		
+		
+		
 		
 		public function tileDimension():Point
 		{
-//			return (tileSets[0] as TileSet).tileDimension();
+			//			return (tileSets[0] as TileSet).tileDimension();
 			return new Point();
 		}
 		
-		public function get numLayers():uint
-		{
-			return layersCount;
-		}
+		//		public function get numLayers():uint
+		//		{
+		//			return layersCount;
+		//		}
 		
-//		override public function toString():String
-//		{
-//			return Utils.getProperties(layers).toString();
-//		}
+		//		override public function toString():String
+		//		{
+		//			return Utils.getProperties(layers).toString();
+		//		}
 	}
+	
 	
 }
 

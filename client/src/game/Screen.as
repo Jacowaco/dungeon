@@ -18,6 +18,7 @@ package game
 		public function Screen(layer:TileLayer)
 		{
 			super();
+			
 			var currentTile:Tile = layer.getTile(0,0);					
 			startPos = new Vector2D(settings.avatar.defaultPosition[0] * currentTile.dimension.x, settings.avatar.defaultPosition[1] * currentTile.dimension.y);
 			dimension = new Vector2D(currentTile.dimension.x * layer.getColsCount(), currentTile.dimension.x * layer.getRowsCount()); 

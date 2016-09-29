@@ -101,12 +101,7 @@ package ui
 			power.visible = show;
 			exitBtn.visible = show;
 		}
-		public function off():void
-		{
-			
-		}
-		
-		
+
 		private function onOver(e:Event):void
 		{
 			audio.fx.play("rollover");

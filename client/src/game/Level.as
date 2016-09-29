@@ -31,7 +31,8 @@ package game
 		public function Level(levelDef:Array)
 		{
 			
-			camera = new Sprite();			
+			camera = new Sprite();		
+			trace(levelDef);
 			screens = new Screens(levelDef);	
 			camera.addChild(screens);
 			
