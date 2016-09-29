@@ -16,7 +16,7 @@ package game
 	
 	import utils.Utils;
 	
-	public class Level extends Sprite
+	public class PlatformGame extends Sprite
 	{
 		public static const END:String = "LevelEnd";
 		
@@ -27,49 +27,44 @@ package game
 		private var camera:Sprite;
 		private var rlim:int;
 
-		// el level es una suceción de screens
-		public function Level(levelDef:Array)
+		// aca solo me encargo de jugar. :)
+		public function PlatformGame(levelDef:Array)
 		{
 			
 			camera = new Sprite();		
-			trace(levelDef);
+			// el objeto Screens es el que sabe como armar la pantalla
+			// una vez que tengo eso como un sprite, lo atachea
 			screens = new Screens(levelDef);	
 			camera.addChild(screens);
 			
+			//
 			avatar = new Avatar();			
 			camera.addChild(avatar);
 			
 			addChild(camera);
 			
-			collisions = new CollisionManager(screens);
-			collisions.addEventListener(Level.END, onEnd);
+			// la logica es mas o menos igual a lo anterior:
+			// separo las cosas de los metodos (los algoritmos)
+			collisions = new CollisionManager(screens, avatar);
+			collisions.addEventListener(PlatformGame.END, onEnd);
 			
+			//TODO mejorar la camara
 			rlim = settings.camera.rightLimit;
-			init();
 		}
-		
-		private function init():void
-		{
-			
-		}
-		
-
 		
 		public function onEnterFrame(e:Event):void
-		{			
-			collisions.resolve(screens, avatar);
-			
-			
-//			var bounds:Rectangle = new Rectangle(camera.x,-100,900,580);
-//			screens.currentObstacles(bounds);
-//			collisions.resolve(screens.currentObstacles(), avatar);
-			
+		{						
+			// esto esta feo pero funciona:
+			// la idea es que si no estoy saltando, fuerzo el estado del avatar a caer.
+			// si colisiona con algo se queda quieto
 			if(!avatar.isJumping()) avatar.setFallState();			
 			avatar.update();			
 			
+			collisions.resolve(); // si colisiono, el manager de colisiones le va a hacer algo a mi avatar. le dejo esa responsabiliadd
 			cameraUpdate();
 		}
 		
+		// clasico
 		private function cameraUpdate():void
 		{
 			var currentPos:Point = avatar.stagePos();
@@ -78,8 +73,8 @@ package game
 			}
 		}
 		
-		
-		
+		// la unica interacción que recibo del mundo exterior
+		// falta pause() y resume();
 		public function onKeyDown(key:KeyboardEvent):void
 		{
 			avatar.onKeyDown(key);

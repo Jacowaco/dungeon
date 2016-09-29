@@ -16,7 +16,7 @@ package avtr
 	import flash.ui.Keyboard;
 	
 	import game.CollisionManager;
-	import game.Level;
+	import game.PlatformGame;
 	import game.Obstacle;
 	
 	import org.as3commons.zip.utils.ChecksumUtil;
@@ -201,7 +201,7 @@ package avtr
 		public function getKilled():void
 		{
 			trace("get Killed");
-			dispatchEvent(new Event(Level.END));
+			dispatchEvent(new Event(PlatformGame.END));
 			asset.gotoAndPlay("celebrate");
 		}
 		

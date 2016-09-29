@@ -20,9 +20,11 @@ package game
 		private var goal:Object;
 		//http://higherorderfun.com/blog/2012/05/20/the-guide-to-implementing-2d-platformers/
 		private var currentScreen:Screens;
+		private var avatar:Avatar;
 		
-		public function CollisionManager(screens:Screens)
+		public function CollisionManager(screens:Screens, avatar:Avatar)
 		{
+			this.avatar = avatar;
 //			cacheScreen(screens);
 			trace("CollisionManager: ", screens);
 			for each(var s:Screen in screens.getScreens()){
@@ -31,7 +33,7 @@ package game
 			}	
 		}
 		
-		public function resolve(screens:Screens, avatar:Avatar):Boolean
+		public function resolve():Boolean
 		{
 			
 			if(checkFloor(avatar)) {  // true si estoy parado sobre algo...
