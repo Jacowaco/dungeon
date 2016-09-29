@@ -28,28 +28,25 @@ package game
 			levelCreator = new LevelBuilder();
 			levelCreator.addEventListener(LevelBuilder.MAP_IS_READY, onMapReady);
 			levelCreator.init();
-			
-			
 		}
 		
 		private function onMapReady(e:Event):void
 		{			
 			logger.info("onMapReady");
-			createNewLevel();
 		}
 		
-		private function createNewLevel():void{
+		public function createNewLevel():void{
 			logger.info("createNewLevel: ");
-			// el juego va a tener 3 niveles, easy, med, hard			
+			// el juego va a tener 3 niveles, easy, med, hard	
+			if(level) {
+				removeChild(level);
+				level = null;
+			}
 			level = new Level(levelCreator.getLevelDefinition(LevelBuilder.EASY));			
 			addChild(level);
 		}
 		
 		
-		public function onGuiEvent(e:Event):void
-		{
-				
-		}
 		
 		
 		public function onEnterFrame(e:Event):void

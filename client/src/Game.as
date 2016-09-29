@@ -128,7 +128,7 @@ package
 			gui.addEventListener(GuiEvents.PAUSE, onPause);			
 			gui.addEventListener(GuiEvents.RESUME, onResume);
 			gui.addEventListener(GuiEvents.SHOW_MENU, onChangeGui);
-			
+			gui.enable();
 			addChild(gui);						
 		}
 		
@@ -202,6 +202,7 @@ package
 		
 		private function onPause(e:Event):void
 		{
+			gameController.createNewLevel();
 			trace("pause game: ");
 		}
 		
@@ -228,10 +229,8 @@ package
 		
 		private function onExitGame(e:Event=null):void
 		{
-			// TODO VERSION STANDAR CON PUNTOS POR MONEDAS
-			// close(maxSessionScore.value);
-			// por ahora pasa 0 porque da medallas. esto esta implementado en el sport.
-			close(0); // close() llama a dispose();			
+			
+//			close(0); // 			
 		}
 		
 		// eliminar bien el juego.

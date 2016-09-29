@@ -54,7 +54,7 @@ package ui
 			// boton salir 
 			exitBtn = asset.getChildByName("exit") as MovieClip;
 			exitBtn.text.text = api.getText(settings.gui.confirmation.exit);
-			exitBtn.mouseEnabled = true;			
+			exitBtn.mouseEnabled = true;
 			exitBtn.addEventListener(MouseEvent.CLICK, onExitBtn);
 			exitBtn.addEventListener(MouseEvent.ROLL_OVER, onOver);
 			exitBtn.visible = false;
@@ -83,6 +83,11 @@ package ui
 			
 		}
 		
+		public function enable():void
+		{
+			exitBtn.visible = true;
+			exitBtn.text.text = "AGAIN";
+		}
 	
 		private function createConfirmationPopup():void
 		{
@@ -109,8 +114,9 @@ package ui
 		
 		private function onExitBtn(e:Event):void
 		{
-			audio.fx.play("click");
-			confirmationPopup.visible = true;
+			//engania pichanga
+//			audio.fx.play("click");
+//			confirmationPopup.visible = true;
 			dispatchEvent(new Event(GuiEvents.PAUSE));
 		}
 		
