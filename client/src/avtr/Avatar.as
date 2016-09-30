@@ -90,6 +90,11 @@ package avtr
 		public function move():void
 		{
 			position = position.add(vel);
+			updatePos();
+		}
+		
+		public function updatePos():void
+		{
 			x = pos.x;
 			y = pos.y;
 		}
@@ -155,7 +160,7 @@ package avtr
 		
 		public function setFallState():void{
 			if(! isFalling()) changeState(fallingState);
-			asset.gotoAndPlay("falling");
+			//asset.gotoAndPlay("falling");
 		}
 		
 		

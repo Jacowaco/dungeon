@@ -28,7 +28,7 @@ package avtr
 //			logger.info("exit idle state");
 		}
 		
-		var offset:Number = 0;
+		private var offset:Number = 0;
 		
 		override public function update():void
 		{

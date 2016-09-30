@@ -30,7 +30,6 @@ package game
 		// el level es una suceción de screens
 		public function Level(levelDef:Array)
 		{
-			
 			camera = new Sprite();			
 			screens = new Screens(levelDef);	
 			camera.addChild(screens);
@@ -52,19 +51,16 @@ package game
 			
 		}
 		
-
-		
 		public function onEnterFrame(e:Event):void
-		{			
-			collisions.resolve(screens, avatar);
-			
-			
+		{
 //			var bounds:Rectangle = new Rectangle(camera.x,-100,900,580);
 //			screens.currentObstacles(bounds);
 //			collisions.resolve(screens.currentObstacles(), avatar);
 			
 			if(!avatar.isJumping()) avatar.setFallState();			
-			avatar.update();			
+			
+			avatar.update();
+			collisions.resolve(screens, avatar);
 			
 			cameraUpdate();
 		}
@@ -77,12 +73,9 @@ package game
 			}
 		}
 		
-		
-		
 		public function onKeyDown(key:KeyboardEvent):void
 		{
 			avatar.onKeyDown(key);
-
 		}
 		
 		public function onKeyUp(key:KeyboardEvent):void
@@ -90,7 +83,7 @@ package game
 			avatar.onKeyUp(key);	
 		}
 		
-		private function onEnd(e:Event)
+		private function onEnd(e:Event):void
 		{
 			
 		}
