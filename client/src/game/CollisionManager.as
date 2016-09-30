@@ -24,8 +24,8 @@ package game
 		
 		public function CollisionManager(screens:Screens, avatar:Avatar)
 		{
-			this.avatar = avatar;
 			currentScreen = screens;
+			this.avatar = avatar;
 //			cacheScreen(screens);
 			trace("CollisionManager: ", screens);
 			for each(var s:Screen in screens.getScreens()){
