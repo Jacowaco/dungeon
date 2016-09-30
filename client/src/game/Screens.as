@@ -20,13 +20,14 @@ package game
 		public function Screens(levelDef:Array)
 		{
 			logger.info("Screens");			
-			trace(levelDef);
 			screens = [];
 			for each(var layer:TileLayer in levelDef){
 				logger.info("creating screen:" + layer);
 				screens.push(new Screen(layer));												
 			}
 			
+			// esto esta bien pero habrá que mejorarlo para cada tipo de juego
+			// es arbitrario como se ordenan las screens.
 			var id:int = 0;
 			for each(var s:Screen in screens){				
 				s.x = id * s.dimension.x;

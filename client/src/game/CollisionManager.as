@@ -26,10 +26,7 @@ package game
 		{
 			currentScreen = screens;
 			this.avatar = avatar;
-//			cacheScreen(screens);
-			trace("CollisionManager: ", screens);
 			for each(var s:Screen in screens.getScreens()){
-				trace("adding ", s);
 				addColliders(s);
 			}	
 		}
@@ -58,6 +55,8 @@ package game
 					
 		}
 		
+		// me gusta separar los obstaculos porque cada uno tiene cualidades diferentes.
+		// entonces esta bueno tratarlos por separado.
 		private function addColliders(screen:Screen):void
 		{
 			logger.info("caching screen: ", screen);
@@ -131,7 +130,7 @@ package game
 				newX = boundarie + (dir == 1 ? -avatar.target(Avatar.RIGHT).x : avatar.target(Avatar.RIGHT).x);
 				avatar.moveTo(newX, avatar.position.y);
 				avatar.updatePos();
-				//trace("moveToR", boundarie, global.x);
+				
 				obj.debug();
 				return true;
 			}
@@ -141,7 +140,7 @@ package game
 				newX = boundarie + (dir == 1 ? -avatar.target(Avatar.LEFT).x : avatar.target(Avatar.LEFT).x);
 				avatar.moveTo(newX, avatar.position.y);
 				avatar.updatePos();
-				//trace("moveToL", boundarie);
+				
 				obj.debug();
 				return true;
 			}

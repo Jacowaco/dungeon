@@ -4,6 +4,7 @@ package game
 	
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
+	import flash.geom.Point;
 	
 	import tiles.AssetCreator;
 	import tiles.Tile;
@@ -11,18 +12,17 @@ package game
 	
 	public class Screen extends Sprite
 	{		
-		public var startPos:Vector2D;	
-		public var dimension:Vector2D;
+		
+		// el screen guarda la lista de sus obstaculos.
 		public var obstacles:Array = [];
+		// y el lugar desde donde debe arrancar el avatar esa pantalla
+		private var start:Vector2D;
+		private var dim:Vector2D;
 		
 		public function Screen(layer:TileLayer)
-		{
-			super();
-			
-			var currentTile:Tile = layer.getTile(0,0);					
-			startPos = new Vector2D(settings.avatar.defaultPosition[0] * currentTile.dimension.x, settings.avatar.defaultPosition[1] * currentTile.dimension.y);
-			dimension = new Vector2D(currentTile.dimension.x * layer.getColsCount(), currentTile.dimension.x * layer.getRowsCount()); 
-			
+		{			
+			var currentTile:Tile = layer.getTile(0,0);	
+			dim = new Vector2D(currentTile.dimension.x * layer.getColsCount(), currentTile.dimension.x * layer.getRowsCount());
 			create(layer);
 		}
 		
@@ -37,7 +37,7 @@ package game
 					var currentTile:Tile = tl.getTile(x,y);							
 					if(currentTile.gid == 0) continue; // si es un tile vacio					
 					if(currentTile.name == "start") {
-						startPos = new Vector2D(x * currentTile.dimension.x, y * currentTile.dimension.y + currentTile.dimension.y); // si es un tile vacio
+						start = new Vector2D(x * currentTile.dimension.x, y * currentTile.dimension.y + currentTile.dimension.y); // si es un tile vacio
 						continue;
 					}
 					
@@ -50,6 +50,18 @@ package game
 					
 				}
 			}
+			
+			if(!start) defaultStart();
+		}
+		
+		private function defaultStart():Vector2D
+		{
+			var tileSize:int = 20;
+		 	return new Vector2D(x * tileSize, (y * tileSize) + tileSize); 				
+		}
+		
+		public function get dimension():Vector2D{
+			return dim;
 		}
 	}
 }
