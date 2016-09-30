@@ -25,6 +25,7 @@ package game
 		public function CollisionManager(screens:Screens, avatar:Avatar)
 		{
 			this.avatar = avatar;
+			currentScreen = screens;
 //			cacheScreen(screens);
 			trace("CollisionManager: ", screens);
 			for each(var s:Screen in screens.getScreens()){
@@ -110,9 +111,9 @@ package game
 		private function checkTopCollition(obj:Obstacle, avatar:Avatar):Boolean
 		{
 			var point:Point = avatar.target(Avatar.BOTTOM).localToGlobal(new Point());
-			if(obj.hitTestPoint( point.x, point.y, true)){						
-				avatar.moveBy(0, obj.getBounds(obj.stage).top - avatar.target(Avatar.BOTTOM).localToGlobal(new Point).y);  // fuerzo a que el gato se pare en la plataforma
-				avatar.move();
+			if(obj.hitTestPoint( point.x, point.y, true)){
+				avatar.moveTo(avatar.position.x, obj.getBounds(currentScreen).top - avatar.target(Avatar.BOTTOM).y);
+				avatar.updatePos();
 				obj.debug();
 				return true;
 			} 			
@@ -121,12 +122,26 @@ package game
 		
 		private function checkSideCollition(obj:Obstacle, avatar:Avatar):Boolean
 		{
-			var dir:int = avatar.facingRight() ? 1 : -1  ;			
+			var dir:int = avatar.facingRight() ? 1 : -1;
+			var boundarie:Number;
+			var newX:Number;
 			var target:Point = avatar.target(Avatar.RIGHT).localToGlobal(new Point);
 			if(obj.hitTestPoint(target.x, target.y)){								
-				var boundarie:Number = dir == 1 ? obj.getBounds(obj).left : obj.getBounds(obj).right;
-				var global:Point = obj.localToGlobal(new Point(boundarie,0));
-				avatar.moveBy(global.x - target.x - 2, 0);  
+				boundarie = dir == 1 ? obj.getBounds(currentScreen).left : obj.getBounds(currentScreen).right;
+				newX = boundarie + (dir == 1 ? -avatar.target(Avatar.RIGHT).x : avatar.target(Avatar.RIGHT).x);
+				avatar.moveTo(newX, avatar.position.y);
+				avatar.updatePos();
+				//trace("moveToR", boundarie, global.x);
+				obj.debug();
+				return true;
+			}
+			target = avatar.target(Avatar.LEFT).localToGlobal(new Point);
+			if(obj.hitTestPoint(target.x, target.y)){								
+				boundarie = dir == 1 ? obj.getBounds(currentScreen).right : obj.getBounds(currentScreen).left;
+				newX = boundarie + (dir == 1 ? -avatar.target(Avatar.LEFT).x : avatar.target(Avatar.LEFT).x);
+				avatar.moveTo(newX, avatar.position.y);
+				avatar.updatePos();
+				//trace("moveToL", boundarie);
 				obj.debug();
 				return true;
 			}

@@ -35,7 +35,7 @@ package game
 		private var asset:MovieClip;
 		
 		public var pos:Vector2D;
-		var offset:Point = new Point();
+		private var offset:Point = new Point();
 		
 		public function Obstacle(mc:MovieClip)
 		{			

@@ -19,7 +19,6 @@ package tiles
 	import org.as3commons.zip.ZipFile;
 	
 	import utils.Utils;
-	
 	/*
 	el TileMap tiene un objecto completo con capas	
 	cada capa es un TileLayer (una pantalla) 
@@ -86,10 +85,10 @@ package tiles
 				for(var i:uint = 0; i < zip.getFileCount(); i++) {				
 					var zipFile:ZipFile = zip.getFileAt(i);
 					var bytes:ByteArray = zipFile.content;
-					data = JSON.decode(zipFile.content.readUTFBytes(zipFile.content.length)); 
+					data = com.adobe.serialization.json.JSON.decode(zipFile.content.readUTFBytes(zipFile.content.length)); 
 				}		
 			}else{
-				data = JSON.decode(e.target.data);
+				data = com.adobe.serialization.json.JSON.decode(e.target.data);
 			}
 			
 			mapWidth = data["width"];

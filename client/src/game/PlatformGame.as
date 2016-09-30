@@ -58,7 +58,9 @@ package game
 			// la idea es que si no estoy saltando, fuerzo el estado del avatar a caer.
 			// si colisiona con algo se queda quieto
 			if(!avatar.isJumping()) avatar.setFallState();			
-			avatar.update();			
+			
+			avatar.update();
+			collisions.resolve();
 			
 			collisions.resolve(); // si colisiono, el manager de colisiones le va a hacer algo a mi avatar. le dejo esa responsabiliadd
 			cameraUpdate();
@@ -78,7 +80,6 @@ package game
 		public function onKeyDown(key:KeyboardEvent):void
 		{
 			avatar.onKeyDown(key);
-
 		}
 		
 		public function onKeyUp(key:KeyboardEvent):void
@@ -86,7 +87,7 @@ package game
 			avatar.onKeyUp(key);	
 		}
 		
-		private function onEnd(e:Event)
+		private function onEnd(e:Event):void
 		{
 			
 		}
