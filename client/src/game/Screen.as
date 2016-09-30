@@ -45,7 +45,10 @@ package game
 					asset.x = x * currentTile.dimension.x;//* scale 
 					asset.y = y * currentTile.dimension.y;//* scale
 					asset.name = currentTile.name;
-					obstacles.push(new Obstacle(asset)); 
+					
+					obstacles.push(Obstacle.create(asset)); 
+					
+					
 					if(obstacles.length > 0) addChild(obstacles[obstacles.length - 1]);
 					
 				}

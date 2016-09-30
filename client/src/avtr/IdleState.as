@@ -11,7 +11,6 @@ package avtr
 	
 	public class IdleState extends AvatarState
 	{		
-
 		
 		public function IdleState(context:Avatar){
 			this.context = context;
@@ -28,23 +27,12 @@ package avtr
 //			logger.info("exit idle state");
 		}
 		
-		private var offset:Number = 0;
 		
 		override public function update():void
 		{
 
 			if(context.left || context.rigth) context.setWalkState();
 			if(context.jump) context.setJumpState();
-		}
-		
-		
-		override public function handleCollition(p:Obstacle):void
-		{
-
-			if(p == context.contact && !p.isOn()){				
-				context.setFallState();
-				p.active = false;
-			}
-		}
+		}		
 	}
 }

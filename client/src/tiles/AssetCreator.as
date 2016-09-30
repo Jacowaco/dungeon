@@ -9,13 +9,13 @@ package tiles
 	{
 		public function AssetCreator()
 		{
-			tiles.obstacle;
+			tiles.brick;
 			tiles.floor;
 			tiles.goal;
-			tiles.thorn;
-			tiles.crack;
+			tiles.pit;
+			tiles.trickFloor;
 			tiles.zombie;
-			tiles.hang;
+			tiles.hook;
 			tiles.bat;
 		}
 		

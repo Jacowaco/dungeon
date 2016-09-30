@@ -14,9 +14,9 @@ package game
 	public class CollisionManager extends EventDispatcher
 	{
 		
-		private var floor:Array = [];
-		private var obstacle:Array = [];
-		private var killers:Array = [];
+		private var floors:Array = [];
+		private var bricks:Array = [];
+		private var pits:Array = [];
 		private var goal:Object;
 		//http://higherorderfun.com/blog/2012/05/20/the-guide-to-implementing-2d-platformers/
 		private var currentScreen:Screens;
@@ -38,14 +38,14 @@ package game
 				avatar.setIdleState();
 			}
 			
-			if(checkKillers(avatar)) {  // true si estoy parado sobre algo...
-				avatar.setIdleState();
-				avatar.getKilled();
-			}
-			
-			if(checkObstacles(avatar)) {  // true si estoy parado sobre algo...
-				avatar.setIdleState();
-			}
+//			if(checkPit(avatar)) {  // true si estoy parado sobre algo...
+//				//avatar.setIdleState();
+//				avatar.getKilled();
+//			}
+//			
+//			if(checkObstacles(avatar)) {  // true si estoy parado sobre algo...
+//				avatar.setIdleState();
+//			}
 
 			return false;
 		}
@@ -59,45 +59,48 @@ package game
 		// entonces esta bueno tratarlos por separado.
 		private function addColliders(screen:Screen):void
 		{
-			logger.info("caching screen: ", screen);
 			for(var i:int = 0; i < screen.numChildren; i++){
 				switch ((screen.getChildAt(i) as Obstacle).name){
-					case "floor":
-						floor.push(screen.getChildAt(i));
+					case Obstacle.FLOOR:
+						floors.push(screen.getChildAt(i));
 						break;
-					case "obstacle":
-						obstacle.push(screen.getChildAt(i));
-						break;				
-					
-					case "goal":
-						goal = screen.getChildAt(i);
-						break;		
-					case "thorn":
-						killers.push( screen.getChildAt(i));
-						break;
+//					case Obstacle.BRICK:
+//						bricks.push(screen.getChildAt(i));
+//						break;									
+//	
+//					case Obstacle.PIT:
+//						floors.push(screen.getChildAt(i));
+//						break;
 				}
 			}		 
 		}
 		
+		
 		private function checkFloor(avatar:Avatar):Boolean
 		{
-			for each(var obj:Obstacle in floor){
-				if(checkTopCollition(obj, avatar)) return true;
+			for each(var obj:Obstacle in floors){				
+				if(checkTopCollition(obj, avatar)){
+					obj.activate();	// lo activo...
+					if(obj.kills()) avatar.getKilled();  // si el obstaculo esta en modo matar me mata...
+					return true;
+				}
 			}			
 			return false;
 		}
 		
-		private function checkKillers(avatar:Avatar):Boolean
-		{
-			for each(var obj:Obstacle in killers){
-				if(checkSideCollition(obj, avatar)) return true;
-				if(checkTopCollition(obj, avatar)) return true;
-			}			
-			return false;
-		}
+		
+//		private function checkPit(avatar:Avatar):Boolean
+//		{
+//			for each(var obj:Obstacle in pits){
+//				if(checkTopCollition(obj, avatar)) return true;
+//			}			
+//			
+//			return false;
+//		}
+		
 		private function checkObstacles(avatar:Avatar):Boolean
 		{
-			for each(var obj:Obstacle in obstacle){
+			for each(var obj:Obstacle in bricks){
 				if(checkSideCollition(obj, avatar)) return true;
 				if(checkTopCollition(obj, avatar)) return true;
 			}

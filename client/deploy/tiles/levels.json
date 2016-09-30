@@ -81,15 +81,15 @@
                 },
              "1":
                 {
-                 "name":"obstacle"
+                 "name":"brick"
                 },
              "10":
                 {
-                 "name":"thorn"
+                 "name":"pit"
                 },
              "11":
                 {
-                 "name":"crack"
+                 "name":"trickFloor"
                 },
              "12":
                 {
@@ -105,7 +105,7 @@
                 },
              "20":
                 {
-                 "name":"hang"
+                 "name":"hook"
                 },
              "3":
                 {

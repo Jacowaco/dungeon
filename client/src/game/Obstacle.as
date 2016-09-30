@@ -18,146 +18,79 @@ package game
 	
 	public class Obstacle extends Sprite
 	{
-		private var isOver:Boolean = false;
-		private var isActive:Boolean = true;
 		
-		public var touched:Boolean = false; 
+		private var isKiller:Boolean 	= false;   // lo toco y muero
+		private var isActive:Boolean	= false; 	// si lo toqué, puedo activar una animacion (ie: un obstaculo que es floor pero luego es killer)
+		private var isZombie:Boolean	= false;	// el tile cambia de estado killer automaticamente
+		private var isMobile:Boolean	= false;    // si quiero que se mueva solo por la pantalla
 		
-		public static var VANISH:String = "vanish";
-		public static var MOBILE:String = "mobile";
-		public static var STATIC:String = "static";
 		
 		public static var GOAL:String = "goal";
-		public static var FLOOR:String = "floor";
-		public static var OBSTACLE:String = "obstacle";
+
+		// estos nombres los uso para parsear el objeto y configurarlo
+		public static var FLOOR:String 					= "floor";   // es el piso.       
+		public static var BRICK:String 					= "brick";   // ladrillos: puedo chocarlos de lado
+		public static var PIT:String					= "pit"; 	// es un agujero en el piso que tiene un killer
+		public static var TRICK_FLOOR:String			= "trickFloor"; // es el piso que te cambia y te mata
+		public static var ZOMBIE:String 				= "zombie";
+		public static var BAT:String					= "bat";
+		public static var HOOK:String					= "hook";
 		
-		private var kind:String = "";
-		private var asset:MovieClip;
+		protected var asset:MovieClip;
+		protected var myType:String;
 		
-		public var pos:Vector2D;
-		private var offset:Point = new Point();
-		
+		// Obstacle responde mas o menos al patron Decorator
+		// ver https://sourcemaking.com/design_patterns/decorator
 		public function Obstacle(mc:MovieClip)
-		{			
+		{	
+			// duando recibo el objeto, en base al nombre 
+			// me configuro como un obstaculo particular
 			asset = mc;
-			this.name = asset.name;
-			if(name == "thorn") randomize();
-			
+			this.name = asset.name;						
 			this.addChild(mc);
 		}
 		
-		private function randomize():void
+		public static function create(mc:MovieClip):Obstacle
 		{
-			asset.gotoAndPlay(Math.floor(Math.random() * 3));
+			
+			switch (mc.name){
+				case Obstacle.FLOOR:
+						return new Floor(mc);
+					break;
+				case Obstacle.BRICK:
+						
+					break;									
+				
+				
+				case Obstacle.PIT:
+			
+					break;
+			}
+			
+			return new Obstacle(mc);
 		}
 		
-		public function type():String
-		{
-			return asset.name;
-		}
 		
 		public function debug():void
 		{
-			asset.gotoAndPlay(2);
+			asset.gotoAndPlay("debug");
 		}
 		
+		public function get type():String
+		{
+			return name;
+		}
 	
-		
-		public function triggerAction():void
+		// activate lo llamo cada vez que el avatar toda el obstaculo
+		// una vez que los activo no vuelven atras...
+		public function activate():void
 		{
-			
-			on();
-			
-			switch(kind)
-			{
-				case VANISH:
-				{
-					dismiss();		
-					break;
-				}
-					
-				case MOBILE:
-				{
-					
-					break;
-				}
-					
-				case STATIC:
-				{
-					
-					break;
-				}
-					
-				default:
-				{
-					break;
-				}
-			}
-			
-			
-			
-			
-			
+			throw new Error("unimplemented");
 		}
 		
-		public function on():void
+		public function kills():Boolean
 		{
-			asset["ison"].visible = true;	
-			touched = true;
-			isOver = true;				
-		}
-		
-		public function off():void
-		{
-			asset["ison"].visible = false;
-			isOver = false;
-		}
-		
-		
-		
-		
-		public function isOn():Boolean
-		{
-			return isOver;
-		}
-		
-		
-		public function dismiss():void
-		{
-			var fadeOut:Tween = new Tween(asset, 700, {alpha:0});
-			fadeOut.addEventListener(TaskEvent.COMPLETE, setOff);
-			Game.taskRunner().add(fadeOut);			
-		}
-		
-		private function setOff(e:Event):void
-		{
-			//			trace("platform set off");
-			off();
-			
-		}
-		
-		public function set active(a:Boolean):void
-		{
-			isActive = a;
-		}
-		
-		public function get active():Boolean
-		{
-			return isActive;
-		}
-		
-		
-		public function isGoal():Boolean
-		{
-			return kind == GOAL;
-		}
-		
-		
-		public function reset():void
-		{
-			asset.alpha = 1;
-			active = true;
-			off();
+			return isKiller;	
 		}
 		
 		
