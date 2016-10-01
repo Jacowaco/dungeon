@@ -13,6 +13,8 @@ package game
 	import flash.events.Event;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.net.getClassByAlias;
+	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
 	import flash.utils.setTimeout;
 	
@@ -58,7 +60,7 @@ package game
 						return new Floor(mc);
 					break;
 				case Obstacle.BRICK:
-						
+						return new Brick(mc);
 					break;									
 				
 				
@@ -85,7 +87,8 @@ package game
 		// una vez que los activo no vuelven atras...
 		public function activate():void
 		{
-			throw new Error("unimplemented");
+//			throw new Error("unimplemented");
+			trace(getQualifiedClassName(this));
 		}
 		
 		public function kills():Boolean

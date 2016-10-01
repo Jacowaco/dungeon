@@ -60,7 +60,7 @@ package game
 			if(!avatar.isJumping()) avatar.setFallState();			
 			
 			avatar.update();
-			collisions.resolve();
+//			collisions.resolve();
 			
 			collisions.resolve(); // si colisiono, el manager de colisiones le va a hacer algo a mi avatar. le dejo esa responsabiliadd
 			cameraUpdate();
