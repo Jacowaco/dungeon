@@ -6,12 +6,11 @@ package avtr
 	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
 	
-	import game.Obstacle;
+	import game.obstacles.Obstacle;
 	
 	
 	public class IdleState extends AvatarState
-	{		
-		
+	{
 		public function IdleState(context:Avatar){
 			this.context = context;
 		}
@@ -20,7 +19,6 @@ package avtr
 		{
 //			logger.info("enter idle state");
 			context.vel = new Vector2D();
-
 		}
 		
 		override public function exit():void{
@@ -28,11 +26,18 @@ package avtr
 		}
 		
 		
-		override public function update():void
+		override public function checkState():void
 		{
-
-			if(context.left || context.rigth) context.setWalkState();
-			if(context.jump) context.setJumpState();
-		}		
+			if(context.left || context.right) context.setWalkState();
+			if (context.jump) context.setJumpState();
+		}
+		
+		override public function update():void 
+		{
+			if (context.touchingFloor) context.vel = new Vector2D();
+			else context.addGravity();
+			context.addController();
+			context.move();
+		}
 	}
 }

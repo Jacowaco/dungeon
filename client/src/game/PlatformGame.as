@@ -50,6 +50,8 @@ package game
 			
 			//TODO mejorar la camara
 			rlim = settings.camera.rightLimit;
+			
+			avatar.setFallState();
 		}
 		
 		public function onEnterFrame(e:Event):void
@@ -57,12 +59,12 @@ package game
 			// esto esta feo pero funciona:
 			// la idea es que si no estoy saltando, fuerzo el estado del avatar a caer.
 			// si colisiona con algo se queda quieto
-			if(!avatar.isJumping()) avatar.setFallState();			
+			//if(!avatar.isJumping()) avatar.setFallState();			
 			
 			avatar.update();
-			collisions.resolve();
 			
 			collisions.resolve(); // si colisiono, el manager de colisiones le va a hacer algo a mi avatar. le dejo esa responsabiliadd
+			
 			cameraUpdate();
 		}
 		

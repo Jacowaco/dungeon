@@ -5,7 +5,7 @@ package avtr
 	import flash.events.KeyboardEvent;
 	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
-	import game.Obstacle;
+	import game.obstacles.Obstacle;
 	
 
 	public class AvatarState
@@ -14,6 +14,7 @@ package avtr
 		public function enter():void{throw new Error("unninplemented")};
 		public function exit():void{throw new Error("unninplemented")};
 		public function update():void{throw new Error("unninplemented")};
+		public function checkState():void{throw new Error("unninplemented")};
 //		public function onKeyDown(ke:KeyboardEvent):void{throw new Error("unninplemented")};
 //		public function onKeyUp(ke:KeyboardEvent):void{throw new Error("unninplemented")};
 

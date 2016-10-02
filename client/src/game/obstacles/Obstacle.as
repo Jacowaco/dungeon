@@ -1,4 +1,4 @@
-package game
+package game.obstacles
 {
 	import com.qb9.flashlib.easing.Tween;
 	import com.qb9.flashlib.geom.Vector2D;
@@ -7,6 +7,9 @@ package game
 	import com.qb9.flashlib.tasks.Sequence;
 	import com.qb9.flashlib.tasks.TaskEvent;
 	import com.qb9.flashlib.tasks.Wait;
+	import game.obstacles.Brick;
+	import game.obstacles.Floor;
+	import game.obstacles.Pit;
 	
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
@@ -19,10 +22,10 @@ package game
 	public class Obstacle extends Sprite
 	{
 		
-		private var isKiller:Boolean 	= false;   // lo toco y muero
-		private var isActive:Boolean	= false; 	// si lo toqué, puedo activar una animacion (ie: un obstaculo que es floor pero luego es killer)
-		private var isZombie:Boolean	= false;	// el tile cambia de estado killer automaticamente
-		private var isMobile:Boolean	= false;    // si quiero que se mueva solo por la pantalla
+		protected var isKiller:Boolean 	= false;   // lo toco y muero
+		protected var isActive:Boolean	= false; 	// si lo toqué, puedo activar una animacion (ie: un obstaculo que es floor pero luego es killer)
+		protected var isZombie:Boolean	= false;	// el tile cambia de estado killer automaticamente
+		protected var isMobile:Boolean	= false;    // si quiero que se mueva solo por la pantalla
 		
 		
 		public static var GOAL:String = "goal";
@@ -36,7 +39,7 @@ package game
 		public static var BAT:String					= "bat";
 		public static var HOOK:String					= "hook";
 		
-		protected var asset:MovieClip;
+		public var asset:MovieClip;
 		protected var myType:String;
 		
 		// Obstacle responde mas o menos al patron Decorator
@@ -58,12 +61,16 @@ package game
 						return new Floor(mc);
 					break;
 				case Obstacle.BRICK:
-						
-					break;									
-				
-				
+						return new Brick(mc);
+					break;
 				case Obstacle.PIT:
-			
+						return new Pit(mc);
+					break;
+				case Obstacle.TRICK_FLOOR:
+						return new TrickFloor(mc);
+					break;
+				case Obstacle.ZOMBIE:
+						return new Zombie(mc);
 					break;
 			}
 			

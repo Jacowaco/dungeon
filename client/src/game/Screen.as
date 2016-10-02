@@ -1,6 +1,7 @@
 package game
 {
 	import com.qb9.flashlib.geom.Vector2D;
+	import game.obstacles.Obstacle;
 	
 	import flash.display.MovieClip;
 	import flash.display.Sprite;

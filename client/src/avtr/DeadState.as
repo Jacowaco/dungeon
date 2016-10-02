@@ -9,16 +9,17 @@ package avtr
 	import game.obstacles.Obstacle;
 	
 
-	public class WalkState extends AvatarState
+	public class DeadState extends AvatarState
 	{
-		public function WalkState(context:Avatar)
+		public function DeadState(context:Avatar)
 		{
 			this.context = context;
 		}
 		
 		override public function enter():void
 		{
-//			logger.info("enter walk state");	
+			var deadJump:Vector2D = new Vector2D(0, -context.jumpForce);		
+			context.vel = deadJump;
 		}
 		
 		override public function exit():void
@@ -28,15 +29,13 @@ package avtr
 		
 		override public function checkState():void
 		{
-			if(!(context.left || context.right)) context.setIdleState();
-			if (context.jump) context.setJumpState();
+			
 		}
 		
 		override public function update():void 
 		{
-			if (context.touchingFloor) context.vel = new Vector2D();
-			else context.addGravity();
-			context.addController();
+			//context.vel = context.deadVel;
+			context.addGravity();
 			context.move();
 		}
 

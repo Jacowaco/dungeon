@@ -17,7 +17,7 @@ package avtr
 	
 	import game.CollisionManager;
 	import game.PlatformGame;
-	import game.Obstacle;
+	import game.obstacles.Obstacle;
 	
 	import org.as3commons.zip.utils.ChecksumUtil;
 	
@@ -31,7 +31,7 @@ package avtr
 		public static var TOP:int 			= 4;
 		
 		public var left:Boolean = false;
-		public var rigth:Boolean = false;
+		public var right:Boolean = false;
 		public var jump:Boolean = false;
 		public var duck:Boolean = false;
 		public var shoot:Boolean = false;
@@ -43,12 +43,14 @@ package avtr
 		private var walkingState:WalkState;
 		private var jumpingState:JumpState;
 		private var fallingState:FallState;
+		private var deadState:DeadState;
 		
 		private var keys:Object = {};  // guardo el estado de las keys para saber que hacer en el update
 		
 		private var walkSpeed:Number;
 		public var jumpForce:Number;
 		public var sideForce:Number;
+		public var touchingFloor:Boolean;
 		
 		private var initialPosition:Vector2D;
 		public var contact:Obstacle; // la cosa contra la que estoy topado ahora.
@@ -57,8 +59,11 @@ package avtr
 		public var vel:Vector2D;
 		public var g:Vector2D;
 		public var f:Vector2D;
+		public var deadVel:Vector2D;
 		private var asset:MovieClip;
 		private var faceRight:Boolean = true;
+		
+		private var lives:int = 3;
 		
 		public function Avatar()
 		{
@@ -70,6 +75,7 @@ package avtr
 			vel = new Vector2D();						
 			g = new Vector2D(settings.avatar.gravity[0], settings.avatar.gravity[1]);
 			f = new Vector2D();
+			deadVel = new Vector2D(0, 10);
 			
 			jumpForce = settings.avatar.jump;
 			walkSpeed = settings.avatar.speed;
@@ -78,13 +84,15 @@ package avtr
 			walkingState = new WalkState(this);
 			jumpingState = new JumpState(this);
 			fallingState = new FallState(this);
+			deadState = new DeadState(this);
 			changeState(fallingState); 			
 		}
 		
 		public function update():void
 		{						
-//			trace("update state: ", currentState);
-			currentState.update();			
+			//trace("update state: ", currentState);
+			currentState.checkState();
+			currentState.update();
 		}
 		
 		public function move():void
@@ -106,11 +114,11 @@ package avtr
 		
 		public function addController():void
 		{
-			var xdir:Number = left ? -1 : 0 + rigth ? 1 : 0;	
+			var xdir:Number = left ? -1 : 0 + right ? 1 : 0;	
 			vel = new Vector2D(xdir * speed, vel.y);
 			if(xdir != 0) faceTo(xdir);
 			
-			if(jump) setJumpState();
+			//if(jump) setJumpState();
 		}
 		
 		public function isFalling():Boolean
@@ -121,6 +129,11 @@ package avtr
 		public function isJumping():Boolean
 		{
 			return currentState == jumpingState;
+		}
+		
+		public function isDead():Boolean
+		{
+			return currentState == deadState;
 		}
 		
 		public function faceTo(direction:int):void
@@ -143,24 +156,30 @@ package avtr
 		
 		public function setJumpState():void{
 			if(!isJumping()) changeState(jumpingState);		
-			asset.gotoAndPlay("jump");		
+			asset.gotoAndPlay("jump");// trace("gotoAndPlay(jump)");	
 		}
 		
 		
 		public function setWalkState():void{
 			changeState(walkingState);
-			asset.gotoAndPlay("walk");
+			asset.gotoAndPlay("walk");// trace("gotoAndPlay(walk)");
 		}
 		
 		public function setIdleState():void
 		{
 			changeState(idleState);
-			asset.gotoAndStop("standBy");
+			asset.gotoAndStop("standBy");// trace("gotoAndPlay(standBy)");
 		}
 		
 		public function setFallState():void{
 			if(! isFalling()) changeState(fallingState);
 			//asset.gotoAndPlay("falling");
+		}
+		
+		public function setDeadState():void
+		{
+			changeState(deadState);
+			asset.gotoAndStop("estornudo");// trace("gotoAndPlay(standBy)");
 		}
 		
 		
@@ -205,9 +224,12 @@ package avtr
 		
 		public function getKilled():void
 		{
-			trace("get Killed");
-			dispatchEvent(new Event(PlatformGame.END));
-			asset.gotoAndPlay("celebrate");
+			if (!isDead())
+			{
+				trace("get Killed");
+				dispatchEvent(new Event(PlatformGame.END));
+				setDeadState();
+			}
 		}
 		
 		public function target(target:int):DisplayObject
@@ -248,7 +270,7 @@ package avtr
 					left = false;
 					break;
 				case Keyboard.RIGHT:
-					rigth = false;
+					right = false;
 					break;
 				case Keyboard.UP:
 					
@@ -269,7 +291,7 @@ package avtr
 					left = true;
 					break;
 				case Keyboard.RIGHT:
-					rigth = true;
+					right = true;
 					break;
 				case Keyboard.UP:
 					

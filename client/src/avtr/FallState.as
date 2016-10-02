@@ -6,9 +6,7 @@ package avtr
 	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
 	
-	import game.Obstacle;
-	
-	
+	import game.obstacles.Obstacle;
 	
 	public class FallState extends AvatarState
 	{
@@ -25,8 +23,18 @@ package avtr
 		}
 		
 		// fall state solo lo hace caer
-		override public function update():void{						
-			context.addGravity();
+		override public function checkState():void{
+			if (context.touchingFloor)
+			{
+				if (context.left || context.right) context.setWalkState();
+				else context.setIdleState();
+			}
+		}
+		
+		override public function update():void 
+		{
+			if (context.touchingFloor) context.vel = new Vector2D();
+			else context.addGravity();
 			context.addController();
 			context.move();
 		}
