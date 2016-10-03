@@ -77,7 +77,7 @@ package game
 		private function checkFloor(avatar:Avatar):Boolean
 		{
 			for each(var obj:Obstacle in floors){				
-				if(checkTopCollition(obj, avatar)){
+				if(checkTopCollition(obj)){
 					obj.activate();	// lo activo...
 					if(obj.kills()) avatar.getKilled();  // si el obstaculo esta en modo matar me mata...
 					return true;
@@ -89,18 +89,15 @@ package game
 		private function checkWalls(avatar:Avatar):Boolean
 		{
 			for each(var obj:Obstacle in walls){
-				if(checkSideCollition(obj, avatar)) return false;
+				if(checkSideCollition(obj)) return false;
 			}
 			return false;
 		}
 		
-		
-		
-		
 		// COLISIONES POR LADO
 		// hitTestPoint solo funciona en coordenadas globales.
 		// http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/display/DisplayObject.html#hitTestPoint()
-		private function checkTopCollition(obj:Obstacle, avatar:Avatar):Boolean
+		private function checkTopCollition(obj:Obstacle):Boolean
 		{
 			var box:MovieClip = obj.asset.getChildByName("box") as MovieClip;
 			if(box.hitTestObject(avatar.target(Avatar.BOTTOM))){
@@ -112,12 +109,35 @@ package game
 			return false;
 		}
 		
-		private function checkSideCollition(obj:Obstacle, avatar:Avatar):Boolean
+		private function checkSideCollition(obj:Obstacle):Boolean
 		{
 			var dir:int = avatar.facingRight() ? 1 : -1;
 			var boundarie:Number;
 			var newX:Number;
 			//var target:Point = avatar.target(Avatar.RIGHT).localToGlobal(new Point);
+			var box:MovieClip = obj.asset.getChildByName("box") as MovieClip;
+			//if(box.hitTestPoint(target.x, target.y)){								
+			if(box.hitTestObject(avatar.target(Avatar.RIGHT))){								
+				boundarie = dir == 1 ? box.getBounds(currentScreen).left : box.getBounds(currentScreen).right;
+				newX = boundarie + (dir == 1 ? -avatar.target(Avatar.RIGHT).x : avatar.target(Avatar.RIGHT).x);
+				avatar.moveTo(newX, avatar.position.y);
+				avatar.updatePos();
+				
+				//obj.debug();
+				return true;
+			}
+			if(box.hitTestObject(avatar.target(Avatar.LEFT))){								
+				boundarie = dir == 1 ? box.getBounds(currentScreen).right : box.getBounds(currentScreen).left;
+				newX = boundarie + (dir == 1 ? -avatar.target(Avatar.LEFT).x : avatar.target(Avatar.LEFT).x);
+				avatar.moveTo(newX, avatar.position.y);
+				avatar.updatePos();
+				return true;
+			}
+			return false;			
+		}
+		
+		private function checkHooks(obj:Obstacle):Boolean
+		{
 			var box:MovieClip = obj.asset.getChildByName("box") as MovieClip;
 			//if(box.hitTestPoint(target.x, target.y)){								
 			if(box.hitTestObject(avatar.target(Avatar.RIGHT))){								
