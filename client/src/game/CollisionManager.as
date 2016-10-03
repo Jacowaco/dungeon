@@ -114,16 +114,12 @@ package game
 			var dir:int = avatar.facingRight() ? 1 : -1;
 			var boundarie:Number;
 			var newX:Number;
-			//var target:Point = avatar.target(Avatar.RIGHT).localToGlobal(new Point);
 			var box:MovieClip = obj.asset.getChildByName("box") as MovieClip;
-			//if(box.hitTestPoint(target.x, target.y)){								
 			if(box.hitTestObject(avatar.target(Avatar.RIGHT))){								
 				boundarie = dir == 1 ? box.getBounds(currentScreen).left : box.getBounds(currentScreen).right;
 				newX = boundarie + (dir == 1 ? -avatar.target(Avatar.RIGHT).x : avatar.target(Avatar.RIGHT).x);
 				avatar.moveTo(newX, avatar.position.y);
 				avatar.updatePos();
-				
-				//obj.debug();
 				return true;
 			}
 			if(box.hitTestObject(avatar.target(Avatar.LEFT))){								
@@ -139,23 +135,10 @@ package game
 		private function checkHooks(obj:Obstacle):Boolean
 		{
 			var box:MovieClip = obj.asset.getChildByName("box") as MovieClip;
-			//if(box.hitTestPoint(target.x, target.y)){								
+			
 			if(box.hitTestObject(avatar.target(Avatar.RIGHT))){								
-				boundarie = dir == 1 ? box.getBounds(currentScreen).left : box.getBounds(currentScreen).right;
-				newX = boundarie + (dir == 1 ? -avatar.target(Avatar.RIGHT).x : avatar.target(Avatar.RIGHT).x);
-				avatar.moveTo(newX, avatar.position.y);
-				avatar.updatePos();
-				
-				//obj.debug();
-				return true;
-			}
-			//target = avatar.target(Avatar.LEFT).localToGlobal(new Point);
-			//if(box.hitTestPoint(target.x, target.y)){								
-			if(box.hitTestObject(avatar.target(Avatar.LEFT))){								
-				boundarie = dir == 1 ? box.getBounds(currentScreen).right : box.getBounds(currentScreen).left;
-				newX = boundarie + (dir == 1 ? -avatar.target(Avatar.LEFT).x : avatar.target(Avatar.LEFT).x);
-				avatar.moveTo(newX, avatar.position.y);
-				avatar.updatePos();
+//				avatar.moveTo(newX, avatar.position.y);
+//				avatar.updatePos();
 				
 				//obj.debug();
 				return true;
