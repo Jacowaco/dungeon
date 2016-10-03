@@ -7,9 +7,6 @@ package game.obstacles
 	import com.qb9.flashlib.tasks.Sequence;
 	import com.qb9.flashlib.tasks.TaskEvent;
 	import com.qb9.flashlib.tasks.Wait;
-	import game.obstacles.Brick;
-	import game.obstacles.Floor;
-	import game.obstacles.Pit;
 	
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
@@ -18,6 +15,10 @@ package game.obstacles
 	import flash.geom.Rectangle;
 	import flash.utils.getQualifiedClassName;
 	import flash.utils.setTimeout;
+	
+	import game.obstacles.Brick;
+	import game.obstacles.Floor;
+	import game.obstacles.Pit;
 	
 	public class Obstacle extends Sprite
 	{
@@ -39,8 +40,17 @@ package game.obstacles
 		public static var BAT:String					= "bat";
 		public static var HOOK:String					= "hook";
 		
+		// los nombres de los frames que tienen los assets
+		public static var IDLE:String					= "idle";
+		public static var WARNING:String 				= "warning";
+		public static var KILLER:String 				= "killer";
+		
 		public var asset:MovieClip;
 		protected var myType:String;
+		
+		// puede que tenga que configurarle cosas...
+		// de manera externalizada
+		protected var settings:Object;
 		
 		// Obstacle responde mas o menos al patron Decorator
 		// ver https://sourcemaking.com/design_patterns/decorator
@@ -52,6 +62,8 @@ package game.obstacles
 			this.name = asset.name;						
 			this.addChild(mc);
 		}
+		
+
 		
 		public static function create(mc:MovieClip):Obstacle
 		{
@@ -95,10 +107,34 @@ package game.obstacles
 			throw new Error("unimplemented");
 		}
 		
+		// hay obstaculos que necesitan configuración... ie: zombies y tricks y hooks
+		public function config(settings:Object):void
+		{
+			throw new Error("uninplemented");
+		}
+		
 		public function kills():Boolean
 		{
 			return isKiller;	
 		}
+		
+		protected function goIdle():void
+		{
+			asset.gotoAndPlay(IDLE);
+			isKiller = false;
+		}
+		
+		protected function goWarning():void
+		{
+			asset.gotoAndPlay(WARNING);			
+		}
+		
+		protected function goKill():void
+		{
+			asset.gotoAndPlay(IDLE);
+			isKiller = true;
+		}
+		
 		
 		
 	}
