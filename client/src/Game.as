@@ -110,16 +110,20 @@ package
 		private function settingsLoaded():void
 		{									
 			loadAudio();
-			createGui();
 			playAudioScheme("menu");
 			stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
-			// ready() le avisa al mmo que ya estoy para jugar (ie. dispatchEvent(MinigameEvent.READY));
-			ready();
 			
 			gameController = new GameController();
 			addChild(gameController)
+
+			createGui();
+			
+			// ready() le avisa al mmo que ya estoy para jugar (ie. dispatchEvent(MinigameEvent.READY));
+			ready();
+			
+
 		}		
 		
 		private function createGui():void

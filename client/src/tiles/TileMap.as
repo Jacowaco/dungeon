@@ -126,6 +126,7 @@ package tiles
 			logger.info("loading layers: ");
 			
 			for each(var layer:Object in data.layers){
+				var props:Object = layer.properties;
 				var name:String = layer.name;
 				var w:int = layer.width;
 				var h:int = layer.height;
@@ -157,6 +158,7 @@ package tiles
 				tl.setName(name);
 				tl.setMap(map);
 				tl.setDimensions(w, h);
+				tl.setProps(props);
 				layers[name] = tl;
 				trace(layers[name]);
 				

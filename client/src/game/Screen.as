@@ -1,11 +1,12 @@
 package game
 {
 	import com.qb9.flashlib.geom.Vector2D;
-	import game.obstacles.Obstacle;
 	
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.geom.Point;
+	
+	import game.obstacles.Obstacle;
 	
 	import tiles.AssetCreator;
 	import tiles.Tile;
@@ -29,6 +30,8 @@ package game
 		
 		private function create(tl:TileLayer):void
 		{			
+			var settings:Object = tl.props;
+			
 			// creo una nueva capa y la llamo como se llama en el tiled
 			// ahí guardo todos los sprites que forman esa capa
 			for(var x:int = 0; x < tl.getColsCount(); x++)
@@ -47,7 +50,9 @@ package game
 					asset.y = y * currentTile.dimension.y;//* scale
 					asset.name = currentTile.name;
 					
-					obstacles.push(Obstacle.create(asset)); 
+					var obstacle:Obstacle = Obstacle.create(asset);
+					obstacle.config(settings);
+					obstacles.push(obstacle); 
 					
 					
 					if(obstacles.length > 0) addChild(obstacles[obstacles.length - 1]);

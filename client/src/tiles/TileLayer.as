@@ -13,9 +13,7 @@ package tiles
 		private var cols:int;
 		public var name:String;
 		private var map:Array;
-		
-		// los tiles en map ya tienen la data del tileset
-			
+		public var props:Object;
 		
 		public function TileLayer()
 		{
@@ -30,19 +28,11 @@ package tiles
 			this.rows = mapHeight ;
 		}
 		
-//		public function getTileDimension():Point
-//		{
-//			return tileset.dimension;	
-//		}
-		
 		public function getTile(x:int, y:int):Tile
 		{
 			return map[x][y] as Tile;
 		}
-//		public function setTileset(tileset:TileSet):void
-//		{
-//			this.tileset = tileset;
-//		}
+
 		
 		public function getRowsCount():int
 		{
@@ -54,20 +44,12 @@ package tiles
 			return cols;
 		}
 		
-//		public function setTileSet(ts:TileSet):void
-//		{
-//			this.tileset = ts;
-//		}
 		
 		public function setMap(map:Array):void
 		{
 			this.map = map;
 		}
-//		public function getBitmapForTile(tile:Tile):Bitmap
-//		{
-//			return tileset.getTileBitmap(tile.gid);
-//		}		
-//		
+
 		public function getTilesCount(type:String):int
 		{
 			var qty:int = 0;
@@ -94,22 +76,14 @@ package tiles
 			return null;
 		}
 		
-//		public function reset():void
-//		{
-//			for(var x:int = 0; x < cols; x++){
-//				for(var y :int = 0; y < rows; y++)
-//				{
-//					var t:Tile = getTile(x,y);
-//					if(t.hasOwnProperty("collected")){
-//						t.collected = false;
-//					}
-//				}
-//			}
-//		}
-		
 		public function setName(name:String):void
 		{
 			this.name = name;
+		}
+		
+		public function setProps(props:Object):void
+		{
+			this.props = props;
 		}
 	}
 }

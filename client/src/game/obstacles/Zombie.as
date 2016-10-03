@@ -31,32 +31,23 @@ package game.obstacles
 		
 		override public function config(settings:Object):void
 		{
-			this.settings = settings;		
-			idle = new Timeout(goIdle, settings.idleTime);
-			warning = new Timeout(goWarning, settings.warningTime);
-			kill = new Timeout(goKill, settings.killerTime);
+			trace("configuring zombie:");
+			trace(settings);
+			trace(settings.zombies * 1000);
+			this.settings = settings;	
 			
+			idle = new Timeout(goIdle, settings.zombies * 1000);
+			warning = new Timeout(goWarning, settings.zombies * 1000);
+			kill = new Timeout(goKill, settings.zombies * 1000);			
 			sequence = new Sequence(idle, warning, kill);
-			timer = new Loop(sequence);
-			
-			Game.taskRunner().add(timer);
-						
+			timer = new Loop(sequence);			
+			Game.taskRunner().add(timer);						
 		}
 		
 		
 		override public function activate():void
 		{
-//			if (state < 2)
-//			{
-//				contToTrick++;
-//				if (contToTrick == 15)
-//				{
-//					contToTrick = 0;
-//					state++;
-//					asset.gotoAndPlay("state_" + state);
-//					if (state == 2) isKiller = true;
-//				}
-//			}
+
 		}
 		
 		

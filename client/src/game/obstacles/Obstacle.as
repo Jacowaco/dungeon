@@ -25,8 +25,6 @@ package game.obstacles
 		
 		protected var isKiller:Boolean 	= false;   // lo toco y muero
 		protected var isActive:Boolean	= false; 	// si lo toqué, puedo activar una animacion (ie: un obstaculo que es floor pero luego es killer)
-		protected var isZombie:Boolean	= false;	// el tile cambia de estado killer automaticamente
-		protected var isMobile:Boolean	= false;    // si quiero que se mueva solo por la pantalla
 		
 		
 		public static var GOAL:String = "goal";
@@ -110,7 +108,7 @@ package game.obstacles
 		// hay obstaculos que necesitan configuración... ie: zombies y tricks y hooks
 		public function config(settings:Object):void
 		{
-			throw new Error("uninplemented");
+			trace("nothing to configure");
 		}
 		
 		public function kills():Boolean
@@ -120,20 +118,23 @@ package game.obstacles
 		
 		protected function goIdle():void
 		{
-			asset.gotoAndPlay(IDLE);
 			isKiller = false;
+			asset.gotoAndStop(IDLE);
+			
 		}
 		
 		protected function goWarning():void
 		{
-			asset.gotoAndPlay(WARNING);			
+			asset.gotoAndStop(WARNING);			
 		}
 		
 		protected function goKill():void
 		{
-			asset.gotoAndPlay(IDLE);
 			isKiller = true;
+			asset.gotoAndStop(KILLER);
+			
 		}
+		
 		
 		
 		
