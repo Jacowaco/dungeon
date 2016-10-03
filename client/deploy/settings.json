@@ -2,7 +2,7 @@
     "defaultValue": {
         "soundsEnable": false
     },
-    "level": ["easy:1", "easy:1", "easy:1", "easy:1"]
+    "level": ["easy:1", "easy:2", "easy:1", "easy:1"]
     ,
     "avatar":{
         "speed": 10,
