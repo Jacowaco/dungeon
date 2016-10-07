@@ -27,7 +27,7 @@ package game.obstacles
 		
 		override public function config(settings:Object):void
 		{
-			logger.info("configuring zombie");
+			//logger.info("configuring zombie");
 			this.settings = settings;	
 			
 			idle = new Timeout(goIdle, settings.zombies * 1000);

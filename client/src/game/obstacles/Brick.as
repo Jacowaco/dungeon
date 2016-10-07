@@ -16,8 +16,5 @@ package game.obstacles
 			// el piso nunca me mata
 		}
 		
-		
-		
-		
 	}
 }

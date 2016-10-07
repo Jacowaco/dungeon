@@ -1,6 +1,7 @@
 package avtr
 {
 	import assets.GaturroMC;
+	import game.obstacles.Hook;
 	
 	import com.qb9.flashlib.geom.Vector2D;
 	import com.qb9.flashlib.prototyping.shapes.Rect;
@@ -29,6 +30,8 @@ package avtr
 		public static var RIGHT:int 		= 2;
 		public static var BOTTOM:int 		= 3;
 		public static var TOP:int 			= 4;
+		public static var BODY:int 			= 5;
+		public static var OBJECT:int 		= 6;
 		
 		public var left:Boolean = false;
 		public var right:Boolean = false;
@@ -44,6 +47,7 @@ package avtr
 		private var jumpingState:JumpState;
 		private var fallingState:FallState;
 		private var deadState:DeadState;
+		private var hookState:HookState;
 		
 		private var keys:Object = {};  // guardo el estado de las keys para saber que hacer en el update
 		
@@ -62,6 +66,8 @@ package avtr
 		public var deadVel:Vector2D;
 		private var asset:MovieClip;
 		private var faceRight:Boolean = true;
+		public var currentHook:Hook;
+		public var canJump:Boolean = true;
 		
 		private var lives:int = 3;
 		
@@ -85,6 +91,7 @@ package avtr
 			jumpingState = new JumpState(this);
 			fallingState = new FallState(this);
 			deadState = new DeadState(this);
+			hookState = new HookState(this);
 			changeState(fallingState); 			
 		}
 		
@@ -155,8 +162,12 @@ package avtr
 		}
 		
 		public function setJumpState():void{
-			if(!isJumping()) changeState(jumpingState);		
-			asset.gotoAndPlay("jump");// trace("gotoAndPlay(jump)");	
+			if (!isJumping() && canJump)
+			{
+				canJump = false;
+				changeState(jumpingState);
+				asset.gotoAndPlay("jump");// trace("gotoAndPlay(jump)");
+			}
 		}
 		
 		
@@ -179,9 +190,14 @@ package avtr
 		public function setDeadState():void
 		{
 			changeState(deadState);
-			asset.gotoAndStop("estornudo");// trace("gotoAndPlay(standBy)");
+			asset.gotoAndStop("estornudo");// trace("gotoAndPlay(estornudo)");
 		}
 		
+		public function setHookState():void
+		{
+			changeState(hookState);
+			asset.gotoAndStop("transportMove_colgante");// trace("gotoAndPlay(transportMove_colgante)");
+		}
 		
 		public function get speed():Number{
 			return walkSpeed;
@@ -232,6 +248,29 @@ package avtr
 			}
 		}
 		
+		public function hookTo(obj:Hook):void
+		{
+			if (currentHook == null)
+			{
+				currentHook = obj;
+				setHookState();
+			}
+		}
+		
+		public function updateToHook():void
+		{
+			if (currentHook != null)
+			{
+				//trace(x, y);
+				//var box:MovieClip = currentHook.asset.getChildByName("box") as MovieClip;
+				//var point:Point = new Point();
+				//pos = new Vector2D(screen.localToGlobal(point).x, box.localToGlobal(point).y);
+				pos = new Vector2D(currentHook.hookPos.x - target(OBJECT).x, currentHook.hookPos.y - target(OBJECT).y);
+				updatePos();
+				//trace(pos);
+			}
+		}
+		
 		public function target(target:int):DisplayObject
 		{
 			switch(target)
@@ -254,6 +293,16 @@ package avtr
 				case RIGHT:
 				{
 					return asset.right_tg;
+					break;
+				}
+				case BODY:
+				{
+					return asset.body_tg;
+					break;
+				}
+				case OBJECT:
+				{
+					return asset.objects_ph;
 					break;
 				}
 				default:
@@ -280,13 +329,14 @@ package avtr
 					break;
 				case Keyboard.SPACE:
 					jump = false;
+					canJump = true;
 					break;
 			}
 		}
 		
 		public function onKeyDown(ke:KeyboardEvent):void
 		{
-			switch (ke.keyCode ) {
+			switch (ke.keyCode) {
 				case Keyboard.LEFT:
 					left = true;
 					break;
@@ -300,7 +350,7 @@ package avtr
 					
 					break;
 				case Keyboard.SPACE:
-					jump = true;
+					jump = true; trace("jump true");
 					break;
 			}			
 		}

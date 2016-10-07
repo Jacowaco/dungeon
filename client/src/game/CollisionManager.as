@@ -1,6 +1,7 @@
 package game
 {
 	import avtr.Avatar;
+	import game.obstacles.Hook;
 	import game.obstacles.Obstacle;
 	
 	import flash.display.DisplayObject;
@@ -17,6 +18,8 @@ package game
 		
 		private var floors:Array = [];
 		private var walls:Array = [];
+		private var hooks:Array = [];
+		private var monsters:Array = [];
 		//http://higherorderfun.com/blog/2012/05/20/the-guide-to-implementing-2d-platformers/
 		private var currentScreen:Screens;
 		private var avatar:Avatar;
@@ -34,16 +37,16 @@ package game
 		{
 			if (avatar.isDead()) return;
 			
-			if(checkFloor(avatar)) {  // true si estoy parado sobre algo...
+			if(checkFloor()) {  // true si estoy parado sobre algo...
 				avatar.touchingFloor = true;
 			}
 			else {
 				avatar.touchingFloor = false;
 			}
 			
-			if(checkWalls(avatar)) {  
-				
-			}
+			checkWalls();
+			checkHooks();
+			checkMonsters();
 		}
 		
 		// me gusta separar los obstaculos porque cada uno tiene cualidades diferentes.
@@ -69,12 +72,18 @@ package game
 					case Obstacle.ZOMBIE:
 						floors.push(tempObs);
 						break;
+					case Obstacle.HOOK:
+						hooks.push(tempObs);
+						break;
+					case Obstacle.BAT:
+						monsters.push(tempObs);
+						break;
 				}
 			}		 
 		}
 		
 		
-		private function checkFloor(avatar:Avatar):Boolean
+		private function checkFloor():Boolean
 		{
 			for each(var obj:Obstacle in floors){				
 				if(checkTopCollition(obj)){
@@ -86,7 +95,7 @@ package game
 			return false;
 		}
 		
-		private function checkWalls(avatar:Avatar):Boolean
+		private function checkWalls():Boolean
 		{
 			for each(var obj:Obstacle in walls){
 				if(checkSideCollition(obj)) return false;
@@ -132,20 +141,41 @@ package game
 			return false;			
 		}
 		
-		private function checkHooks(obj:Obstacle):Boolean
+		private function checkHooks():Boolean
 		{
-			var box:MovieClip = obj.asset.getChildByName("box") as MovieClip;
-			
-			if(box.hitTestObject(avatar.target(Avatar.RIGHT))){								
-//				avatar.moveTo(newX, avatar.position.y);
-//				avatar.updatePos();
-				
-				//obj.debug();
-				return true;
+			for each(var obj:Obstacle in hooks){
+				if(checkHookCollition(obj)) return false;
 			}
-			return false;			
+			return false;
 		}
 		
+		private function checkHookCollition(obj:Obstacle):Boolean
+		{
+			var box:MovieClip = obj.asset.getChildByName("box") as MovieClip;
+			if (box.hitTestObject(avatar.target(Avatar.BODY))) {
+				avatar.hookTo(obj as Hook);
+				return true;
+			}
+			return false;
+		}
 		
+		private function checkMonsters():Boolean
+		{
+			for each(var obj:Obstacle in monsters){
+				if(checkMonsterCollition(obj)) return false;
+			}
+			return false;
+		}
+		
+		private function checkMonsterCollition(obj:Obstacle):Boolean
+		{
+			var box:MovieClip = obj.asset.getChildByName("box") as MovieClip;
+			if (box.hitTestObject(avatar.target(Avatar.BODY))) {
+				obj.activate();	// lo activo...
+				if(obj.kills()) avatar.getKilled();  // si el obstaculo esta en modo matar me mata...
+				return true;
+			}
+			return false;
+		}
 	}
 }
