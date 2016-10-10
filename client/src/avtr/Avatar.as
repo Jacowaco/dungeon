@@ -97,9 +97,9 @@ package avtr
 		
 		public function update():void
 		{						
-			//trace("update state: ", currentState);
 			currentState.checkState();
 			currentState.update();
+			updatePos();
 		}
 		
 		public function move():void
@@ -108,7 +108,10 @@ package avtr
 			updatePos();
 		}
 		
-		public function updatePos():void
+		// este metodo tiene que ser privado.
+		// es el metodo que efectivamente mueve el objeto en la pantalla
+		// solo el avatar debería saber cuando llamarlo
+		private function updatePos():void
 		{
 			x = pos.x;
 			y = pos.y;
