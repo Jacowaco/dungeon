@@ -260,8 +260,11 @@ package avtr
 				//var box:MovieClip = currentHook.asset.getChildByName("box") as MovieClip;
 				//var point:Point = new Point();
 				//pos = new Vector2D(screen.localToGlobal(point).x, box.localToGlobal(point).y);
-				pos = new Vector2D(currentHook.hookPos.x - target(OBJECT).x, currentHook.hookPos.y - target(OBJECT).y);
-				apply();
+//				pos = new Vector2D(currentHook.hookPos.x - target(OBJECT).x, currentHook.hookPos.y - target(OBJECT).y);
+				
+				moveTo(currentHook.hookPos.x - target(OBJECT).x, currentHook.hookPos.y- target(OBJECT).y);
+//				pos = new Vector2D(currentHook.hookPos.x , currentHook.hookPos.y );
+//				apply();
 				//trace(pos);
 			}
 		}

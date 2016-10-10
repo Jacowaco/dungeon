@@ -23,17 +23,24 @@ package game.obstacles
 			// el piso nunca me mata
 		}
 		
+		
+		
 		public function get hookPos():Point
 		{
 			//_hookPos.x = parent.x + asset.x + box.x + box.width / 2;
 			//_hookPos.y = parent.y + asset.y + box.y + box.height / 2;
 			//_hookPos.x = parent.x + asset.x + box.parent.x + box.localToGlobal(new Point).x + box.width / 2;
 			//_hookPos.y = parent.y + asset.y + box.parent.y + box.localToGlobal(new Point).y + box.height / 2;
+//			_hookPos.x = parent.x + asset.x + box.parent.x + box.x;// + box.width / 2;
+//			_hookPos.y = parent.y + asset.y + box.parent.y + box.y;// + box.height / 2;
+			
 			_hookPos.x = parent.x + asset.x + box.parent.x + box.x;// + box.width / 2;
 			_hookPos.y = parent.y + asset.y + box.parent.y + box.y;// + box.height / 2;
+			
 			trace(_hookPos, parent.x, asset.x, box.parent.x, box.localToGlobal(new Point));
 			
 			return _hookPos;
+//			return box.localToGlobal(new Point);
 		}
 		
 	}
