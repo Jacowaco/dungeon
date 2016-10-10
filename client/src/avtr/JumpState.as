@@ -31,6 +31,7 @@ package avtr
 		{
 			if (context.touchingFloor)
 			{
+				context.currentHook = null;
 				if (context.left || context.right) context.setWalkState();
 				else context.setIdleState();
 			}

@@ -82,6 +82,12 @@ package game.obstacles
 				case Obstacle.ZOMBIE:
 						return new Zombie(mc);
 					break;
+				case Obstacle.HOOK:
+						return new Hook(mc);
+					break;
+				case Obstacle.BAT:
+						return new Bat(mc);
+					break;
 			}
 			
 			return new Obstacle(mc);
@@ -108,7 +114,7 @@ package game.obstacles
 		// hay obstaculos que necesitan configuración... ie: zombies y tricks y hooks
 		public function config(settings:Object):void
 		{
-			trace("nothing to configure");
+			//trace("nothing to configure");
 		}
 		
 		public function kills():Boolean

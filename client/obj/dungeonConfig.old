@@ -8,15 +8,15 @@
   <compiler>
     <define append="true">
       <name>CONFIG::debug</name>
-      <value>false</value>
-    </define>
-    <define append="true">
-      <name>CONFIG::release</name>
       <value>true</value>
     </define>
     <define append="true">
+      <name>CONFIG::release</name>
+      <value>false</value>
+    </define>
+    <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'02/10/2016'</value>
+      <value>'07/10/2016'</value>
     </define>
     <define append="true">
       <name>CONFIG::air</name>
@@ -30,8 +30,7 @@
       <name>CONFIG::desktop</name>
       <value>false</value>
     </define>
-    <optimize>true</optimize>
-    <verbose-stacktraces>false</verbose-stacktraces>
+    <verbose-stacktraces>true</verbose-stacktraces>
     <source-path append="true">
       <path-element>C:\Users\Joaco\Desktop\Jacowaco\Programming\dungeon\client\src</path-element>
       <path-element>C:\Users\Joaco\Desktop\Jacowaco\Programming\gaturro minigames\libs\as3corelib\as3corelib\src</path-element>
