@@ -137,13 +137,6 @@ package avtr
 			asset.scaleX = Math.abs(asset.scaleX) * direction;	
 		}
 		
-		
-//		public function move():void
-//		{
-//			position = position.add(vel);
-//			apply();
-//		}
-		
 		public function moveBy(dx:Number, dy:Number):void
 		{
 			pos = pos.add( new Vector2D(dx, dy));
@@ -154,12 +147,14 @@ package avtr
 			pos = new Vector2D(x, y);
 		}		
 		
-		
-		
-		
-		
-
-		
+		// estados.
+		// https://sourcemaking.com/design_patterns/state
+		// usamos el segundo caso (a pesar del acoplamiento que genera pero deja la clase avatar muy limpia:		
+		// The State pattern does not specify where the state transitions will be defined. 
+		// The choices are two: the "context" object, or each individual State derived class. 
+		// The advantage of the latter option is ease of adding new State derived classes. 
+		// The disadvantage is each State derived class has knowledge of (coupling to) its siblings, which introduces dependencies between subclasses.
+				
 		protected function changeState(state:AvatarState):void
 		{
 			if(currentState) currentState.exit();
@@ -188,7 +183,7 @@ package avtr
 		}
 		
 		public function setFallState():void{
-			if(! isFalling()) changeState(fallingState);
+			if(!isFalling()) changeState(fallingState);
 			//asset.gotoAndPlay("falling");
 		}
 		
@@ -204,13 +199,11 @@ package avtr
 			asset.gotoAndStop("transportMove_colgante");// trace("gotoAndPlay(transportMove_colgante)");
 		}
 		
-		
-		
 		public function get speed():Number{
 			return walkSpeed;
 		}
 		
-		
+		// TODO no solo debe detener el asset sino las movimientos.
 		public function pause():void
 		{
 			asset.stop();
@@ -245,6 +238,10 @@ package avtr
 				setDeadState();
 			}
 		}
+		
+		
+		// TODO aca seguro hay que resolver la conexion entre el hook
+		// y el gato.
 		
 		public function hookTo(obj:Hook):void
 		{
@@ -326,7 +323,7 @@ package avtr
 				}
 				case OBJECT:
 				{
-					return asset.objects_ph;
+					return asset.arm1;
 					break;
 				}
 				default:
