@@ -138,6 +138,7 @@ package game
 			return false;			
 		}
 		
+		
 		private function checkHooks():Boolean
 		{
 			for each(var obj:Obstacle in hooks){

@@ -269,6 +269,8 @@ package avtr
 			}
 		}
 		
+		
+		
 
 		// API PUBLICA
 		public function isFalling():Boolean
