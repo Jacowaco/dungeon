@@ -111,8 +111,6 @@ package game
 			var box:MovieClip = obj.asset.getChildByName("box") as MovieClip;
 			if(box.hitTestObject(avatar.target(Avatar.BOTTOM))){
 				avatar.moveTo(avatar.position.x, box.getBounds(currentScreen).top - avatar.target(Avatar.BOTTOM).y);
-				avatar.updatePos();
-//				obj.debug();  // debug caga todo... no usar.
 				return true;
 			} 			
 			return false;
@@ -120,7 +118,7 @@ package game
 		
 		private function checkSideCollition(obj:Obstacle):Boolean
 		{
-			var dir:int = avatar.facingRight() ? 1 : -1;
+			var dir:int = avatar.isFacingRight() ? 1 : -1;
 			var boundarie:Number;
 			var newX:Number;
 			var box:MovieClip = obj.asset.getChildByName("box") as MovieClip;
@@ -128,14 +126,13 @@ package game
 				boundarie = dir == 1 ? box.getBounds(currentScreen).left : box.getBounds(currentScreen).right;
 				newX = boundarie + (dir == 1 ? -avatar.target(Avatar.RIGHT).x : avatar.target(Avatar.RIGHT).x);
 				avatar.moveTo(newX, avatar.position.y);
-				avatar.updatePos();
 				return true;
 			}
 			if(box.hitTestObject(avatar.target(Avatar.LEFT))){								
 				boundarie = dir == 1 ? box.getBounds(currentScreen).right : box.getBounds(currentScreen).left;
 				newX = boundarie + (dir == 1 ? -avatar.target(Avatar.LEFT).x : avatar.target(Avatar.LEFT).x);
 				avatar.moveTo(newX, avatar.position.y);
-				avatar.updatePos();
+
 				return true;
 			}
 			return false;			

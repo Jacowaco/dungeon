@@ -97,63 +97,64 @@ package avtr
 		
 		public function update():void
 		{						
-			//trace("update state: ", currentState);
 			currentState.checkState();
 			currentState.update();
+			apply();
 		}
 		
-		public function move():void
+		// updatePos(); ahora apply();
+		// este metodo tiene que ser privado.
+		// es el metodo que efectivamente mueve el objeto en la pantalla
+		// solo el avatar debería saber cuando llamarlo
+		private function apply():void
 		{
-			position = position.add(vel);
-			updatePos();
-		}
-		
-		public function updatePos():void
-		{
+			position = position.add(vel); // antes metodo move(). voló...
 			x = pos.x;
 			y = pos.y;
 		}
+
 		
+		// avatar como particula
 		public function addGravity():void
 		{ 
 			vel = vel.add(g);
 		}
 		
-		public function addController():void
+		// el add velocity en principio siempre va a estar vinculado
+		// a los controles pero en realidad podría ser que no.
+		// porque si lo quiero lanzar con algun objeto que lo impulse
+		// tendria que tener otro metodo
+		public function addVelocity():void
 		{
 			var xdir:Number = left ? -1 : 0 + right ? 1 : 0;	
 			vel = new Vector2D(xdir * speed, vel.y);
 			if(xdir != 0) faceTo(xdir);
-			
-			//if(jump) setJumpState();
 		}
-		
-		public function isFalling():Boolean
-		{
-			return currentState == fallingState;
-		}
-		
-		public function isJumping():Boolean
-		{
-			return currentState == jumpingState;
-		}
-		
-		public function isDead():Boolean
-		{
-			return currentState == deadState;
-		}
-		
-		public function faceTo(direction:int):void
+
+		private function faceTo(direction:int):void
 		{			
 			faceRight = direction == 1 ? true : false; 
 			asset.scaleX = Math.abs(asset.scaleX) * direction;	
 		}
 		
-		public function facingRight():Boolean
+		public function moveBy(dx:Number, dy:Number):void
 		{
-			return faceRight;
-		}
+			pos = pos.add( new Vector2D(dx, dy));
+		}		
 		
+		public function moveTo(x:Number, y:Number):void
+		{
+			pos = new Vector2D(x, y);
+		}		
+		
+		// estados.
+		// https://sourcemaking.com/design_patterns/state
+		// usamos el segundo caso (a pesar del acoplamiento que genera pero deja la clase avatar muy limpia:		
+		// The State pattern does not specify where the state transitions will be defined. 
+		// The choices are two: the "context" object, or each individual State derived class. 
+		// The advantage of the latter option is ease of adding new State derived classes. 
+		// The disadvantage is each State derived class has knowledge of (coupling to) its siblings, which introduces dependencies between subclasses.
+				
 		protected function changeState(state:AvatarState):void
 		{
 			if(currentState) currentState.exit();
@@ -170,7 +171,6 @@ package avtr
 			}
 		}
 		
-		
 		public function setWalkState():void{
 			changeState(walkingState);
 			asset.gotoAndPlay("walk");// trace("gotoAndPlay(walk)");
@@ -183,7 +183,7 @@ package avtr
 		}
 		
 		public function setFallState():void{
-			if(! isFalling()) changeState(fallingState);
+			if(!isFalling()) changeState(fallingState);
 			//asset.gotoAndPlay("falling");
 		}
 		
@@ -203,16 +203,7 @@ package avtr
 			return walkSpeed;
 		}
 		
-		public function moveBy(dx:Number, dy:Number):void
-		{
-			pos = pos.add( new Vector2D(dx, dy));
-		}		
-		
-		public function moveTo(x:Number, y:Number):void
-		{
-			pos = new Vector2D(x, y);
-		}		
-		
+		// TODO no solo debe detener el asset sino las movimientos.
 		public function pause():void
 		{
 			asset.stop();
@@ -248,6 +239,10 @@ package avtr
 			}
 		}
 		
+		
+		// TODO aca seguro hay que resolver la conexion entre el hook
+		// y el gato.
+		
 		public function hookTo(obj:Hook):void
 		{
 			if (currentHook == null)
@@ -265,11 +260,40 @@ package avtr
 				//var box:MovieClip = currentHook.asset.getChildByName("box") as MovieClip;
 				//var point:Point = new Point();
 				//pos = new Vector2D(screen.localToGlobal(point).x, box.localToGlobal(point).y);
-				pos = new Vector2D(currentHook.hookPos.x - target(OBJECT).x, currentHook.hookPos.y - target(OBJECT).y);
-				updatePos();
+//				pos = new Vector2D(currentHook.hookPos.x - target(OBJECT).x, currentHook.hookPos.y - target(OBJECT).y);
+				
+				moveTo(currentHook.hookPos.x - target(OBJECT).x, currentHook.hookPos.y- target(OBJECT).y);
+//				pos = new Vector2D(currentHook.hookPos.x , currentHook.hookPos.y );
+//				apply();
 				//trace(pos);
 			}
 		}
+		
+
+		// API PUBLICA
+		public function isFalling():Boolean
+		{
+			return currentState == fallingState;
+		}
+		
+		public function isJumping():Boolean
+		{
+			return currentState == jumpingState;
+		}
+		
+		public function isDead():Boolean
+		{
+			return currentState == deadState;
+		}
+		
+		public function isFacingRight():Boolean
+		{
+			return faceRight;
+		}
+
+		
+		
+		
 		
 		public function target(target:int):DisplayObject
 		{
@@ -302,7 +326,7 @@ package avtr
 				}
 				case OBJECT:
 				{
-					return asset.objects_ph;
+					return asset.arm1;
 					break;
 				}
 				default:
