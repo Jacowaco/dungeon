@@ -36,7 +36,7 @@ package avtr
 		{
 			//context.vel = context.deadVel;
 			context.addGravity();
-			context.move();
+//			context.move();
 		}
 
 	}

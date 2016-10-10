@@ -99,63 +99,66 @@ package avtr
 		{						
 			currentState.checkState();
 			currentState.update();
-			updatePos();
+			apply();
 		}
 		
-		public function move():void
-		{
-			position = position.add(vel);
-			updatePos();
-		}
-		
+		// updatePos(); ahora apply();
 		// este metodo tiene que ser privado.
 		// es el metodo que efectivamente mueve el objeto en la pantalla
 		// solo el avatar debería saber cuando llamarlo
-		private function updatePos():void
+		private function apply():void
 		{
+			position = position.add(vel); // antes metodo move(). voló...
 			x = pos.x;
 			y = pos.y;
 		}
+
 		
+		// avatar como particula
 		public function addGravity():void
 		{ 
 			vel = vel.add(g);
 		}
 		
-		public function addController():void
+		// el add velocity en principio siempre va a estar vinculado
+		// a los controles pero en realidad podría ser que no.
+		// porque si lo quiero lanzar con algun objeto que lo impulse
+		// tendria que tener otro metodo
+		public function addVelocity():void
 		{
 			var xdir:Number = left ? -1 : 0 + right ? 1 : 0;	
 			vel = new Vector2D(xdir * speed, vel.y);
 			if(xdir != 0) faceTo(xdir);
-			
-			//if(jump) setJumpState();
 		}
-		
-		public function isFalling():Boolean
-		{
-			return currentState == fallingState;
-		}
-		
-		public function isJumping():Boolean
-		{
-			return currentState == jumpingState;
-		}
-		
-		public function isDead():Boolean
-		{
-			return currentState == deadState;
-		}
-		
-		public function faceTo(direction:int):void
+
+		private function faceTo(direction:int):void
 		{			
 			faceRight = direction == 1 ? true : false; 
 			asset.scaleX = Math.abs(asset.scaleX) * direction;	
 		}
 		
-		public function facingRight():Boolean
+		
+//		public function move():void
+//		{
+//			position = position.add(vel);
+//			apply();
+//		}
+		
+		public function moveBy(dx:Number, dy:Number):void
 		{
-			return faceRight;
-		}
+			pos = pos.add( new Vector2D(dx, dy));
+		}		
+		
+		public function moveTo(x:Number, y:Number):void
+		{
+			pos = new Vector2D(x, y);
+		}		
+		
+		
+		
+		
+		
+
 		
 		protected function changeState(state:AvatarState):void
 		{
@@ -172,7 +175,6 @@ package avtr
 				asset.gotoAndPlay("jump");// trace("gotoAndPlay(jump)");
 			}
 		}
-		
 		
 		public function setWalkState():void{
 			changeState(walkingState);
@@ -202,19 +204,12 @@ package avtr
 			asset.gotoAndStop("transportMove_colgante");// trace("gotoAndPlay(transportMove_colgante)");
 		}
 		
+		
+		
 		public function get speed():Number{
 			return walkSpeed;
 		}
 		
-		public function moveBy(dx:Number, dy:Number):void
-		{
-			pos = pos.add( new Vector2D(dx, dy));
-		}		
-		
-		public function moveTo(x:Number, y:Number):void
-		{
-			pos = new Vector2D(x, y);
-		}		
 		
 		public function pause():void
 		{
@@ -269,10 +264,36 @@ package avtr
 				//var point:Point = new Point();
 				//pos = new Vector2D(screen.localToGlobal(point).x, box.localToGlobal(point).y);
 				pos = new Vector2D(currentHook.hookPos.x - target(OBJECT).x, currentHook.hookPos.y - target(OBJECT).y);
-				updatePos();
+				apply();
 				//trace(pos);
 			}
 		}
+		
+
+		// API PUBLICA
+		public function isFalling():Boolean
+		{
+			return currentState == fallingState;
+		}
+		
+		public function isJumping():Boolean
+		{
+			return currentState == jumpingState;
+		}
+		
+		public function isDead():Boolean
+		{
+			return currentState == deadState;
+		}
+		
+		public function isFacingRight():Boolean
+		{
+			return faceRight;
+		}
+
+		
+		
+		
 		
 		public function target(target:int):DisplayObject
 		{

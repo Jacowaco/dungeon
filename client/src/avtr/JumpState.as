@@ -41,8 +41,8 @@ package avtr
 		{
 			if (context.touchingFloor) context.vel = new Vector2D();
 			else context.addGravity();
-			context.addController();
-			context.move();
+			context.addVelocity();
+//			context.move();
 		}
 	}
 }
