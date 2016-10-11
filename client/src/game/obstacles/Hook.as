@@ -37,7 +37,7 @@ package game.obstacles
 			_hookPos.x = parent.x + asset.x + box.parent.x + box.x;// + box.width / 2;
 			_hookPos.y = parent.y + asset.y + box.parent.y + box.y;// + box.height / 2;
 			
-			trace(_hookPos, parent.x, asset.x, box.parent.x, box.localToGlobal(new Point));
+			//trace(_hookPos, parent.x, asset.x, box.parent.x, box.localToGlobal(new Point));
 			
 			return _hookPos;
 //			return box.localToGlobal(new Point);

@@ -54,9 +54,6 @@ package game
 			addChild(dungeon);
 		}
 		
-		
-		
-		
 		public function onEnterFrame(e:Event):void
 		{
 			if(dungeon){

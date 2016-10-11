@@ -100,6 +100,7 @@ package avtr
 			currentState.checkState();
 			currentState.update();
 			apply();
+			trace(vel);
 		}
 		
 		// updatePos(); ahora apply();
@@ -112,7 +113,13 @@ package avtr
 			x = pos.x;
 			y = pos.y;
 		}
-
+		
+		//soy testarudo y vuelvo a agregar esto, es necesario el metodo para las colisiones
+		public function updatePos():void
+		{
+			x = pos.x;
+			y = pos.y;
+		}
 		
 		// avatar como particula
 		public function addGravity():void
@@ -245,7 +252,7 @@ package avtr
 		
 		public function hookTo(obj:Hook):void
 		{
-			if (currentHook == null)
+			if (currentHook == null || currentHook != obj)
 			{
 				currentHook = obj;
 				setHookState();

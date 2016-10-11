@@ -18,7 +18,8 @@ package avtr
 		
 		override public function enter():void
 		{
-//			logger.info("enter walk state");	
+			//logger.info("enter walk state");
+			context.vel = new Vector2D();
 		}
 		
 		override public function exit():void

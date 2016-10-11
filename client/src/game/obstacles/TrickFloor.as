@@ -22,7 +22,11 @@ package game.obstacles
 		override public function config(settings:Object):void
 		{
 			//logger.info("configuring trick");
+			//trace(settings);
+			//trace(settings.obstacles.trickTime);
 			delay = settings.tricks * 1000;
+			//delay = settings.obstacles.trickTime * 1000;
+			//delay = 2 * 1000;
 		}
 		
 		override public function activate():void

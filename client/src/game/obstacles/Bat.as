@@ -38,26 +38,14 @@ package game.obstacles
 			logger.info("configuring bat");
 			this.settings = settings;	
 			
-//			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			goLeft = new Tween(this, time, { "x": location.x - 200 });
+			goRight = new Tween(this, time, { "x": location.x + 200 } );
 			
-//			reset = new Func(function():void{ time = Math.floor(1000 + Math.random() * 3000); trace(time)});
-			goLeft = new Tween(this, time, { "x": location.x - 400 });
-			goRight = new Tween(this, time, { "x": location.x + 400 });
-			//idle = new Timeout(goIdle, settings.zombies * 1000);
-			//warning = new Timeout(goWarning, settings.zombies * 1000);
-			//kill = new Timeout(goKill, settings.zombies * 1000);			
-			sequence = new Sequence(goLeft, goRight);
+			if (Math.random() < 0.5) sequence = new Sequence(goLeft, goRight);
+			else sequence = new Sequence(goRight, goLeft);
+			
 			loop = new Loop(sequence);			
 			Game.taskRunner().add(loop);						
-		}
-		
-		private function onEnterFrame(e:Event):void
-		{
-			x--;
-			if (x < 0)
-			{
-				//resetear
-			}
 		}
 		
  		override public function activate():void
