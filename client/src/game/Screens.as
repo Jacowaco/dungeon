@@ -38,6 +38,13 @@ package game
 			}
 		}
 		
+		public function dispose():void
+		{
+			for each(var s:Screen in screens){				
+				s.dispose();
+			}
+		}
+		
 		public function getScreens():Array			
 		{
 			return screens;

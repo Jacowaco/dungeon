@@ -111,6 +111,11 @@ package game.obstacles
 			throw new Error("unimplemented");
 		}
 		
+		public function dispose():void
+		{
+			throw new Error("unimplemented");
+		}
+		
 		// hay obstaculos que necesitan configuración... ie: zombies y tricks y hooks
 		public function config(settings:Object):void
 		{

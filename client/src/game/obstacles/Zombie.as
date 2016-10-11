@@ -37,9 +37,20 @@ package game.obstacles
 			timer = new Loop(sequence);			
 			Game.taskRunner().add(timer);						
 		}
-				
+			
+		// TODO
+		override public function dispose():void
+		{
+			timer.dispose();
+			sequence.dispose();
+			kill.dispose();
+			warning.dispose();
+			idle.dispose();			
+		}
+		
  		override public function activate():void
 		{
+			
 			// nada que hacer aca...
 		}
 		

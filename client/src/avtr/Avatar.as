@@ -1,7 +1,6 @@
 package avtr
 {
 	import assets.GaturroMC;
-	import game.obstacles.Hook;
 	
 	import com.qb9.flashlib.geom.Vector2D;
 	import com.qb9.flashlib.prototyping.shapes.Rect;
@@ -18,6 +17,7 @@ package avtr
 	
 	import game.CollisionManager;
 	import game.PlatformGame;
+	import game.obstacles.Hook;
 	import game.obstacles.Obstacle;
 	
 	import org.as3commons.zip.utils.ChecksumUtil;
@@ -100,7 +100,6 @@ package avtr
 			currentState.checkState();
 			currentState.update();
 			apply();
-			trace(vel);
 		}
 		
 		// updatePos(); ahora apply();
@@ -115,7 +114,7 @@ package avtr
 		}
 		
 		//soy testarudo y vuelvo a agregar esto, es necesario el metodo para las colisiones
-		public function updatePos():void
+		public function revertPosition():void
 		{
 			x = pos.x;
 			y = pos.y;

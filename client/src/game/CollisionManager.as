@@ -111,7 +111,7 @@ package game
 			var box:MovieClip = obj.asset.getChildByName("box") as MovieClip;
 			if(box.hitTestObject(avatar.target(Avatar.BOTTOM))){
 				avatar.moveTo(avatar.position.x, box.getBounds(currentScreen).top - avatar.target(Avatar.BOTTOM).y);
-				avatar.updatePos();
+				avatar.revertPosition();
 				return true;
 			} 			
 			return false;
@@ -127,14 +127,14 @@ package game
 				boundarie = dir == 1 ? box.getBounds(currentScreen).left : box.getBounds(currentScreen).right;
 				newX = boundarie + (dir == 1 ? -avatar.target(Avatar.RIGHT).x : avatar.target(Avatar.RIGHT).x);
 				avatar.moveTo(newX, avatar.position.y);
-				avatar.updatePos();
+				avatar.revertPosition();
 				return true;
 			}
 			if(box.hitTestObject(avatar.target(Avatar.LEFT))){								
 				boundarie = dir == 1 ? box.getBounds(currentScreen).right : box.getBounds(currentScreen).left;
 				newX = boundarie + (dir == 1 ? -avatar.target(Avatar.LEFT).x : avatar.target(Avatar.LEFT).x);
 				avatar.moveTo(newX, avatar.position.y);
-				avatar.updatePos();
+				avatar.revertPosition();
 				return true;
 			}
 			return false;			

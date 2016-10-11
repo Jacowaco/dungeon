@@ -23,6 +23,9 @@ package game.obstacles
 			// el piso nunca me mata
 		}
 		
+		override public function dispose():void{
+			
+		}
 		
 		
 		public function get hookPos():Point

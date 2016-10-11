@@ -53,5 +53,12 @@ package game.obstacles
 			// nada que hacer aca...
 		}
 		
+		override public function dispose():void{
+			goRight.dispose();
+			goLeft.dispose();
+			sequence.dispose();
+			loop.dispose();
+		}
+		
 	}
 }

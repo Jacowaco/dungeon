@@ -205,6 +205,7 @@ package
 		
 
 		
+		
 		private function onPause(e:Event):void
 		{
 			gameController.createNewLevel();

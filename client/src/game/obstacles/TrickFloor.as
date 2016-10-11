@@ -39,5 +39,10 @@ package game.obstacles
 				Game.taskRunner().add(timeout);
 			}
 		}		
+		
+		override public function dispose():void
+		{
+			if(timeout) timeout.dispose();
+		}
 	}
 }

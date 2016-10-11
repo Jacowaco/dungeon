@@ -46,6 +46,7 @@ package game
 				// como no le registré ningún evento a ese objeto estoy casi seguro que se destruye por completo
 				// igual tendría que profilear.
 				removeChild(dungeon);
+				dungeon.dispose();
 				dungeon = null;
 			}
 			// aca se separa todo. me chupa un huevo como creo el nivel, en tanto y en cuanto

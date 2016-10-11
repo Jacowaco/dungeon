@@ -15,6 +15,8 @@ package game.obstacles
 			// aca no hago nada...
 			// el piso nunca me mata
 		}
-		
+		override public function dispose():void{
+			
+		}
 	}
 }

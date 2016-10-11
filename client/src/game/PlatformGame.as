@@ -93,5 +93,10 @@ package game
 		{
 			
 		}
+		
+		public function dispose():void
+		{
+			screens.dispose();
+		}
 	}
 }

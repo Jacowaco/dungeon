@@ -72,5 +72,12 @@ package game
 		public function get dimension():Vector2D{
 			return dim;
 		}
+		
+		public function dispose():void
+		{
+			for each(var o:Obstacle in obstacles){
+				o.dispose();
+			}
+		}
 	}
 }

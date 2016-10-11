@@ -15,6 +15,8 @@ package game.obstacles
 		{
 			
 		}
-		
+		override public function dispose():void{
+			
+		}
 	}
 }
