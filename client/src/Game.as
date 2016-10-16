@@ -116,14 +116,15 @@ package
 			stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 			
 			gameController = new GameController();
-			addChild(gameController)
-
+			addChild(gameController);
+			
 			createGui();
+			
+			gameController.addEventListener("UPDATE_LIVES", updateLives, true);
 			
 			// ready() le avisa al mmo que ya estoy para jugar (ie. dispatchEvent(MinigameEvent.READY));
 			ready();
 			
-
 		}		
 		
 		private function createGui():void
@@ -135,6 +136,12 @@ package
 			gui.addEventListener(GuiEvents.SHOW_MENU, onChangeGui);
 			gui.enable();
 			addChild(gui);						
+		}
+		
+		private function updateLives(e:DataEvent):void
+		{
+			trace("updateLives");
+			gui.setLives(e.data);
 		}
 		
 		// sound schemes: invento para poder tener estados de musica...
@@ -201,13 +208,11 @@ package
 			if(!settings.defaultValue.soundsEnable){
 				audio.gain(null, 0.001);
 			}
-		}		
-		
-
-		
+		}
 		
 		private function onPause(e:Event):void
 		{
+			gui.setLives("3");
 			gameController.createNewLevel();
 			trace("pause game: ");
 		}

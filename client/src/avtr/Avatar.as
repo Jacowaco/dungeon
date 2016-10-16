@@ -1,6 +1,7 @@
 package avtr
 {
 	import assets.GaturroMC;
+	import flash.events.DataEvent;
 	
 	import com.qb9.flashlib.geom.Vector2D;
 	import com.qb9.flashlib.prototyping.shapes.Rect;
@@ -70,6 +71,8 @@ package avtr
 		public var canJump:Boolean = true;
 		
 		private var lives:int = 3;
+		private var hurting:Boolean;
+		private var contHurt:int;
 		
 		public function Avatar()
 		{
@@ -92,11 +95,14 @@ package avtr
 			fallingState = new FallState(this);
 			deadState = new DeadState(this);
 			hookState = new HookState(this);
-			changeState(fallingState); 			
+			changeState(fallingState);
+			
+			dispatchEvent(new DataEvent("UPDATE_LIVES", false, false, lives.toString()));
 		}
 		
 		public function update():void
-		{						
+		{
+			updateHurt();
 			currentState.checkState();
 			currentState.update();
 			apply();
@@ -233,6 +239,43 @@ package avtr
 		public function stagePos():Point
 		{
 			return localToGlobal(new Point);
+		}
+		
+		public function hurt():void
+		{
+			if (!hurting)
+			{
+				lives--;
+				dispatchEvent(new DataEvent("UPDATE_LIVES", false, false, lives.toString()));
+				if (lives <= 0)
+				{
+					getKilled();
+				}
+				else
+				{
+					hurting = true;
+					contHurt = 0;
+					asset.gotoAndPlay("estornudo");
+				}
+			}
+		}
+		
+		private function updateHurt():void
+		{
+			if (hurting)
+			{
+				if (contHurt % 4 == 0)
+				{
+					asset.alpha = (asset.alpha == 1) ? 0.6 : 1;
+				}
+				if (contHurt >= 32)
+				{
+					contHurt = 0;
+					hurting = false;
+					asset.alpha = 1;
+				}
+				contHurt++;
+			}
 		}
 		
 		public function getKilled():void

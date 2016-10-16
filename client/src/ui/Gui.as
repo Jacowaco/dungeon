@@ -61,8 +61,8 @@ package ui
 			
 			// score
 			meters = asset.getChildByName("display") as MovieClip;
-			meters.label.text = api.getText(settings.gui.score);
-			meters.visible = false;
+			meters.label.text = api.getText(settings.gui.lives);
+			//meters.visible = false;
 			
 			// time
 			time = asset.getChildByName("time") as MovieClip;
@@ -157,6 +157,11 @@ package ui
 		public function setMeters(score:String):void
 		{
 			this.meters.value.text = score;
-		}		
+		}
+		
+		public function setLives(lives:String):void
+		{
+			this.meters.value.text = lives;
+		}
 	}
 }

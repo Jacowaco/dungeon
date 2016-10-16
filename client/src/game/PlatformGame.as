@@ -51,6 +51,7 @@ package game
 			//TODO mejorar la camara
 			rlim = settings.camera.rightLimit;
 			
+			//avatar.adde
 			avatar.setFallState();
 		}
 		
