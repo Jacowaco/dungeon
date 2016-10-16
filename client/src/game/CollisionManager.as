@@ -30,7 +30,7 @@ package game
 			this.avatar = avatar;
 			for each(var s:Screen in screens.getScreens()){
 				addColliders(s);
-			}	
+			}
 		}
 		
 		public function resolve():void
@@ -79,7 +79,7 @@ package game
 						monsters.push(tempObs);
 						break;
 				}
-			}		 
+			}
 		}
 		
 		

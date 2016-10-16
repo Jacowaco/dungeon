@@ -35,7 +35,7 @@ package game.obstacles
 		
 		override public function config(settings:Object):void
 		{
-			logger.info("configuring bat");
+			//logger.info("configuring bat");
 			this.settings = settings;	
 			
 			goLeft = new Tween(this, time, { "x": location.x - 200 });

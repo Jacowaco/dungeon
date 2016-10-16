@@ -18,7 +18,7 @@ package game
 		// el screen guarda la lista de sus obstaculos.
 		public var obstacles:Array = [];
 		// y el lugar desde donde debe arrancar el avatar esa pantalla
-		private var start:Vector2D;
+		public var start:Vector2D;
 		private var dim:Vector2D;
 		
 		public function Screen(layer:TileLayer)
@@ -53,7 +53,7 @@ package game
 					var obstacle:Obstacle = Obstacle.create(asset);
 					obstacle.config(settings);
 					obstacles.push(obstacle); 
-					
+					//if (asset.name == "start") trace(asset.name);
 					
 					if(obstacles.length > 0) addChild(obstacles[obstacles.length - 1]);
 					

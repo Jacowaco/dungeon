@@ -37,6 +37,7 @@ package game.obstacles
 		public static var ZOMBIE:String 				= "zombie";
 		public static var BAT:String					= "bat";
 		public static var HOOK:String					= "hook";
+		public static var START:String					= "start";
 		
 		// los nombres de los frames que tienen los assets
 		public static var IDLE:String					= "idle";
@@ -88,6 +89,9 @@ package game.obstacles
 				case Obstacle.BAT:
 						return new Bat(mc);
 					break;
+				//case Obstacle.START:
+						//return new Start(mc);
+					//break;
 			}
 			
 			return new Obstacle(mc);

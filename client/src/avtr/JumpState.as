@@ -16,14 +16,14 @@ package avtr
 		}
 		
 		override public function enter():void{
-			logger.info("enter jump state");			
+			//logger.info("enter jump state");			
 			var jump:Vector2D = new Vector2D(context.vel.x, -context.jumpForce);		
 			context.vel = context.vel.add(jump);
 			context.touchingFloor = false;
 		}
 		
 		override public function exit():void{
-			logger.info("exit jump state");
+			//logger.info("exit jump state");
 			
 		}
 		

@@ -1,6 +1,8 @@
 package game
 {
 	import assets.*;
+	import com.qb9.flashlib.geom.Vector2D;
+	import game.obstacles.Obstacle;
 	
 	import avtr.Avatar;
 	
@@ -19,6 +21,8 @@ package game
 	public class PlatformGame extends Sprite
 	{
 		public static const END:String = "LevelEnd";
+		
+		public static var currentLevel:int = 0;
 		
 		private var collisions:CollisionManager;
 		
@@ -53,6 +57,13 @@ package game
 			
 			//avatar.adde
 			avatar.setFallState();
+			
+			var startScreen:Screen = screens.getScreens()[currentLevel];
+			var _start:Vector2D = startScreen.start;
+			avatar.position = new Vector2D(startScreen.x + _start.x, startScreen.y + _start.y);
+			avatar.revertPosition();
+			
+			//trace(screens.getScreens()[0].x, screens.getScreens()[1].x);
 		}
 		
 		public function onEnterFrame(e:Event):void
@@ -67,6 +78,8 @@ package game
 			collisions.resolve(); // si colisiono, el manager de colisiones le va a hacer algo a mi avatar. le dejo esa responsabiliadd
 			
 			cameraUpdate();
+			
+			checkCheckpoint();
 		}
 		
 		// clasico
@@ -75,6 +88,21 @@ package game
 			var currentPos:Point = avatar.stagePos();
 			if(currentPos.x > settings.camera.rightLimit){
 				camera.x += rlim - currentPos.x;
+			}
+		}
+		
+		private function checkCheckpoint():void
+		{
+			for (var i:int = 0; i < screens.getScreens().length; i++)
+			{
+				if (avatar.position.x >= screens.getScreens()[i].x)
+				{
+					if (currentLevel < i)
+					{
+						currentLevel = i;
+						trace("reached checkpoint", currentLevel);
+					}
+				}
 			}
 		}
 		

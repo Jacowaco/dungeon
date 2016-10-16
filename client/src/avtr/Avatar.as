@@ -425,7 +425,7 @@ package avtr
 					
 					break;
 				case Keyboard.SPACE:
-					jump = true; trace("jump true");
+					jump = true;
 					break;
 			}			
 		}
